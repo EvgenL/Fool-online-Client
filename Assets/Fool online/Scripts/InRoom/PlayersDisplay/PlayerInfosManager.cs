@@ -33,7 +33,7 @@ namespace Fool_online.Scripts.InRoom
             SlotsScripts = new EnemyInfo[StaticRoomData.MaxPalyers];
             SlotsGo = new GameObject[StaticRoomData.MaxPalyers];
 
-            StartCoroutine(WaitForRoomDataAndDrawSlots());
+            DrawSlots();
 
             foreach (var slot in SlotsScripts)
             {
@@ -51,17 +51,8 @@ namespace Fool_online.Scripts.InRoom
         /// TODO 1) If server's not sending us data for some period of time thend ask it
         /// TODO 2) timeout discoinnect
         /// </summary>
-        private IEnumerator WaitForRoomDataAndDrawSlots()
+        private void DrawSlots()
         {
-            //Waiting room data from server
-            while (StaticRoomData.DataReady == false)
-            {
-                yield return null;
-                //TODO timeout
-            }
-
-            StaticRoomData.DataReady = false;
-
             //Instanciate empty slots
             for (int slotI = 0; slotI < StaticRoomData.MaxPalyers; slotI++)
             {

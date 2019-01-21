@@ -11,9 +11,6 @@ namespace Fool_online.Scripts.InRoom
     /// </summary>
     public static class StaticRoomData
     {
-
-        public static bool DataReady = false;
-
         /// <summary>
         /// Player objects sorted by slot number in room
         /// </summary>
