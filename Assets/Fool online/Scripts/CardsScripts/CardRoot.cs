@@ -58,8 +58,11 @@ namespace Fool_online.Scripts.CardsScripts
             Vector3 startScale = interactibleCard.transform.localScale;
 
             transform.SetParent(container);
-            //TODO set to target inhandRotation
-            transform.localRotation = Quaternion.identity;
+
+            transform.position = container.position;
+            transform.rotation = container.rotation;
+            transform.localScale = container.localScale;
+
 
             interactibleCard.AnimateFromToRoot(startPos, startRot, startScale);
         }

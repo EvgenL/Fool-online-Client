@@ -190,7 +190,6 @@ namespace Fool_online.Scripts.InRoom
         {
             foreach (var card in cardsOnTable)
             {
-
                 card.AnimateMoveToTransform(_cardPickPoint);
                 SpawnCardInHand();
                 card.DestroyCard(2f);

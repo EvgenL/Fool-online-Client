@@ -1,4 +1,6 @@
-﻿using DG.Tweening;
+﻿using System.Collections;
+using System.Collections.Generic;
+using DG.Tweening;
 using DOTween.Modules;
 using UnityEngine;
 using UnityEngine.UI;
@@ -45,14 +47,14 @@ namespace Fool_online.Scripts.CardsScripts
         private static bool _mouseBusy = false;
         private bool _isDragged = false;
         private bool _zoom = false;
-        private Image _image;
+        private Image _cardImage;
         private Outline _outline;
         private static float _animationDuration = 0.25f;
 
         private void Awake()
         {
             cardRoot = transform.parent.GetComponent<CardRoot>();
-            _image = GetComponent<Image>();
+            _cardImage = GetComponent<Image>();
             _outline = GetComponent<Outline>();
 
             targetPos = transform.position;
@@ -132,10 +134,12 @@ namespace Fool_online.Scripts.CardsScripts
                 //If close in distance
                 if (CanSnapToRoot())
                 {
+                    print("Snap!");
                     //Snap
                     transform.position = targetPos;
                     transform.rotation = targetRot;
                     transform.localScale = targetScale;
+
 
                     AnimationState = CardAnimationState.Idle;
                 }
@@ -209,10 +213,25 @@ namespace Fool_online.Scripts.CardsScripts
             transform.localScale = startScale;
 
             //Set target
-            targetPos = transform.parent.position;
-            targetRot = transform.parent.rotation;
-            targetScale = transform.parent.localScale;
+            targetPos = cardRoot.transform.position;
+            targetRot = cardRoot.transform.rotation;
+            targetScale = cardRoot.transform.localScale;
 
+            AnimationState = CardAnimationState.MovingToRoot;
+
+            StartCoroutine(AnimateFromToRootNextFrame(startPosition, startRotation, startScale));
+
+        }
+
+        private IEnumerator AnimateFromToRootNextFrame(Vector3 startPosition, Quaternion startRotation, Vector3 startScale)
+        {
+            _cardImage.enabled = false;
+            yield return new WaitForEndOfFrame();
+            _cardImage.enabled = true;
+            //Set start
+            transform.position = startPosition;
+            transform.rotation = startRotation;
+            transform.localScale = startScale;
             AnimationState = CardAnimationState.MovingToRoot;
         }
 
@@ -230,19 +249,19 @@ namespace Fool_online.Scripts.CardsScripts
 
         public void AnimateIdle()
         {
-            _image.DOColor(IdleCardColor, _animationDuration);
+            _cardImage.DOColor(IdleCardColor, _animationDuration);
             _outline.DOColor(IdleOutlineColor, _animationDuration);
         }
 
         public void AnimateCanBeTargeted()
         {
-            _image.DOColor(CanBeTargetedCardColor, _animationDuration);
+            _cardImage.DOColor(CanBeTargetedCardColor, _animationDuration);
             _outline.DOColor(CanBeTargetedOutlineColor, _animationDuration);
         }
 
         public void AnimateTargeted()
         {
-            _image.DOColor(TargetedCardColor, _animationDuration);
+            _cardImage.DOColor(TargetedCardColor, _animationDuration);
             _outline.DOColor(CanBeTargetedCardColor, _animationDuration);
         }
     }

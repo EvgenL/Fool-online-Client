@@ -53,7 +53,7 @@ public class TalonRenderer : MonoBehaviourFoolNetworkObserver
         TrumpCard.enabled = true;
         TrumpSuitIcon.enabled = false;
 
-        if (cards == 1)
+        if (cards <= 1)
         {
             TalonDisplay.enabled = false;
         }
