@@ -327,17 +327,6 @@ namespace Fool_online.Scripts.Network.NetworksObserver
                 }
             });
         }
-        protected void OnOtherPlayerPickUpCards(long pickedPlayerId, int slotN)
-        {
-            //This is needed for access to unity's api
-            DoInMainUnityThread(delegate {
-                CheckDestroyedObservers();
-                foreach (var obs in _observers)
-                {
-                    obs.OnOtherPlayerPickUpCards(pickedPlayerId, slotN);
-                }
-            });
-        }
         protected void OnOtherPlayerCoversCard(long coveredPlayerId, int slotN,
             string cardOnTableCode, string cardDroppedCode)
         {

@@ -1,13 +1,13 @@
-﻿// Author: Daniele Giardini - http://www.demigiant.com
+// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2018/07/13
 
 #if true && (UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_5 || UNITY_2017_1_OR_NEWER) // MODULE_MARKER
-using DG.Tweening;
-using DG.Tweening.Core;
+using System;
 using UnityEngine;
+using DG.Tweening.Core;
 
 #pragma warning disable 1591
-namespace DOTween.Modules
+namespace DG.Tweening
 {
 	public static class DOTweenModuleSprite
     {
@@ -20,7 +20,7 @@ namespace DOTween.Modules
         /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
         public static Tweener DOColor(this SpriteRenderer target, Color endValue, float duration)
         {
-            return DG.Tweening.DOTween.To(() => target.color, x => target.color = x, endValue, duration).SetTarget(target);
+            return DOTween.To(() => target.color, x => target.color = x, endValue, duration).SetTarget(target);
         }
 
         /// <summary>Tweens a Material's alpha color to the given value.
@@ -28,7 +28,7 @@ namespace DOTween.Modules
         /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
         public static Tweener DOFade(this SpriteRenderer target, float endValue, float duration)
         {
-            return DG.Tweening.DOTween.ToAlpha(() => target.color, x => target.color = x, endValue, duration)
+            return DOTween.ToAlpha(() => target.color, x => target.color = x, endValue, duration)
                 .SetTarget(target);
         }
 
@@ -38,7 +38,7 @@ namespace DOTween.Modules
         /// <param name="gradient">The gradient to use</param><param name="duration">The duration of the tween</param>
         public static Sequence DOGradientColor(this SpriteRenderer target, Gradient gradient, float duration)
         {
-            Sequence s = DG.Tweening.DOTween.Sequence();
+            Sequence s = DOTween.Sequence();
             GradientColorKey[] colors = gradient.colorKeys;
             int len = colors.Length;
             for (int i = 0; i < len; ++i) {
@@ -70,7 +70,7 @@ namespace DOTween.Modules
         {
             endValue = endValue - target.color;
             Color to = new Color(0, 0, 0, 0);
-            return DG.Tweening.DOTween.To(() => to, x => {
+            return DOTween.To(() => to, x => {
                     Color diff = x - to;
                     to = x;
                     target.color += diff;

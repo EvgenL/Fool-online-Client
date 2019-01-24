@@ -17,7 +17,6 @@ namespace Fool_online.Scripts.InRoom
 
         public GameObject[] SlotsGo;
         public EnemyInfo[] SlotsScripts;
-        public PlayerInfo[] SlotsScripts2; //todo
 
         /// <summary>
         /// Draw everything when local player enters room
@@ -30,8 +29,8 @@ namespace Fool_online.Scripts.InRoom
             print("EnemiesDisplay: InitRoomData");
 
             //There's gonna be amount of slots available
-            SlotsScripts = new EnemyInfo[StaticRoomData.MaxPalyers];
-            SlotsGo = new GameObject[StaticRoomData.MaxPalyers];
+            SlotsScripts = new EnemyInfo[StaticRoomData.MaxPlayers];
+            SlotsGo = new GameObject[StaticRoomData.MaxPlayers];
 
             DrawSlots();
 
@@ -45,31 +44,24 @@ namespace Fool_online.Scripts.InRoom
         }
 
         /// <summary>
-        /// Waits 'till server sends data about room then draws it.
-        /// This needed for first connect where we call this at scene awake and
-        /// possibly we dont have room data yet
-        /// TODO 1) If server's not sending us data for some period of time thend ask it
-        /// TODO 2) timeout discoinnect
+        /// Draws slots
+        /// //TODO if max slots changed during preparation (?)
         /// </summary>
         private void DrawSlots()
         {
             //Instanciate empty slots
-            for (int slotI = 0; slotI < StaticRoomData.MaxPalyers; slotI++)
+            for (int slotI = 0; slotI < StaticRoomData.MaxPlayers; slotI++)
             {
                 //If this is data about us then skip
                 if (slotI == StaticRoomData.MySlotNumber) continue;
 
-                //spawn
-                var slotGo = Instantiate(EnemySlotPrefab, SlotsContainer);
-                var slotScript = slotGo.GetComponent<EnemyInfo>();
-
-                //add to list
-                SlotsGo[slotI] = slotGo;
-                SlotsScripts[slotI] = slotScript;
+                AddEmptySlot(slotI);
             }
 
+            SortSlotDisplays();
+
             //set occupied slots (if we aren't first to enter this room)
-            for (int slotI = 0; slotI < StaticRoomData.MaxPalyers; slotI++)
+            for (int slotI = 0; slotI < StaticRoomData.MaxPlayers; slotI++)
             {
                 //If this is data about us then skip
                 if (slotI == StaticRoomData.MySlotNumber) continue;
@@ -82,12 +74,36 @@ namespace Fool_online.Scripts.InRoom
             }
         }
 
-        /// <summary>
-        /// Replace slot with prefab of empty slot
-        /// </summary>
-        private void SetSlotAsEmpty(int slotN)
+        private void AddEmptySlot(int slotI)
         {
-            SlotsScripts[slotN].DrawEmpty();
+            //spawn
+            var slotGo = Instantiate(EnemySlotPrefab, SlotsContainer);
+            var slotScript = slotGo.GetComponent<EnemyInfo>();
+
+            //add to list
+            SlotsGo[slotI] = slotGo;
+            SlotsScripts[slotI] = slotScript;
+        }
+
+        /// <summary>
+        /// sorts slots game objects to be in order:
+        /// mySlotN+1 is first slot on top of the screen.
+        /// mySlotN-1 is last slot on top of the screen.
+        /// </summary>
+        private void SortSlotDisplays()
+        {
+            if (SlotsGo.Length == 0) return;
+
+            int mySlotN = StaticRoomData.MySlotNumber;
+
+            int leftSlotN = (mySlotN + 1) % SlotsGo.Length;
+
+            while (leftSlotN != mySlotN)
+            {
+                SlotsGo[leftSlotN].transform.SetAsLastSibling();
+
+                leftSlotN = (leftSlotN + 1) % SlotsGo.Length;
+            } 
         }
 
         /// <summary>
@@ -125,7 +141,7 @@ namespace Fool_online.Scripts.InRoom
         /// </summary>
         public override void OnOtherPlayerLeftRoom(long leftPlayerId, int slotN)
         {
-            SetSlotAsEmpty(slotN);
+            SlotsScripts[slotN].DrawEmpty();
 
             //Uncheck everybody's checkmarks
             foreach (var slot in SlotsScripts)
@@ -161,18 +177,18 @@ namespace Fool_online.Scripts.InRoom
 
         public override void OnOtherPlayerPassed(long passedPlayerId, int slotN)
         {
-            if (StaticRoomData.DefenderPassed())
+            if (StaticRoomData.WhoseDefend == passedPlayerId)
             {
-                SlotsScripts[slotN].ShowTextCloud("Пас");
+                SlotsScripts[slotN].ShowTextCloud("Беру");
+            }
+            else if (StaticRoomData.WhoseAttack == passedPlayerId)
+            {
+                SlotsScripts[slotN].ShowTextCloud("Бито");
             }
             else
             {
                 SlotsScripts[slotN].ShowTextCloud("Бито");
             }
-        }
-        public override void OnOtherPlayerPickUpCards(long passedPlayerId, int slotN)
-        {
-            SlotsScripts[slotN].ShowTextCloud("Беру");
         }
 
 

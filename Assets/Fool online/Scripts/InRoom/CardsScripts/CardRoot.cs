@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using Fool_online.Scripts.InRoom;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,8 +24,12 @@ namespace Fool_online.Scripts.CardsScripts
         /// If this card is covered by some other card then 
         /// other card would be display at that position
         /// </summary>
-        public Vector3 CoveredPosition;
-        public Quaternion CoveredRotation;
+        public Transform CoveredCardContainer;
+
+        [Header("Card animated local scales in different locations")]
+        [SerializeField] private float _scaleInEnemyHand = 0.33f;
+        [SerializeField] private float _scaleInMyHand = 1f;
+        [SerializeField] private float _scaleOnTable = 1f;
 
 
         public void InitGraphics(string cardCode)
@@ -42,29 +47,47 @@ namespace Fool_online.Scripts.CardsScripts
             CardVisual.sprite = sprite;
         }
 
-        public void AnimateFromToRoot(Vector3 startPosition)
-        {
-            interactibleCard.AnimateFromToRoot(startPosition);
-        }
-        public void AnimateFromToRoot(Vector3 startPosition, Quaternion startRotation)
-        {
-            interactibleCard.AnimateFromToRoot(startPosition, startRotation);
-        }
-
         public void AnimateMoveToTransform(Transform container)
         {
             Vector3 startPos = interactibleCard.transform.position;
             Quaternion startRot = interactibleCard.transform.rotation;
             Vector3 startScale = interactibleCard.transform.localScale;
 
-            transform.SetParent(container);
-
+            transform.SetParent(container, false);
             transform.position = container.position;
             transform.rotation = container.rotation;
-            transform.localScale = container.localScale;
 
+            //if card was put on table or in hand, we need to force rebuild layout on this frame
+            LayoutGroup layout = container.GetComponent<LayoutGroup>();
+            if (layout != null)
+            {
+                //LayoutRebuilder.MarkLayoutForRebuild(handTransform as RectTransform); //this doesnt do this on exact frame
+                LayoutRebuilder.ForceRebuildLayoutImmediate(container as RectTransform);
+            }
 
-            interactibleCard.AnimateFromToRoot(startPos, startRot, startScale);
+            interactibleCard.AnimateMoveFromToRoot(startPos, startRot, startScale);
+        }
+
+        public void AnimateMoveToMyHand(Transform handTransform)
+        {
+            Vector3 startPos = interactibleCard.transform.position;
+            Quaternion startRot = interactibleCard.transform.rotation;
+            Vector3 startScale = transform.localScale; 
+
+            transform.SetParent(handTransform);
+            transform.localScale = Vector3.one * _scaleInMyHand;
+            transform.localRotation = Quaternion.identity;
+
+            //if card was put on table or in hand, we need to force rebuild layout on this frame
+            LayoutGroup layout = handTransform.GetComponent<LayoutGroup>();
+            if (layout != null)
+            {
+                //LayoutRebuilder.MarkLayoutForRebuild(handTransform as RectTransform); //this doesnt do this on exact frame
+                LayoutRebuilder.ForceRebuildLayoutImmediate(handTransform as RectTransform);
+            }
+
+            //init animation on card
+            interactibleCard.AnimateMoveFromToRoot(startPos, startRot, startScale);
         }
 
         public void DestroyCard(float delay)

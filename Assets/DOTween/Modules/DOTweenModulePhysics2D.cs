@@ -2,11 +2,11 @@
 // Created: 2018/07/13
 
 #if true && (UNITY_4_3 || UNITY_4_4 || UNITY_4_5 || UNITY_4_6 || UNITY_5 || UNITY_2017_1_OR_NEWER) // MODULE_MARKER
-using DG.Tweening;
+using System;
 using UnityEngine;
 
 #pragma warning disable 1591
-namespace DOTween.Modules
+namespace DG.Tweening
 {
 	public static class DOTweenModulePhysics2D
     {
@@ -20,7 +20,7 @@ namespace DOTween.Modules
         /// <param name="snapping">If TRUE the tween will smoothly snap all values to integers</param>
         public static Tweener DOMove(this Rigidbody2D target, Vector2 endValue, float duration, bool snapping = false)
         {
-            return DG.Tweening.DOTween.To(() => target.position, target.MovePosition, endValue, duration)
+            return DOTween.To(() => target.position, target.MovePosition, endValue, duration)
                 .SetOptions(snapping).SetTarget(target);
         }
 
@@ -30,7 +30,7 @@ namespace DOTween.Modules
         /// <param name="snapping">If TRUE the tween will smoothly snap all values to integers</param>
         public static Tweener DOMoveX(this Rigidbody2D target, float endValue, float duration, bool snapping = false)
         {
-            return DG.Tweening.DOTween.To(() => target.position, target.MovePosition, new Vector2(endValue, 0), duration)
+            return DOTween.To(() => target.position, target.MovePosition, new Vector2(endValue, 0), duration)
                 .SetOptions(AxisConstraint.X, snapping).SetTarget(target);
         }
 
@@ -40,7 +40,7 @@ namespace DOTween.Modules
         /// <param name="snapping">If TRUE the tween will smoothly snap all values to integers</param>
         public static Tweener DOMoveY(this Rigidbody2D target, float endValue, float duration, bool snapping = false)
         {
-            return DG.Tweening.DOTween.To(() => target.position, target.MovePosition, new Vector2(0, endValue), duration)
+            return DOTween.To(() => target.position, target.MovePosition, new Vector2(0, endValue), duration)
                 .SetOptions(AxisConstraint.Y, snapping).SetTarget(target);
         }
 
@@ -49,7 +49,7 @@ namespace DOTween.Modules
         /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
         public static Tweener DORotate(this Rigidbody2D target, float endValue, float duration)
         {
-            return DG.Tweening.DOTween.To(() => target.rotation, target.MoveRotation, endValue, duration)
+            return DOTween.To(() => target.rotation, target.MoveRotation, endValue, duration)
                 .SetTarget(target);
         }
 
@@ -70,15 +70,15 @@ namespace DOTween.Modules
             float startPosY = 0;
             float offsetY = -1;
             bool offsetYSet = false;
-            Sequence s = DG.Tweening.DOTween.Sequence();
-            Tween yTween = DG.Tweening.DOTween.To(() => target.position, x => target.position = x, new Vector2(0, jumpPower), duration / (numJumps * 2))
+            Sequence s = DOTween.Sequence();
+            Tween yTween = DOTween.To(() => target.position, x => target.position = x, new Vector2(0, jumpPower), duration / (numJumps * 2))
                 .SetOptions(AxisConstraint.Y, snapping).SetEase(Ease.OutQuad).SetRelative()
                 .SetLoops(numJumps * 2, LoopType.Yoyo)
                 .OnStart(() => startPosY = target.position.y);
-            s.Append(DG.Tweening.DOTween.To(() => target.position, x => target.position = x, new Vector2(endValue.x, 0), duration)
+            s.Append(DOTween.To(() => target.position, x => target.position = x, new Vector2(endValue.x, 0), duration)
                     .SetOptions(AxisConstraint.X, snapping).SetEase(Ease.Linear)
                 ).Join(yTween)
-                .SetTarget(target).SetEase(DG.Tweening.DOTween.defaultEaseType);
+                .SetTarget(target).SetEase(DOTween.defaultEaseType);
             yTween.OnUpdate(() => {
                 if (!offsetYSet) {
                     offsetYSet = true;

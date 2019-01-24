@@ -23,7 +23,7 @@ namespace Fool_online.Scripts.InRoom
             for (int i = 0; i < cards.Length; i++)
             {
                 //Spawn card as child of this trahsform.
-                var cardGo = Instantiate(_cardPrefab, transform);
+                var cardGo = Instantiate(_cardPrefab, _talonTransform);
                 var cardRootScript = cardGo.GetComponent<CardRoot>();
                 cardRootScript.InitGraphics(cards[i]);
 
@@ -31,18 +31,10 @@ namespace Fool_online.Scripts.InRoom
                 CardsInHand.Add(cardRootScript);
 
                 //Init animation
-                AnimateFromTalonToHand(cardRootScript);
+                cardRootScript.AnimateMoveToMyHand(this.transform);
 
-                yield return new WaitForSeconds(StaticParameters.TalonAnimationDelay);
+                yield return new WaitForSeconds(0.1f); //StaticParameters.TalonAnimationDelay);
             }
-
-            //UpdateCardsInHand();
-        }
-
-        private void AnimateFromTalonToHand(CardRoot cardRoot)
-        {
-            cardRoot.AnimateFromToRoot(_talonTransform.position);
-
 
             //UpdateCardsInHand();
         }

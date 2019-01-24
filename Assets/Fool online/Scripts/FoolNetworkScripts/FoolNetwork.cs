@@ -13,7 +13,12 @@
         /// <summary>
         /// If was disconnected then theres would be a reason
         /// </summary>
-        public static string DisconnectReason = null; 
+        public static string DisconnectReason = null;
+
+        /// <summary>
+        /// For debugging
+        /// </summary>
+        public static bool ConnectToLocalhost = false;
 
         public enum ConnectionState
         {
@@ -21,9 +26,9 @@
             Connected,
             Disconnected,
             //TODO states
-            SearchingForRoom,
-            JoiningRoom,
-            ConnectedInRoom
+            //SearchingForRoom,
+            //JoiningRoom,
+            //ConnectedInRoom
         }
 
         /// <summary>
@@ -65,6 +70,10 @@
         /// </summary>
         public static void ConnectToGameServer()
         {
+            if (ConnectToLocalhost)
+            {
+                FoolTcpClient.Instance.ServerIP = "127.0.0.1";
+            }
             FoolTcpClient.Instance.Start();
             client = FoolTcpClient.Instance;
         }

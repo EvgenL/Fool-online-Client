@@ -163,10 +163,6 @@ namespace Fool_online.Scripts.Network.NetworksObserver
         {
         }
 
-        public virtual void OnOtherPlayerPickUpCards(long pickedPlayerId, int slotN)
-        {
-        }
-
         public virtual void OnOtherPlayerCoversCard(long coveredPlayerId, int slotN,
             string cardOnTableCode, string cardDroppedCode)
         {

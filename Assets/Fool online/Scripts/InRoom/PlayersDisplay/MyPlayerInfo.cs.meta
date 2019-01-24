@@ -3,7 +3,25 @@ guid: b823063ec279d2940a9b329cfb3227f2
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - TurnStatusIconContainer: {instanceID: 0}
+  - NicknameText: {instanceID: 0}
+  - Userpic: {instanceID: 0}
+  - HandContainer: {instanceID: 0}
+  - TextCloud: {instanceID: 0}
+  - TextCloudText: {instanceID: 0}
+  - WonSprite: {fileID: 21300000, guid: dbee1432d14e1ef4db2b9fcbce5e27fb, type: 3}
+  - FoolSprite: {fileID: 21300000, guid: 487bb3b963a765044ad36f1bcf5190fa, type: 3}
+  - AttackLeaderSprite: {fileID: 21300000, guid: 15f3c0dfc7d8d204ebe2ae434c025c0e,
+      type: 3}
+  - AttackerSprite: {fileID: 21300000, guid: 15f3c0dfc7d8d204ebe2ae434c025c0e, type: 3}
+  - DefenderSprite: {fileID: 21300000, guid: 48e45c759d61f0b4f88694fbc8ebe215, type: 3}
+  - DefenderGaveUpSprite: {fileID: 21300000, guid: cdb3811643e1d234e9d386713ce69e46,
+      type: 3}
+  - _myHand: {instanceID: 0}
+  - GetReadyButton: {instanceID: 0}
+  - EndTurnButton: {instanceID: 0}
+  - EndTurnButtonText: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

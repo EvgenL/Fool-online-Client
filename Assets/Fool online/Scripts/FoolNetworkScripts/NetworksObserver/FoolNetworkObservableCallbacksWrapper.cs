@@ -195,9 +195,9 @@ namespace Fool_online.Scripts.Network.NetworksObserver
 
         public void NextTurn(long whoseTurn, int slotN, long defendingPlayerId, int defSlotN, int turnN)
         {
-            StaticRoomData.WhoseTurn = whoseTurn;
+            StaticRoomData.WhoseAttack = whoseTurn;
             StaticRoomData.WhoseDefend = defendingPlayerId;
-            StaticRoomData.CardsLeftInTalon -= (StaticRoomData.MaxPalyers * StaticRoomData.MaxCardsDraw);
+            StaticRoomData.CardsLeftInTalon -= (StaticRoomData.MaxPlayers * StaticRoomData.MaxCardsDraw);
 
             foreach (var player in StaticRoomData.Players)
             {
@@ -260,13 +260,6 @@ namespace Fool_online.Scripts.Network.NetworksObserver
             StaticRoomData.Players[slotN].Pass = true;
             //Observable
             OnOtherPlayerPassed(passedPlayerId, slotN);
-        }
-
-        public void OtherPlayerPickedUpCards(long pickedPlayerId, int slotN)
-        {
-            StaticRoomData.Players[slotN].Pass = true;
-            //Observable
-            OnOtherPlayerPickUpCards(pickedPlayerId, slotN);
         }
 
         public void OtherPlayerCoversCard(long coveredPlayerId, int slotN,

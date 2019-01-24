@@ -84,14 +84,14 @@ namespace Fool_online.Scripts.InRoom
             for (int i = 0; i < cardsN; i++)
             {
                 //Spawn card as child of this trahsform.
-                var cardRootScript = SpawnCardInHand();
+                CardRoot cardRootScript = SpawnCardInHand();
+                cardRootScript.transform.SetParent(_talonTransform, false);
 
-                //Add to list
-                yield return new WaitForEndOfFrame();
                 //Init animation
-                cardRootScript.AnimateFromToRoot(_talonTransform.position);
+                cardRootScript.AnimateMoveToTransform(HandContainer);
+                //cardRootScript.AnimateFromToRoot(_talonTransform.position);
 
-                yield return new WaitForSeconds(StaticParameters.TalonAnimationDelay);
+                yield return new WaitForSeconds(0.1f); //StaticParameters.TalonAnimationDelay);
             }
 
             //UpdateCardsInHand();
@@ -131,31 +131,25 @@ namespace Fool_online.Scripts.InRoom
             //Spawn card as child of table trahsform.
             var cardRootScript = SpawnCard(cardCode);
 
-            cardRootScript.transform.SetParent(table, true);
             //Init animation
-            StartCoroutine(AnimateCardOnNextFrame(cardRootScript));
+            cardRootScript.AnimateMoveToTransform(table);
 
             return cardRootScript;
-        }
-
-        private IEnumerator AnimateCardOnNextFrame(CardRoot cardRootScript)
-        {
-            yield return new WaitForEndOfFrame();
-            //Init animation
-            cardRootScript.AnimateFromToRoot(transform.position);
         }
 
         public CardRoot SpawnCard(string cardCode)
         {
             //TODO scarle
-            //Spawn card as child of table trahsform.
-            var cardGo = Instantiate(CardBackPrefab, transform);
+            //Spawn card as child of hand trahsform.
+            var cardGo = Instantiate(CardBackPrefab, HandContainer);
 
             if (CardsInHand.Count > 0) //bug null
             {
                 cardGo.transform.position = CardsInHand[0].transform.position;
                 cardGo.transform.rotation = CardsInHand[0].transform.rotation;
                 cardGo.transform.localScale = CardsInHand[0].transform.localScale;
+
+                
             }
             else
             {

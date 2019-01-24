@@ -44,7 +44,6 @@ namespace Fool_online.Scripts.Network
             EndGame,
             EndGameGiveUp,
             OtherPlayerPassed,
-            OtherPlayerPickedUpCards,
             OtherPlayerCoversCard,
             Beaten,
             DefenderPicksCards,
@@ -95,7 +94,6 @@ namespace Fool_online.Scripts.Network
             _packets.Add((long)SevrerPacketId.EndGame, Packet_EndGame);
             _packets.Add((long)SevrerPacketId.EndGameGiveUp, Packet_EndGameGiveUp);
             _packets.Add((long)SevrerPacketId.OtherPlayerPassed, Packet_OtherPlayerPassed);
-            _packets.Add((long)SevrerPacketId.OtherPlayerPickedUpCards, Packet_OtherPlayerPickedUpCards);
             _packets.Add((long)SevrerPacketId.OtherPlayerCoversCard, Packet_OtherPlayerCoversCard);
             _packets.Add((long)SevrerPacketId.Beaten, Packet_Beaten);
             _packets.Add((long)SevrerPacketId.DefenderPicksCards, Packet_DefenderPicksCards);
@@ -321,7 +319,7 @@ namespace Fool_online.Scripts.Network
             StaticRoomData.ConnectedPlayersCount = playersCount;
             StaticRoomData.PlayerIds = playerIdsInRoom;
             StaticRoomData.OccupiedSlots = slots;
-            StaticRoomData.MaxPalyers = maxPlayers;
+            StaticRoomData.MaxPlayers = maxPlayers;
 
             StaticRoomData.Players = new PlayerInRoom[maxPlayers];
 
@@ -499,6 +497,8 @@ namespace Fool_online.Scripts.Network
             //Read turn number
             int turnN = buffer.ReadInteger();
 
+            Debug.Log($"Player {firstPlayerId} (slot {slotN}) does turn. Defender: Player {defendingPlayerId} (slot {defendingPlayerId})");
+
             //Invoke callback on observers
             FoolNetworkObservableCallbacksWrapper.Instance.NextTurn(firstPlayerId, slotN, defendingPlayerId, defSlotN, turnN);
         }
@@ -668,23 +668,6 @@ namespace Fool_online.Scripts.Network
 
             //Invoke callback on observers
             FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerPassed(passedPlayerId, slotN);
-        }
-
-        private static void Packet_OtherPlayerPickedUpCards(byte[] data)
-        {
-            ByteBuffer buffer = new ByteBuffer();
-            buffer.WriteBytes(data);
-
-            //Skip packetId
-            buffer.ReadLong();
-
-            //Read player who picked
-            long pickedPlayerId = buffer.ReadLong();
-            //Read slotN
-            int slotN = buffer.ReadInteger();
-
-            //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerPickedUpCards(pickedPlayerId, slotN);
         }
 
         private static void Packet_OtherPlayerCoversCard(byte[] data)

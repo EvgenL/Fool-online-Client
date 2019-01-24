@@ -1,9 +1,19 @@
 fileFormatVersion: 2
-guid: 2b8ee8e4c42967842a9c91ea09c04b96
+guid: 331ba72834608cc48846903d4d6e5920
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - _textMeshText: {instanceID: 0}
+  - _textContainer: {instanceID: 0}
+  - _playerStatusIconSpawner: {instanceID: 0}
+  - _statusIconPrefab: {instanceID: 0}
+  - _wonSprite: {fileID: 21300000, guid: dbee1432d14e1ef4db2b9fcbce5e27fb, type: 3}
+  - _foolSprite: {fileID: 21300000, guid: 487bb3b963a765044ad36f1bcf5190fa, type: 3}
+  - _attackerSprite: {fileID: 21300000, guid: 15f3c0dfc7d8d204ebe2ae434c025c0e, type: 3}
+  - _defenderSprite: {fileID: 21300000, guid: 48e45c759d61f0b4f88694fbc8ebe215, type: 3}
+  - _defenderGaveUpSprite: {fileID: 21300000, guid: cdb3811643e1d234e9d386713ce69e46,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

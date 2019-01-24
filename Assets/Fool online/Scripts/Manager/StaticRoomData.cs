@@ -16,7 +16,7 @@ namespace Fool_online.Scripts.InRoom
         /// </summary>
         public static int ConnectedPlayersCount;
 
-        public static int MaxPalyers;
+        public static int MaxPlayers;
 
         public static List<long> PlayerIds;
 
@@ -31,7 +31,7 @@ namespace Fool_online.Scripts.InRoom
         /// <summary>
         /// Player id who does turn now
         /// </summary>
-        public static long WhoseTurn;
+        public static long WhoseAttack;
         public static long WhoseDefend;
 
         public static int MaxCardsInTalon = 32;
@@ -46,9 +46,10 @@ namespace Fool_online.Scripts.InRoom
 
         public static bool DefenderPassed()
         {
-            return Players.Any(player => player.Pass && player.ConnectionId == WhoseDefend);
+            return Players.Any(player => player != null && player.Pass && player.ConnectionId == WhoseDefend);
         }
 
         public static PlayerInRoom Denfender => Players.Single(player => player.ConnectionId == WhoseDefend);
+        public static PlayerInRoom Attacker => Players.Single(player => player.ConnectionId == WhoseAttack);
     }
 }

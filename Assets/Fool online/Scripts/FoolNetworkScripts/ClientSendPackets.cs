@@ -24,7 +24,6 @@ namespace Fool_online.Scripts.Network
             //GAMEPLAY
             DropCardOnTable,
             Pass,
-            PickUpCards,
             CoverCardOnTable,
         }
 
@@ -140,14 +139,6 @@ namespace Fool_online.Scripts.Network
         public static void Send_Pass()
         {
             SendOnlyPacketId(ClientPacketId.Pass);
-        }
-
-        /// <summary>
-        /// Sent when i click pick up cards button in room
-        /// </summary>
-        public static void Send_PickUpCards()
-        {
-            SendOnlyPacketId(ClientPacketId.PickUpCards);
         }
 
         /// <summary>

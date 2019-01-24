@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using DOTween.Modules;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -134,7 +133,6 @@ namespace Fool_online.Scripts.CardsScripts
                 //If close in distance
                 if (CanSnapToRoot())
                 {
-                    print("Snap!");
                     //Snap
                     transform.position = targetPos;
                     transform.rotation = targetRot;
@@ -195,17 +193,17 @@ namespace Fool_online.Scripts.CardsScripts
             transform.SetParent(cardRoot.transform, true); //Sets parent of this object to Canvas to show above up everything
         }
 
-        public void AnimateFromToRoot(Vector3 startPosition)
+        public void AnimateMoveFromToRoot(Vector3 startPosition)
         {
-            AnimateFromToRoot(startPosition, Quaternion.identity, Vector3.one);
+            AnimateMoveFromToRoot(startPosition, Quaternion.identity, Vector3.one);
         }
 
-        public void AnimateFromToRoot(Vector3 startPosition, Quaternion startRotation)
+        public void AnimateMoveFromToRoot(Vector3 startPosition, Quaternion startRotation)
         {
-            AnimateFromToRoot(startPosition, startRotation, Vector3.one);
+            AnimateMoveFromToRoot(startPosition, startRotation, Vector3.one);
         }
 
-        public void AnimateFromToRoot(Vector3 startPosition, Quaternion startRotation, Vector3 startScale)
+        public void AnimateMoveFromToRoot(Vector3 startPosition, Quaternion startRotation, Vector3 startScale)
         {
             //Set start
             transform.position = startPosition;
@@ -218,20 +216,20 @@ namespace Fool_online.Scripts.CardsScripts
             targetScale = cardRoot.transform.localScale;
 
             AnimationState = CardAnimationState.MovingToRoot;
-
-            StartCoroutine(AnimateFromToRootNextFrame(startPosition, startRotation, startScale));
-
         }
 
-        private IEnumerator AnimateFromToRootNextFrame(Vector3 startPosition, Quaternion startRotation, Vector3 startScale)
+        public void AnimateToMyHand(Vector3 startPosition, Quaternion startRotation, Vector3 startScale)
         {
-            _cardImage.enabled = false;
-            yield return new WaitForEndOfFrame();
-            _cardImage.enabled = true;
             //Set start
             transform.position = startPosition;
             transform.rotation = startRotation;
             transform.localScale = startScale;
+
+            //Set target
+            targetPos = cardRoot.transform.position;
+            targetRot = cardRoot.transform.rotation;
+            targetScale = cardRoot.transform.localScale;
+
             AnimationState = CardAnimationState.MovingToRoot;
         }
 
