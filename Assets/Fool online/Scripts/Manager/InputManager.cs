@@ -1,5 +1,6 @@
 ﻿using Fool_online.Scripts.CardsScripts;
 using Fool_online.Scripts.InRoom;
+using Fool_online.Scripts.Network.NetworksObserver;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
@@ -22,11 +23,11 @@ public class InputManager : MonoBehaviour
         //if it was dragged insude table rect
         if (RectTransformUtility.RectangleContainsScreenPoint(TableDropZone, mousePos))
         {
-            GameManager.Instance.DraggedCardUpdate(mousePos, cardRoot, true);
+            FoolNetworkObservableCallbacksWrapper.Instance.DraggedCardUpdate(mousePos, cardRoot, true);
         }
         else
         {
-            GameManager.Instance.DraggedCardUpdate(mousePos, cardRoot, false);
+            FoolNetworkObservableCallbacksWrapper.Instance.DraggedCardUpdate(mousePos, cardRoot, false);
         }
     }
 
@@ -35,7 +36,7 @@ public class InputManager : MonoBehaviour
         //if it was dropped insude table rect
         if (RectTransformUtility.RectangleContainsScreenPoint(TableDropZone, mousePos))
         {
-            GameManager.Instance.CardDroppedOnTableByMe(cardRoot);
+            FoolNetworkObservableCallbacksWrapper.Instance.CardDroppedOnTableByMe(cardRoot);
         }
     }
 }

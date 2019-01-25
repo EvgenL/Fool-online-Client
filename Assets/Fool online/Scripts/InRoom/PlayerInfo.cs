@@ -10,7 +10,7 @@ namespace Fool_online.Scripts.InRoom
     {
         private const float ICON_FADE_TIME = 0.5f;
 
-        [SerializeField] private RectTransform _turnStatusIconContainer;
+        public RectTransform TurnStatusIconContainer;
 
         public enum PlayerStatusIcon
         {
@@ -64,7 +64,26 @@ namespace Fool_online.Scripts.InRoom
             AnimateHideCurrentStatusIcon();
 
             //init icon animation
-            MessageManager.Instance.AnimatePlayerStatusIcon(_turnStatusIconContainer, icon);
+            MessageManager.Instance.AnimatePlayerStatusIcon(TurnStatusIconContainer, icon);
+
+            CurrentStatusIcon = icon;
+        }
+        /// <summary>
+        /// Spawns player status icon like attack, defend, won, fool, etc
+        /// in player's info without flying from screen centre
+        /// </summary>
+        public void SetStatusIconNoAnimation(PlayerStatusIcon icon)
+        {
+            AnimateHideCurrentStatusIcon();
+
+            //init icon animation
+            var iconTransform = MessageManager.Instance.SpawnIconAtScreenCentre(icon);
+            iconTransform.SetParent(TurnStatusIconContainer, false);
+
+            var iconDisplay = iconTransform.GetComponent<Image>();
+            //make transparent
+            iconDisplay.color = new Color(1, 1, 1, 0);
+            iconDisplay.DOFade(1f, 0.5f);
 
             CurrentStatusIcon = icon;
         }
@@ -73,12 +92,43 @@ namespace Fool_online.Scripts.InRoom
         /// <summary>
         /// Fade out current icon
         /// </summary>
-        private void AnimateHideCurrentStatusIcon()
+        public void AnimateHideCurrentStatusIcon()
         {
+            CurrentStatusIconDisplay = TurnStatusIconContainer.GetComponentInChildren<Image>();
+
             if (CurrentStatusIconDisplay != null)
             {
                 var fadeTweener = CurrentStatusIconDisplay.DOFade(0, 0.5f);
+                fadeTweener.OnComplete(() => Destroy(CurrentStatusIconDisplay.gameObject));
             }
+        }
+
+        /// <summary>
+        /// Demove all card displays from hand
+        /// </summary>
+        public virtual void ClearHand()
+        {
+            Util.DestroyAllChildren(HandContainer);
+            CardsInHand.Clear();
+        }
+
+        public virtual void DrawPlayer(PlayerInRoom playerInRoom)
+        {
+            NicknameText.text = playerInRoom.Nickname;
+        }
+
+        public virtual void DrawEmpty()
+        {
+            NicknameText.text = "Ожидание противника";
+
+            HideTextCloud();
+            AnimateHideCurrentStatusIcon();
+            SetReadyCheckmark(false);
+        }
+
+
+        public virtual void SetReadyCheckmark(bool value)
+        {
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Fool_online.Scripts.CardsScripts;
+using Fool_online.Scripts.Network;
 using Fool_online.Scripts.Network.NetworksObserver;
 using UnityEngine;
 
@@ -16,20 +17,29 @@ namespace Fool_online.Scripts.InRoom
         public Transform SlotsContainer;
 
         public GameObject[] SlotsGo;
-        public EnemyInfo[] SlotsScripts;
+        /// <summary>
+        /// Array of abstract class PlayerInfo which contains my player info and enemt player info
+        /// </summary>
+        public PlayerInfo[] SlotsScripts;
+
+        private const float DelayBeforeNextTurn = 0.5f;
 
         /// <summary>
         /// Draw everything when local player enters room
         /// </summary>
         public void InitRoomData()
         {
+            if (!FoolNetwork.IsConnected) return;
             //Clear slots is there were
             Util.DestroyAllChildren(SlotsContainer);
 
             print("EnemiesDisplay: InitRoomData");
 
             //There's gonna be amount of slots available
-            SlotsScripts = new EnemyInfo[StaticRoomData.MaxPlayers];
+            SlotsScripts = new PlayerInfo[StaticRoomData.MaxPlayers];
+            var MySlot = FindObjectOfType<MyPlayerInfo>();
+            SlotsScripts[StaticRoomData.MySlotNumber] = MySlot;
+
             SlotsGo = new GameObject[StaticRoomData.MaxPlayers];
 
             DrawSlots();
@@ -119,11 +129,12 @@ namespace Fool_online.Scripts.InRoom
         /// </summary>
         public override void OnStartGame()
         {
-            foreach (var slot in SlotsScripts)
+            //Hide checkmarks
+            for (int i = 0; i < SlotsScripts.Length; i++)
             {
-                if (slot != null)
+                if (i != StaticRoomData.MySlotNumber)
                 {
-                    slot.SetReadyCheckmark(false);
+                    SlotsScripts[i].SetReadyCheckmark(false);
                 }
             }
         }
@@ -146,9 +157,11 @@ namespace Fool_online.Scripts.InRoom
             //Uncheck everybody's checkmarks
             foreach (var slot in SlotsScripts)
             {
-                if (slot != null)
-                    slot.SetReadyCheckmark(false);
+                slot.SetReadyCheckmark(false);
             }
+
+            HideTextClouds();
+            HideStatusIcons();
         }
 
         /// <summary>
@@ -172,49 +185,113 @@ namespace Fool_online.Scripts.InRoom
         public override void OnEnemyGotCardsFromTalon(long playerId, int slotN, int cardsN)
         {
             print("OnEnemyGotCardsFromTalon " + playerId);
-            SlotsScripts[slotN].TakeCardsFromTalon(cardsN);
+            (SlotsScripts[slotN] as EnemyInfo).TakeCardsFromTalon(cardsN);
+        }
+
+        public override void OnMePassed()
+        {
+            OnOtherPlayerPassed(StaticRoomData.MyPlayer.ConnectionId, StaticRoomData.MySlotNumber);
         }
 
         public override void OnOtherPlayerPassed(long passedPlayerId, int slotN)
         {
+            //Set text clouds
             if (StaticRoomData.WhoseDefend == passedPlayerId)
             {
                 SlotsScripts[slotN].ShowTextCloud("Беру");
+                SlotsScripts[slotN].SetStatusIconNoAnimation(PlayerInfo.PlayerStatusIcon.DefenderGaveUp);
             }
-            else if (StaticRoomData.WhoseAttack == passedPlayerId)
+            else if (GameManager.Instance.AllCardsCovered())
             {
                 SlotsScripts[slotN].ShowTextCloud("Бито");
             }
             else
             {
-                SlotsScripts[slotN].ShowTextCloud("Бито");
+                SlotsScripts[slotN].ShowTextCloud("Пас");
+            }
+
+            //Set status icons
+            if (StaticRoomData.WhoseAttack == passedPlayerId)
+            {
+                //Animate icons
+                var defenderSlot = SlotsScripts[StaticRoomData.Denfender.SlotN];
+
+                foreach (var slot in SlotsScripts)
+                {
+                    if (slot != defenderSlot)
+                    {
+                        slot.SetStatusIconNoAnimation(PlayerInfo.PlayerStatusIcon.Attacker);
+                    }
+                }
             }
         }
+
 
 
 
         /// <summary>
         /// observer event
         /// </summary>
-        public override void OnNextTurn(long whoseTurn, int slotN, long defendingPlayerId, int defSlotN, int turnN)
+        public override void OnNextTurn(long whoseTurnPlayerId, int slotN, long defendingPlayerId, int defSlotN, int turnN)
         {
             HideTextClouds();
+            HideStatusIcons();
+
+            //Animate icons
+            PlayerInfo attacker = SlotsScripts[slotN];
+            PlayerInfo defender = SlotsScripts[defSlotN];
+
+            if (GameManager.Instance.TurnN == 0)
+            {
+                MessageManager.Instance.DelayNextAnimation(DelayBeforeNextTurn * 2);
+            }
+            else
+            {
+                MessageManager.Instance.DelayNextAnimation(DelayBeforeNextTurn);
+            }
+            attacker.AnimateSpawnStatusIcon(PlayerInfo.PlayerStatusIcon.Attacker);
+            defender.AnimateSpawnStatusIcon(PlayerInfo.PlayerStatusIcon.Defender);
+            
+
+            //MessageManager.Instance.AnimateAttackerAndDefender(attacker, defender);
+        }
+
+        public override void OnEndGame(long foolConnectionId, Dictionary<long, int> rewards)
+        {
+            HideTextClouds();
+            HideStatusIcons();
+        }
+
+        private void HideStatusIcons()
+        {
+            //hide old icons if were
+            foreach (var slot in SlotsScripts)
+            {
+                slot.AnimateHideCurrentStatusIcon();
+            }
         }
 
         public void HideTextClouds()
         {
             foreach (var slot in SlotsScripts)
             {
-                if (slot != null)
-                {
+                 slot.HideTextCloud();
+            }
+        }
+
+        public void HideTextCloudsNoDefender()
+        {
+            var defenderSlot = SlotsScripts[StaticRoomData.Denfender.SlotN];
+            foreach (var slot in SlotsScripts)
+            {
+                if (slot != defenderSlot)
                     slot.HideTextCloud();
-                }
             }
         }
 
         public void PickCardsFromTable(int slotN, List<CardRoot> cardsOnTable, List<CardRoot> cardsOnTableCovering)
         {
-            HideTextClouds();
+            HideTextCloudsNoDefender();
 
             SlotsScripts[slotN].PickCardsFromTable(cardsOnTable, cardsOnTableCovering);
         }

@@ -40,7 +40,7 @@ namespace Fool_online.Scripts.InRoom
 
         private int _cardsAddedByMe;
 
-        private bool _defenderGaveUpDefence = false;
+        public bool DefenderGaveUpDefence {private set; get; }
         private bool _attackerPassedPriority = false;
 
 
@@ -62,7 +62,7 @@ namespace Fool_online.Scripts.InRoom
         /// <summary>
         /// Number of current turn
         /// </summary>
-        private int _turnN; 
+        public int TurnN {private set; get; }
 
         /// <summary>
         /// Observer callback
@@ -84,7 +84,7 @@ namespace Fool_online.Scripts.InRoom
             else if (State == GameState.Playing)
             {
                 //TODO not end game but wait
-                EndGame();
+                //EndGame();
             }
         }
 
@@ -94,7 +94,7 @@ namespace Fool_online.Scripts.InRoom
         public override void OnOtherPlayerDropsCardOnTable(long playerId, int slotN, string cardCode)
         {
             var enemy = PlayerInfosManager.SlotsScripts[slotN];
-            var cardRoot = enemy.DropCardOnTable(TableContainerTransform, cardCode);
+            var cardRoot = (enemy as EnemyInfo).DropCardOnTable(TableContainerTransform, cardCode);
 
             //Add to list
             cardsOnTable.Add(cardRoot);
@@ -110,11 +110,37 @@ namespace Fool_online.Scripts.InRoom
         {
             //todo if attacker passed
 
-            if (StaticRoomData.Denfender.ConnectionId == passedPlayerId)
+            //if i didn't passed
+            if (!StaticRoomData.MyPlayer.Pass && !IamDefending())
             {
-                MyPlayerInfoDisplay.ShowPassbutton();
+                //if defender just passed then i can add card or just pass
+                if (StaticRoomData.Denfender.ConnectionId == passedPlayerId)
+                {
+                    if (_attackerPassedPriority || ILedAttack())
+                    {
+                        MyPlayerInfoDisplay.ShowPassbutton();
+                    }
+                    else
+                    {
+                        //todo wait for attacker pass
+                    }
 
-                _defenderGaveUpDefence = true;
+                    DefenderGaveUpDefence = true;
+                }
+                //if attacker just passed then i can add card or just pass. If attack was defeated (all cards covered) then i can say 'beaten'
+                else if (StaticRoomData.Attacker.ConnectionId == passedPlayerId)
+                {
+                    _attackerPassedPriority = true;
+
+                    if (AllCardsCovered())
+                    {
+                        MyPlayerInfoDisplay.ShowBeatenbutton();
+                    }
+                    else
+                    {
+                        MyPlayerInfoDisplay.ShowPassbutton();
+                    }
+                }
             }
 
             if (AllPassed())
@@ -160,7 +186,8 @@ namespace Fool_online.Scripts.InRoom
         {
             print("Other player covers card! " + cardOnTableCode + " by " + cardDroppedCode);
 
-            var droppedCardRoot = PlayerInfosManager.SlotsScripts[slotN].SpawnCard(cardDroppedCode);
+            var enemy = PlayerInfosManager.SlotsScripts[slotN];
+            var droppedCardRoot = (enemy as EnemyInfo).SpawnCard(cardDroppedCode);
 
             CardRoot cardOnTable = cardsOnTable.Find(card => card.CardCode == cardOnTableCode);
 
@@ -236,7 +263,7 @@ namespace Fool_online.Scripts.InRoom
         /// <summary>
         /// On i clicked get ready button
         /// </summary>
-        public void OnGetReady(bool value)
+        public void OnGetReady(bool value) //bug sometime button disaperars and doesnt send to server
         {
             if (State != GameState.PlayersGettingReady) return;
 
@@ -264,38 +291,37 @@ namespace Fool_online.Scripts.InRoom
 
         public override void OnStartGame()
         {
-            _turnN = 0;
+            TurnN = 0;
 
         }
 
         /// <summary>
         /// observer event
         /// </summary>
-        public override void OnNextTurn(long whoseTurn, int slotN, long defendingPlayerId, int defSlotN, int turnN)
+        public override void OnNextTurn(long whoseTurnPlayerId, int slotN, long defendingPlayerId, int defSlotN, int turnN)
         {
             print("OnNextTurn");
 
-            _defenderGaveUpDefence = false;
+            DefenderGaveUpDefence = false;
             _attackerPassedPriority = false;
 
-            this._turnN = turnN;
+            this.TurnN = turnN;
             _cardsAddedByMe = 0;
             State = GameState.Playing;
-            MyPlayerInfoDisplay.HideTextCloud();
 
             //if first turn
-            if (this._turnN == 1)
+            if (this.TurnN == 1)
             {
 
                 MyPlayerInfoDisplay.HideAllButtons();
 
                 if (ILedAttack())
                 {
-                    MessageManager.Instance.ShowFullScreenText("Вы ходите первым");
+                   // MessageManager.Instance.ShowFullScreenText("Вы ходите первым");
                 }
                 else
                 {
-                    MessageManager.Instance.ShowFullScreenText("Первым ходит " + StaticRoomData.Players[slotN].Nickname);
+                   // MessageManager.Instance.ShowFullScreenText("Первым ходит " + StaticRoomData.Players[slotN].Nickname);
                 }
                 return;
             }
@@ -303,12 +329,14 @@ namespace Fool_online.Scripts.InRoom
             //if not first turn
             if (ILedAttack())
             {
-                MessageManager.Instance.ShowFullScreenText("Ваш ход");
+                // MessageManager.Instance.ShowFullScreenText("Ваш ход");
             }
             else
             {
-                MessageManager.Instance.ShowFullScreenText("Ход игрока " + StaticRoomData.Players[slotN].Nickname);
+                // MessageManager.Instance.ShowFullScreenText("Ход игрока " + StaticRoomData.Players[slotN].Nickname);
             }
+            
+            
 
         }
 
@@ -317,7 +345,7 @@ namespace Fool_online.Scripts.InRoom
         /// </summary>
         public override void OnDropCardOnTableErrorCantDropThisCard(string cardCode)
         {
-            MessageManager.Instance.ShowFullScreenText("Можно подкидывать только карты той же стоимости что и на столе");
+            MessageManager.Instance.ShowFullScreenText("Нельзя подкинуть эту карту");
             //TODO go back (cardCode)
         }
 
@@ -327,6 +355,7 @@ namespace Fool_online.Scripts.InRoom
         public override void OnDropCardOnTableErrorNotYourTurn(string cardCode)
         {
             MessageManager.Instance.ShowFullScreenText("Не ваш ход");
+            //TODO go back (cardCode)
         }
 
         /// <summary>
@@ -335,6 +364,7 @@ namespace Fool_online.Scripts.InRoom
         public override void OnDropCardOnTableErrorTableIsFull(string cardCode)
         {
             MessageManager.Instance.ShowFullScreenText("Перебор");
+            //TODO go back (cardCode)
         }
 
         public override void OnEndGameGiveUp(long foolConnectionId, Dictionary<long, int> rewards)
@@ -360,8 +390,10 @@ namespace Fool_online.Scripts.InRoom
         /// <summary>
         /// Called by InputManager whenever i drop card on table
         /// </summary>
-        public void CardDroppedOnTableByMe(CardRoot droppedCardRoot)
+        public override void OnCardDroppedOnTableByMe(CardRoot droppedCardRoot)
         {
+            StopTableCardAnimations();
+
             if (State != GameState.Playing) return;
 
             if (AllPassed() || 
@@ -411,15 +443,13 @@ namespace Fool_online.Scripts.InRoom
                 {
                     //you are defending
                     MessageManager.Instance.ShowFullScreenText("На вас ходят");
-                    StopTableCardAnimations();
                     return;
                 }
 
                 //if i passed
-                if (StaticRoomData.DefenderPassed())
+                if (DefenderGaveUpDefence)
                 {
                     MessageManager.Instance.ShowFullScreenText("Вы решили брать");
-                    StopTableCardAnimations();
                     return;
                 }
 
@@ -430,7 +460,6 @@ namespace Fool_online.Scripts.InRoom
                 {
                     //you can not defent with this card
                     MessageManager.Instance.ShowFullScreenText("Вы не можете побиться этой картой");
-                    StopTableCardAnimations();
                     return;
                 }
                 //Chose closest beatable card
@@ -448,7 +477,14 @@ namespace Fool_online.Scripts.InRoom
             //else if i not attacking nor defenfing and cant add cards
             else
             {
-                MessageManager.Instance.ShowFullScreenText("Не ваш ход");
+                if (!_attackerPassedPriority)
+                {
+                    MessageManager.Instance.ShowFullScreenText("У атакующего приоритет");
+                }
+                else
+                {
+                    //ok
+                }
             }
         }
 
@@ -504,7 +540,7 @@ namespace Fool_online.Scripts.InRoom
         /// </summary>
         private bool IcanAddCards()
         {
-            return ILedAttack();
+            return _attackerPassedPriority || ILedAttack(); //&& todo am i neighbour 
         }
 
         /// <summary>
@@ -512,7 +548,7 @@ namespace Fool_online.Scripts.InRoom
         /// </summary>
         private bool ILedAttack()
         {
-            return StaticRoomData.WhoseAttack == FoolNetwork.LocalPlayer.ConnectionId;
+            return StaticRoomData.Attacker == StaticRoomData.MyPlayer;
         }
 
         /// <summary>
@@ -520,8 +556,7 @@ namespace Fool_online.Scripts.InRoom
         /// </summary>
         private bool IamDefending()
         {
-            //TODO multiplayer
-            return !ILedAttack();
+            return StaticRoomData.Denfender == StaticRoomData.MyPlayer;
         }
 
         /// <summary>
@@ -539,27 +574,39 @@ namespace Fool_online.Scripts.InRoom
                     {
                         MyPlayerInfoDisplay.HideAllButtons();
                     }
-                    else if (!_defenderGaveUpDefence)
+                    else if (!DefenderGaveUpDefence)
                     {
                         //i can give up an attack and take all cards from table
                         MyPlayerInfoDisplay.ShowPickUpCardsButton();
                     }
-                }
-                //if not my turn but i can add cards to table
-                else if (!ILedAttack() && IcanAddCards() && StaticRoomData.DefenderPassed())
-                {
-                    if (_cardsAddedByMe > 0)
+                    else //if (_defenderGaveUpDefence)
                     {
-                        MyPlayerInfoDisplay.ShowBeatenbutton();
+                        MyPlayerInfoDisplay.HideAllButtons();
+                    }
+                }
+                //im not defending
+                else
+                {
+                    MyPlayerInfoDisplay.HideAllButtons();
+
+                    if (DefenderGaveUpDefence)
+                    {
+                        //attacker passed or i am attacker
+                        if (IcanAddCards())
+                        {
+                            MyPlayerInfoDisplay.ShowPassbutton();
+                        }
                     }
                     else
                     {
-                        MyPlayerInfoDisplay.ShowPassbutton();
+                        if (AllCardsCovered())
+                        {
+                            if (IcanAddCards())
+                            {
+                                MyPlayerInfoDisplay.ShowBeatenbutton();
+                            }
+                        }
                     }
-                }
-                else if (ILedAttack() && AllCardsCovered())
-                {
-                    MyPlayerInfoDisplay.ShowBeatenbutton();
                 }
             }
             else
@@ -567,27 +614,41 @@ namespace Fool_online.Scripts.InRoom
                 MyPlayerInfoDisplay.HideAllButtons();
             }
 
-            //Hide 'i pass' texts
-            MyPlayerInfoDisplay.HideTextCloud();
-            PlayerInfosManager.HideTextClouds();
-
-            //if defender didn't gave up an attack
-            if (!StaticRoomData.DefenderPassed())
+            if (DefenderGaveUpDefence)
+            {
+                //Hide 'i pass' texts
+                PlayerInfosManager.HideTextCloudsNoDefender();
+                //set every player to no-pass
+                foreach (var player in StaticRoomData.Players)
+                {
+                    if (player != StaticRoomData.Denfender)
+                    {
+                        player.Pass = false;
+                    }
+                }
+            }
+            else
             {
                 //set every player to no-pass
                 foreach (var player in StaticRoomData.Players)
                 {
+                    //left player will be null if this was triggered on leave
                     if (player != null)
+                    {
                         player.Pass = false;
+                    }
                 }
+
+                //Hide 'i pass' texts
+                PlayerInfosManager.HideTextClouds();
             }
 
-            StopTableCardAnimations();
+            FoolNetworkObservableCallbacksWrapper.Instance.TableUpdated();
         }
 
         private void EndGame()
         {
-            _turnN = 0;
+            TurnN = 0;
 
             RemoveAllCardsToDiscardPileAnimation();
             TableUpdated();
@@ -631,42 +692,48 @@ namespace Fool_online.Scripts.InRoom
             }
         }
 
-        public void OnEndTurnButtonClick() //todo end turn fix
+        public void OnEndTurnButtonClick()
         {
             MyPlayerInfoDisplay.HideAllButtons();
 
             if (State != GameState.Playing) return;
 
-            if (ILedAttack() && AllCardsCovered())
+            if (AllCardsCovered())
             {
                 //pass
                 ClientSendPackets.Send_Pass();
-                MyPlayerInfoDisplay.ShowTextCloud("Бито");
+               // MyPlayerInfoDisplay.ShowTextCloud("Бито");
                 StaticRoomData.MyPlayer.Pass = true;
+                FoolNetworkObservableCallbacksWrapper.Instance.MePassed();
             }
             //if i am defending 
             else if (IamDefending())
             {
                 //pick up cards
+                DefenderGaveUpDefence = true;
+
                 ClientSendPackets.Send_Pass();
-                MyPlayerInfoDisplay.ShowTextCloud("Беру");
+               // MyPlayerInfoDisplay.ShowTextCloud("Беру");
                 StaticRoomData.MyPlayer.Pass = true;
+                FoolNetworkObservableCallbacksWrapper.Instance.MePassed();
             }
             //if my turn and i am attacking
-            else if ((!ILedAttack() || IcanAddCards()) && _cardsAddedByMe > 0)
+            else if (IcanAddCards())
             {
                 //pass
                 ClientSendPackets.Send_Pass();
-                MyPlayerInfoDisplay.ShowTextCloud("Пас");
+               // MyPlayerInfoDisplay.ShowTextCloud("Пас");
                 StaticRoomData.MyPlayer.Pass = true;
+                FoolNetworkObservableCallbacksWrapper.Instance.MePassed();
             }
+
         }
 
         /// <summary>
         /// Called on each frame by InputManger when i drag card
         /// Animates cards that can be covered when you are defending
         /// </summary>
-        public void DraggedCardUpdate(Vector2 mousePos, CardRoot draggedCardRoot, bool inTableZone)
+        public override void OnDraggedCardUpdate(Vector2 mousePos, CardRoot draggedCardRoot, bool inTableZone)
         {
             //Am i defending or attacking?
             if (IamDefending())
@@ -700,15 +767,11 @@ namespace Fool_online.Scripts.InRoom
                     StopTableCardAnimations();
                 }
             }
-            else if (ILedAttack() || IcanAddCards())
-            {
-
-            }
 
         }
 
         /// <summary>
-        /// Stops glowing on cards which you could beat on table
+        /// Stops glowing on cards which you could beat on table //todo migrate to table renderer
         /// </summary>
         private void StopTableCardAnimations()
         {
@@ -804,7 +867,7 @@ namespace Fool_online.Scripts.InRoom
             cardsOnTableCovering.Clear();
         }
 
-        private bool AllCardsCovered()
+        internal bool AllCardsCovered()
         {
             return cardsOnTable.All(card => card.IsCoveredByACard);
         }

@@ -14,6 +14,8 @@ namespace Fool_online.Scripts.Network
 //TODO implement heartbeat
     public class FoolTcpClient : FoolNetworkObservable
     {
+        public static string ClientVersion = "1.2"; //todo implement version check
+
         private const string CONFIG_FILE_NAME = "client.config";
 
         private static FoolTcpClient _instance;

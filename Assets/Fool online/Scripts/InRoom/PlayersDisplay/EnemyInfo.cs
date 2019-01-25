@@ -21,33 +21,13 @@ namespace Fool_online.Scripts.InRoom
             _talonTransform = FindObjectOfType<TalonRenderer>().TalonDisplay.transform;
         }
 
-        public void DrawPlayer(PlayerInRoom playerInRoom)
-        {
-            NicknameText.text = playerInRoom.Nickname;
-        }
-
-        public void DrawEmpty()
-        {
-            NicknameText.text = "Ожидание противника";
-        }
-
         public void Reset()
         {
             NicknameText.text = "";
             ReadyCheckmark.enabled = false;
         }
 
-        public void OnPlayerLeftRoom()
-        {
-            //TODO OnPlayerLeftRoom
-            /*if (playerLeft == owner)
-        {
-            NicknameText.text = "";
-            ReadyCheckmark.enabled = (false);
-        }*/
-        }
-
-        public void SetReadyCheckmark(bool value)
+        public override void SetReadyCheckmark(bool value)
         {
             ReadyCheckmark.enabled = value;
         }
@@ -112,14 +92,6 @@ namespace Fool_online.Scripts.InRoom
             CardsInHand.Add(cardRootScript);
             cardRootScript.interactibleCard.CanBeDragged = false;
             cardsN++;
-        }
-
-        /// <summary>
-        /// Delete all card displays from hand
-        /// </summary>
-        public void ClearHand()
-        {
-            Util.DestroyAllChildren(HandContainer);
         }
 
         /// <summary>

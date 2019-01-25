@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Fool_online.Scripts.CardsScripts;
+using UnityEngine;
 
 namespace Fool_online.Scripts.Network.NetworksObserver
 {
@@ -217,14 +219,14 @@ namespace Fool_online.Scripts.Network.NetworksObserver
                 }
             });
         }
-        protected void OnNextTurn(long whoseTurn, int slotN, long defendingPlayerId, int defSlotN, int turnN)
+        protected void OnNextTurn(long whoseTurnPlayerId, int slotN, long defendingPlayerId, int defSlotN, int turnN)
         {
             //This is needed for access to unity's api
             DoInMainUnityThread(delegate {
                 CheckDestroyedObservers();
                 foreach (var obs in _observers)
                 {
-                    obs.OnNextTurn(whoseTurn, slotN, defendingPlayerId, defSlotN, turnN);
+                    obs.OnNextTurn(whoseTurnPlayerId, slotN, defendingPlayerId, defSlotN, turnN);
                 }
             });
         }
@@ -372,6 +374,51 @@ namespace Fool_online.Scripts.Network.NetworksObserver
                 }
             });
         }
+        protected void OnMePassed()
+        {
+            //This is needed for access to unity's api
+            DoInMainUnityThread(delegate {
+                CheckDestroyedObservers();
+                foreach (var obs in _observers)
+                {
+                    obs.OnMePassed();
+                }
+            });
+        }
+        protected void OnDraggedCardUpdate(Vector2 mousePos, CardRoot draggedCardRoot, bool inTableZone)
+        {
+            //This is needed for access to unity's api
+            DoInMainUnityThread(delegate {
+                CheckDestroyedObservers();
+                foreach (var obs in _observers)
+                {
+                    obs.OnDraggedCardUpdate(mousePos, draggedCardRoot, inTableZone);
+                }
+            });
+        }
+        protected void OnCardDroppedOnTableByMe(CardRoot cardRoot)
+        {
+            //This is needed for access to unity's api
+            DoInMainUnityThread(delegate {
+                CheckDestroyedObservers();
+                foreach (var obs in _observers)
+                {
+                    obs.OnCardDroppedOnTableByMe(cardRoot);
+                }
+            });
+        }
+        protected void OnTableUpdated()
+        {
+            //This is needed for access to unity's api
+            DoInMainUnityThread(delegate {
+                CheckDestroyedObservers();
+                foreach (var obs in _observers)
+                {
+                    obs.OnTableUpdated();
+                }
+            });
+        }
+        
 
 
         #endregion

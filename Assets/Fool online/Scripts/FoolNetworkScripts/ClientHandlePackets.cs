@@ -328,6 +328,7 @@ namespace Fool_online.Scripts.Network
                 if (slots.ContainsKey(i))
                 {
                     PlayerInRoom pl = new PlayerInRoom(slots[i]);
+                    pl.SlotN = i;
                     StaticRoomData.Players[i] = pl;
                 }
             }

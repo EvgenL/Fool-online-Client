@@ -56,7 +56,7 @@ public class MessageManager : MonoBehaviour
         Invoke(nameof(Hide), 3f);
     }
 
-    public void Hide()
+    private void Hide()
     {
         _textContainer.SetActive(false);
     }
@@ -152,7 +152,7 @@ public class MessageManager : MonoBehaviour
     /// Spawns player status icon at screen centre
     /// it will be a child of a PlayerStatusIconSpawner
     /// </summary>
-    private Transform SpawnIconAtScreenCentre(PlayerInfo.PlayerStatusIcon statusIcon)
+    public Transform SpawnIconAtScreenCentre(PlayerInfo.PlayerStatusIcon statusIcon)
     {
         //Spawn icon to centre of the PlayerStatusIconSpawner
         GameObject iconGo = Instantiate(_statusIconPrefab, _playerStatusIconSpawner);
@@ -202,6 +202,13 @@ public class MessageManager : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(_playerStatusIconSpawner);
 
         return result;
+    }
+
+    public void DelayNextAnimation(float seconds)
+    {
+        Sequence seq = DOTween.Sequence();
+        seq.AppendInterval(seconds);
+        EnqueueNewSequence(seq);
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Fool_online.Scripts.CardsScripts;
 using UnityEngine;
 
 namespace Fool_online.Scripts.Network.NetworksObserver
@@ -122,7 +123,7 @@ namespace Fool_online.Scripts.Network.NetworksObserver
         /// <summary>
         /// Called on every turn.
         /// </summary>
-        public virtual void OnNextTurn(long whoseTurn, int slotN, long defendingPlayerId, int defSlotN, int turnN)
+        public virtual void OnNextTurn(long whoseTurnPlayerId, int slotN, long defendingPlayerId, int defSlotN, int turnN)
         {
         }
 
@@ -179,7 +180,34 @@ namespace Fool_online.Scripts.Network.NetworksObserver
         {
         }
 
-        
+        /// <summary>
+        /// Sent by GameManager when i click endturnbutton
+        /// </summary>
+        public virtual void OnMePassed()
+        {
+        }
+
+        /// <summary>
+        /// Sent by InputManager
+        /// </summary>
+        public virtual void OnDraggedCardUpdate(Vector2 mousePos, CardRoot draggedCardRoot, bool inTableZone)
+        {
+        }
+
+        /// <summary>
+        /// Sent by InputManager
+        /// </summary>
+        public virtual void OnCardDroppedOnTableByMe(CardRoot cardRoot)
+        {
+        }
+
+        /// <summary>
+        /// Sent by GameManager anything on table happens
+        /// </summary>
+        public virtual void OnTableUpdated()
+        {
+        }
+
 
         private void OnDestroy()
         {

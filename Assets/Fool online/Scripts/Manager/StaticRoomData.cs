@@ -44,11 +44,6 @@ namespace Fool_online.Scripts.InRoom
         public static string CardFrontSkin = "Default";
         public static string CardBackSkin = "Default";
 
-        public static bool DefenderPassed()
-        {
-            return Players.Any(player => player != null && player.Pass && player.ConnectionId == WhoseDefend);
-        }
-
         public static PlayerInRoom Denfender => Players.Single(player => player.ConnectionId == WhoseDefend);
         public static PlayerInRoom Attacker => Players.Single(player => player.ConnectionId == WhoseAttack);
     }

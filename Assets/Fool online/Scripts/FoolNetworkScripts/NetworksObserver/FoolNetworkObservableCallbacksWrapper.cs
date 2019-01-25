@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Fool_online.Scripts.CardsScripts;
 using Fool_online.Scripts.InRoom;
 using UnityEngine;
 
@@ -132,6 +133,7 @@ namespace Fool_online.Scripts.Network.NetworksObserver
             StaticRoomData.PlayerIds.Add(joinedPlayerId);
 
             PlayerInRoom pl = new PlayerInRoom(joinedPlayerId);
+            pl.SlotN = slotN;
             StaticRoomData.Players[slotN] = pl;
 
             //Observable
@@ -193,9 +195,9 @@ namespace Fool_online.Scripts.Network.NetworksObserver
             OnStartGame();
         }
 
-        public void NextTurn(long whoseTurn, int slotN, long defendingPlayerId, int defSlotN, int turnN)
+        public void NextTurn(long whoseTurnPlayerId, int slotN, long defendingPlayerId, int defSlotN, int turnN)
         {
-            StaticRoomData.WhoseAttack = whoseTurn;
+            StaticRoomData.WhoseAttack = whoseTurnPlayerId;
             StaticRoomData.WhoseDefend = defendingPlayerId;
             StaticRoomData.CardsLeftInTalon -= (StaticRoomData.MaxPlayers * StaticRoomData.MaxCardsDraw);
 
@@ -204,7 +206,7 @@ namespace Fool_online.Scripts.Network.NetworksObserver
                 player.Pass = false;
             }
             //Observable
-            OnNextTurn(whoseTurn, slotN, defendingPlayerId, defSlotN, turnN);
+            OnNextTurn(whoseTurnPlayerId, slotN, defendingPlayerId, defSlotN, turnN);
         }
 
         public void TalonData(int talonSize, string trumpCardCode)
@@ -265,10 +267,10 @@ namespace Fool_online.Scripts.Network.NetworksObserver
         public void OtherPlayerCoversCard(long coveredPlayerId, int slotN,
             string cardOnTableCode, string cardDroppedCode)
         {
-            foreach (var player in StaticRoomData.Players)
+            /*foreach (var player in StaticRoomData.Players)
             {
                 player.Pass = false;
-            }
+            }*/
 
             //Observable
             OnOtherPlayerCoversCard(coveredPlayerId, slotN, cardOnTableCode, cardDroppedCode);
@@ -290,6 +292,42 @@ namespace Fool_online.Scripts.Network.NetworksObserver
         {
             //Observable
             OnEndGameFool(foolPlayerId);
+        }
+
+        /// <summary>
+        /// Sent by GameManager when i click endturnbutton
+        /// </summary>
+        public void MePassed()
+        {
+            //Observable
+            OnMePassed();
+        }
+
+        /// <summary>
+        /// Sent by InputManager
+        /// </summary>
+        public void DraggedCardUpdate(Vector2 mousePos, CardRoot draggedCardRoot, bool inTableZone)
+        {
+            //Observable
+            OnDraggedCardUpdate(mousePos, draggedCardRoot, inTableZone);
+        }
+
+        /// <summary>
+        /// Sent by InputManager
+        /// </summary>
+        public void CardDroppedOnTableByMe(CardRoot cardRoot)
+        {
+            //Observable
+            OnCardDroppedOnTableByMe(cardRoot);
+        }
+
+        /// <summary>
+        /// Sent by GameManager anything on table happens
+        /// </summary>
+        public void TableUpdated()
+        {
+            //Observable
+            OnTableUpdated();
         }
 
 
