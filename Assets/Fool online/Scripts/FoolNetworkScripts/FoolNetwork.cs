@@ -70,10 +70,6 @@
         /// </summary>
         public static void ConnectToGameServer()
         {
-            if (ConnectToLocalhost)
-            {
-                FoolTcpClient.Instance.ServerIP = "127.0.0.1";
-            }
             FoolTcpClient.Instance.Start();
             client = FoolTcpClient.Instance;
         }
@@ -81,9 +77,9 @@
         /// <summary>
         /// Call to disconnect from game.
         /// </summary>
-        public static void Disconnect()
+        public static void Disconnect(string reason = null)
         {
-            FoolTcpClient.Instance.Disconnect();
+            FoolTcpClient.Instance.Disconnect(reason);
         }
 
         /// <summary>

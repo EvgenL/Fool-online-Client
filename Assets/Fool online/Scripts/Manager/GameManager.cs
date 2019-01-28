@@ -38,12 +38,8 @@ namespace Fool_online.Scripts.InRoom
         public List<CardRoot> cardsOnTable = new List<CardRoot>();
         public List<CardRoot> cardsOnTableCovering = new List<CardRoot>();
 
-        private int _cardsAddedByMe;
-
         public bool DefenderGaveUpDefence {private set; get; }
         private bool _attackerPassedPriority = false;
-
-
 
         private void Awake()
         {
@@ -110,9 +106,6 @@ namespace Fool_online.Scripts.InRoom
         {
             //todo if attacker passed
 
-            //if i didn't passed
-            if (!StaticRoomData.MyPlayer.Pass && !IamDefending())
-            {
                 //if defender just passed then i can add card or just pass
                 if (StaticRoomData.Denfender.ConnectionId == passedPlayerId)
                 {
@@ -134,14 +127,24 @@ namespace Fool_online.Scripts.InRoom
 
                     if (AllCardsCovered())
                     {
-                        MyPlayerInfoDisplay.ShowBeatenbutton();
+                        if (IamDefending())
+                        {
+                            if (AllButDefenderPassed())
+                            {
+                                //wait for next turn
+                                State = GameState.Paused;
+                            }
+                        }
+                        else
+                        {
+                            MyPlayerInfoDisplay.ShowBeatenbutton();
+                        }
                     }
                     else
                     {
                         MyPlayerInfoDisplay.ShowPassbutton();
                     }
                 }
-            }
 
             if (AllPassed())
             {
@@ -152,13 +155,15 @@ namespace Fool_online.Scripts.InRoom
 
         private bool AllPassed()
         {
-            return StaticRoomData.Players.All(x => x.Pass);
+            return StaticRoomData.Players.All(x => x.Pass || x.Won);
         }
 
         private bool AllButDefenderPassed()
         {
             foreach (var player in StaticRoomData.Players)
             {
+                if (player.Won) continue;
+
                 if (player == StaticRoomData.Denfender)
                 {
                     if (player.Pass)
@@ -168,7 +173,7 @@ namespace Fool_online.Scripts.InRoom
                 }
                 else
                 {
-                    if (player.Pass != true)
+                    if (player.Pass == false)
                     {
                         return false;
                     }
@@ -256,6 +261,7 @@ namespace Fool_online.Scripts.InRoom
                 {
                     State = GameState.PlayersGettingReady;
                 }
+
                 MyPlayerInfoDisplay.HideGetReadyButton();
             }
         }
@@ -292,7 +298,6 @@ namespace Fool_online.Scripts.InRoom
         public override void OnStartGame()
         {
             TurnN = 0;
-
         }
 
         /// <summary>
@@ -300,13 +305,10 @@ namespace Fool_online.Scripts.InRoom
         /// </summary>
         public override void OnNextTurn(long whoseTurnPlayerId, int slotN, long defendingPlayerId, int defSlotN, int turnN)
         {
-            print("OnNextTurn");
-
             DefenderGaveUpDefence = false;
             _attackerPassedPriority = false;
 
             this.TurnN = turnN;
-            _cardsAddedByMe = 0;
             State = GameState.Playing;
 
             //if first turn
@@ -367,7 +369,7 @@ namespace Fool_online.Scripts.InRoom
             //TODO go back (cardCode)
         }
 
-        public override void OnEndGameGiveUp(long foolConnectionId, Dictionary<long, int> rewards)
+        public override void OnEndGameGiveUp(long foolConnectionId, Dictionary<long, double> rewards)
         {
             MessageManager.Instance.ShowFullScreenText("Игрок " + foolConnectionId + " сдался.");
             EndGame();
@@ -385,6 +387,9 @@ namespace Fool_online.Scripts.InRoom
 
             //else if everybody's ready start game
             MyPlayerInfoDisplay.HideGetReadyButton();
+
+            //Wait for server to start game
+            State = GameState.Paused;
         }
 
         /// <summary>
@@ -418,7 +423,6 @@ namespace Fool_online.Scripts.InRoom
                     droppedCardRoot.SetOnTable(true);
                     cardsOnTable.Add(droppedCardRoot);
                     MyPlayerInfoDisplay.RemoveCardFromHand(droppedCardRoot);
-                    _cardsAddedByMe++;
                     //init animation
                     droppedCardRoot.AnimateMoveToTransform(TableContainerTransform);
                     //StartCoroutine(AnimatePutMyCardOnTableOnNextFrame(droppedCardRoot, TableContainerTransform));
@@ -692,7 +696,7 @@ namespace Fool_online.Scripts.InRoom
             }
         }
 
-        public void OnEndTurnButtonClick()
+        public void OnMePass()
         {
             MyPlayerInfoDisplay.HideAllButtons();
 

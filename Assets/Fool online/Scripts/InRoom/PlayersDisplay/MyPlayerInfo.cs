@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Fool_online.Scripts.CardsScripts;
 using Fool_online.Scripts.Network;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace Fool_online.Scripts.InRoom
 {
     public class MyPlayerInfo : PlayerInfo
     {
-
         [SerializeField] private MyHandRenderer _myHand;
         [SerializeField] private GameObject GetReadyButton;
         [SerializeField] private GameObject EndTurnButton;
@@ -31,7 +32,7 @@ namespace Fool_online.Scripts.InRoom
 
         public void OnEndTurnButtonClick()
         {
-            GameManager.Instance.OnEndTurnButtonClick();
+            GameManager.Instance.OnMePass();
         }
 
         public void ShowGetReadyButton()
@@ -53,20 +54,24 @@ namespace Fool_online.Scripts.InRoom
 
         public void ShowPickUpCardsButton()
         {
-            EndTurnButton.SetActive(true);
-            EndTurnButtonText.text = "Беру";
+            ShowEndTurnButtonText("Беру");
         }
         public void ShowPassbutton()
         {
-            EndTurnButton.SetActive(true);
-            EndTurnButtonText.text = "Пас";
+            ShowEndTurnButtonText("Пас");
         }
         public void ShowBeatenbutton()
         {
-            EndTurnButton.SetActive(true);
-            EndTurnButtonText.text = "Бито";
+            ShowEndTurnButtonText("Бито");
         }
-    
+
+        private void ShowEndTurnButtonText(string buttonText)
+        {
+            if (StaticRoomData.Iwon) return;
+            EndTurnButton.SetActive(true);
+            EndTurnButtonText.text = buttonText;
+        }
+
 
         /// <summary>
         /// Hides EndTurnButton and/or GetReadyButton from my player info display

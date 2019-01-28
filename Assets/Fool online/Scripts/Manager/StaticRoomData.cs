@@ -46,5 +46,7 @@ namespace Fool_online.Scripts.InRoom
 
         public static PlayerInRoom Denfender => Players.Single(player => player.ConnectionId == WhoseDefend);
         public static PlayerInRoom Attacker => Players.Single(player => player.ConnectionId == WhoseAttack);
+
+        public static bool Iwon => MyPlayer.Won;
     }
 }

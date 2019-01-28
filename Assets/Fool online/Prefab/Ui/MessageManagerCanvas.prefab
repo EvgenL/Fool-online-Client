@@ -315,6 +315,8 @@ MonoBehaviour:
   _playerStatusIconSpawner: {fileID: 264185985}
   _statusIconPrefab: {fileID: 3493985123639174428, guid: ebe36db64d71d5d4c9acff35da1c20cf,
     type: 3}
+  _moneyPrefab: {fileID: 6811461357810641197, guid: 5f4a6bb0baa4a7a45b6aac0034811163,
+    type: 3}
   _wonSprite: {fileID: 21300000, guid: dbee1432d14e1ef4db2b9fcbce5e27fb, type: 3}
   _foolSprite: {fileID: 21300000, guid: 487bb3b963a765044ad36f1bcf5190fa, type: 3}
   _attackerSprite: {fileID: 21300000, guid: 15f3c0dfc7d8d204ebe2ae434c025c0e, type: 3}

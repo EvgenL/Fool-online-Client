@@ -140,6 +140,7 @@ RectTransform:
   - {fileID: 55}
   - {fileID: 57}
   - {fileID: 58}
+  - {fileID: 63533896}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -164,11 +165,12 @@ MonoBehaviour:
   NicknameText: {fileID: 72}
   Userpic: {fileID: 0}
   HandContainer: {fileID: 50}
+  MoneyIconContainer: {fileID: 63533896}
   TextCloud: {fileID: 33}
   TextCloudText: {fileID: 75}
   CardsInHand: []
   ReadyCheckmark: {fileID: 70}
-  CardBackPrefab: {fileID: 23, guid: 19d8fd5802581374dbc7eba1c0751732, type: 3}
+  CardBackPrefab: {fileID: 26, guid: 19d8fd5802581374dbc7eba1c0751732, type: 3}
   _cardPickPoint: {fileID: 57}
 --- !u!1 &30
 GameObject:
@@ -616,3 +618,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 36}
   m_CullTransparentMesh: 0
+--- !u!1 &63533895
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 63533896}
+  m_Layer: 5
+  m_Name: MoneyIconContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &63533896
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63533895}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 52}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0.000010014, y: 19}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}

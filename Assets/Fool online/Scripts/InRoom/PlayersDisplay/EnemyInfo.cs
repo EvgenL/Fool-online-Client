@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Fool_online.Scripts.InRoom;
 using Fool_online.Scripts.CardsScripts;
 using UnityEngine;
 using UnityEngine.UI;
@@ -69,7 +70,6 @@ namespace Fool_online.Scripts.InRoom
 
                 //Init animation
                 cardRootScript.AnimateMoveToTransform(HandContainer);
-                //cardRootScript.AnimateFromToRoot(_talonTransform.position);
 
                 yield return new WaitForSeconds(0.1f); //StaticParameters.TalonAnimationDelay);
             }

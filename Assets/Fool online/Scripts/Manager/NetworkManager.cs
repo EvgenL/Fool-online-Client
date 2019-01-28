@@ -15,11 +15,6 @@ namespace Fool_online.Scripts
         /// </summary>
         public FoolNetwork.ConnectionState ConnectionState = FoolNetwork.ConnectionState.ConnectingGameServer;
 
-        /// <summary>
-        /// For debugging
-        /// </summary>
-        public bool ConnectToLocalhost = false;
-
         #region Singleton
 
         public static NetworkManager Instance;
@@ -54,8 +49,6 @@ namespace Fool_online.Scripts
         /// </summary>
         public void Connect()
         {
-            FoolNetwork.ConnectToLocalhost = ConnectToLocalhost;
-
             ConnectionState = FoolNetwork.connectionState;
             if (ConnectionState == FoolNetwork.ConnectionState.ConnectingGameServer)
             {

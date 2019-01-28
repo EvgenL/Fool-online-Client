@@ -151,6 +151,14 @@ namespace Fool_online.Scripts.Network.NetworksObserver
 
             StaticRoomData.Players[slotN] = null;
 
+            foreach (var player in StaticRoomData.Players)
+            {
+                if (player != null)
+                {
+                    player.IsReady = false;
+                }
+            }
+
             //Observable
             OnRoomData();
 
@@ -191,6 +199,13 @@ namespace Fool_online.Scripts.Network.NetworksObserver
 
         public void StartGame()
         {
+            foreach (var player in StaticRoomData.Players)
+            {
+                player.Won = false;
+                player.Pass = false;
+                player.IsReady = false;
+            }
+
             //Observable
             OnStartGame();
         }
@@ -245,16 +260,26 @@ namespace Fool_online.Scripts.Network.NetworksObserver
             OnOtherPlayerDropsCardOnTable(playerId, slotN, cardCode);
         }
 
-        public void EndGame(long foolConnectionId, Dictionary<long, int> rewards)
+        public void EndGame(long foolConnectionId, Dictionary<long, double> rewards)
         {
             //Observable
             OnEndGame(foolConnectionId, rewards);
         }
 
-        public void EndGameGiveUp(long foolConnectionId, Dictionary<long, int> rewards)
+        public void EndGameGiveUp(long foolConnectionId, Dictionary<long, double> rewards)
         {
             //Observable
+            OnEndGame(foolConnectionId, rewards);
+            //Observable
             OnEndGameGiveUp(foolConnectionId, rewards);
+        }
+
+        public void EndGameFool(long foolPlayerId, Dictionary<long, double> rewards)
+        {
+            //Observable
+            OnEndGame(foolPlayerId, rewards);
+            //Observable
+            OnEndGameFool(foolPlayerId);
         }
 
         public void OtherPlayerPassed(long passedPlayerId, int slotN)
@@ -286,12 +311,6 @@ namespace Fool_online.Scripts.Network.NetworksObserver
         {
             //Observable
             OnDefenderPicksCards(pickedPlayerId, slotN);
-        }
-
-        public void EndGameFool(long foolPlayerId)
-        {
-            //Observable
-            OnEndGameFool(foolPlayerId);
         }
 
         /// <summary>
@@ -330,6 +349,11 @@ namespace Fool_online.Scripts.Network.NetworksObserver
             OnTableUpdated();
         }
 
+        public void PlayerWon(long wonPlayerId, double winnerReward)
+        {
+            //Observable
+            OnPlayerWon(wonPlayerId, winnerReward);
+        }
 
     }
 }

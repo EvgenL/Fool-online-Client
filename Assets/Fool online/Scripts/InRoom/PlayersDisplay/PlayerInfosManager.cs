@@ -256,7 +256,7 @@ namespace Fool_online.Scripts.InRoom
             //MessageManager.Instance.AnimateAttackerAndDefender(attacker, defender);
         }
 
-        public override void OnEndGame(long foolConnectionId, Dictionary<long, int> rewards)
+        public override void OnEndGame(long foolConnectionId, Dictionary<long, double> rewards)
         {
             HideTextClouds();
             HideStatusIcons();

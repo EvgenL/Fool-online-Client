@@ -27,6 +27,8 @@ public class MessageManager : MonoBehaviour
 
     [Header("Prefab of status icon")]
     [SerializeField] private GameObject _statusIconPrefab;
+    [Header("Prefab of money icon and text")]
+    [SerializeField] private GameObject _moneyPrefab;
 
     [Header("Sprites of status icons")]
     [SerializeField] private Sprite _wonSprite;
@@ -61,6 +63,13 @@ public class MessageManager : MonoBehaviour
         _textContainer.SetActive(false);
     }
 
+
+    public void PlayerGotReward(Transform playerRewardContainer, double amount)
+    {
+        var moneyTransform = SpawnIconAtScreenCentre(PlayerInfo.PlayerStatusIcon.Money);
+
+        AnimateMoveIconToTransform(playerRewardContainer, moneyTransform);
+    }
 
     /// <summary>
     /// Animates sword and shield icons to apperar 
@@ -106,6 +115,46 @@ public class MessageManager : MonoBehaviour
         var seq = AnimateMoveIconToTransform(target, iconTransform);
         EnqueueNewSequence(seq);
     }
+    
+    /// <summary>
+    /// Spawns player status icon at screen centre
+    /// it will be a child of a PlayerStatusIconSpawner
+    /// </summary>
+    public Transform SpawnIconAtScreenCentre(PlayerInfo.PlayerStatusIcon statusIcon)
+    {
+        if (statusIcon == PlayerInfo.PlayerStatusIcon.Money)
+        {
+            return Instantiate(_moneyPrefab, _playerStatusIconSpawner).transform;
+        }
+
+        //Spawn icon to centre of the PlayerStatusIconSpawner
+        GameObject iconGo = Instantiate(_statusIconPrefab, _playerStatusIconSpawner);
+
+        iconGo.transform.position = _playerStatusIconSpawner.position;
+
+        //Get image
+        var iconImage = iconGo.GetComponent<Image>();
+
+        //Choose what image to draw
+        switch (statusIcon)
+        {
+            case PlayerInfo.PlayerStatusIcon.Fool:
+                iconImage.sprite = _foolSprite;
+                break;
+            case PlayerInfo.PlayerStatusIcon.Attacker:
+                iconImage.sprite = _attackerSprite;
+                break;
+            case PlayerInfo.PlayerStatusIcon.Defender:
+                iconImage.sprite = _defenderSprite;
+                break;
+            case PlayerInfo.PlayerStatusIcon.DefenderGaveUp:
+                iconImage.sprite = _defenderGaveUpSprite;
+                break;
+        }
+
+
+        return iconGo.transform;
+    }
 
     /// <summary>
     /// Moves status icon to players container transrorm
@@ -148,43 +197,6 @@ public class MessageManager : MonoBehaviour
         return sequence;
     }
 
-    /// <summary>
-    /// Spawns player status icon at screen centre
-    /// it will be a child of a PlayerStatusIconSpawner
-    /// </summary>
-    public Transform SpawnIconAtScreenCentre(PlayerInfo.PlayerStatusIcon statusIcon)
-    {
-        //Spawn icon to centre of the PlayerStatusIconSpawner
-        GameObject iconGo = Instantiate(_statusIconPrefab, _playerStatusIconSpawner);
-
-        iconGo.transform.position = _playerStatusIconSpawner.position;
-
-        //Get image
-        var iconImage = iconGo.GetComponent<Image>();
-
-        //Choose what image to draw
-        switch (statusIcon)
-        {
-            case PlayerInfo.PlayerStatusIcon.Won:
-                iconImage.sprite = _wonSprite;
-                break;
-            case PlayerInfo.PlayerStatusIcon.Fool:
-                iconImage.sprite = _foolSprite;
-                break;
-            case PlayerInfo.PlayerStatusIcon.Attacker:
-                iconImage.sprite = _attackerSprite;
-                break;
-            case PlayerInfo.PlayerStatusIcon.Defender:
-                iconImage.sprite = _defenderSprite;
-                break;
-            case PlayerInfo.PlayerStatusIcon.DefenderGaveUp:
-                iconImage.sprite = _defenderGaveUpSprite;
-                break;
-        }
-
-
-        return iconGo.transform;
-    }
 
     /// <summary>
     /// Spawns multiple icons with position managed by grid layout

@@ -296,7 +296,7 @@ namespace Fool_online.Scripts.Network.NetworksObserver
                 }
             });
         }
-        protected void OnEndGame(long foolConnectionId, Dictionary<long, int> rewards)
+        protected void OnEndGame(long foolConnectionId, Dictionary<long, double> rewards)
         {
             //This is needed for access to unity's api
             DoInMainUnityThread(delegate {
@@ -307,7 +307,7 @@ namespace Fool_online.Scripts.Network.NetworksObserver
                 }
             });
         }
-        protected void OnEndGameGiveUp(long foolConnectionId, Dictionary<long, int> rewards)
+        protected void OnEndGameGiveUp(long foolConnectionId, Dictionary<long, double> rewards)
         {
             //This is needed for access to unity's api
             DoInMainUnityThread(delegate {
@@ -418,7 +418,18 @@ namespace Fool_online.Scripts.Network.NetworksObserver
                 }
             });
         }
-        
+        protected void OnPlayerWon(long wonPlayerId, double winnerReward)
+        {
+            //This is needed for access to unity's api
+            DoInMainUnityThread(delegate {
+                CheckDestroyedObservers();
+                foreach (var obs in _observers)
+                {
+                    obs.OnPlayerWon(wonPlayerId, winnerReward);
+                }
+            });
+        }
+
 
 
         #endregion

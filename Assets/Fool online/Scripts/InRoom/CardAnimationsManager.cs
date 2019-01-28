@@ -15,23 +15,29 @@ namespace Assets.Fool_online.Scripts.InRoom
     {
         public static CardAnimationsManager Instance;
         [SerializeField] private GameObject _cardPrefab;
-        [SerializeField] private Transform _talonTransform;
-        [SerializeField] private Transform _myHandTransform;
+        private Transform _talonTransform;
 
         private const float TalonAnimationDelay = 0.1f;
 
         private void Awake()
         {
             Instance = this;
+
+            _talonTransform = FindObjectOfType<TalonRenderer>().TalonDisplay.transform;
         }
 
-        public void YouGotCards(string[] cards)
+        public void EnemyGotCards(int cardsN, Transform enemyHand)
         {
-            StartCoroutine(AnimateCardsFromTalon(cards));
+            StartCoroutine(AnimateEnemyCardsFromTalon(cardsN, enemyHand));
+        }
+
+        public void YouGotCards(string[] cards, Transform handTransform)
+        {
+            StartCoroutine(AnimateCardsFromTalon(cards, handTransform));
         }
 
         //todo fix and migrate from MyHandRenderer
-        private IEnumerator AnimateCardsFromTalon(string[] cards)
+        private IEnumerator AnimateCardsFromTalon(string[] cards, Transform handTransform)
         {
             for (int i = 0; i < cards.Length; i++)
             {
@@ -44,7 +50,7 @@ namespace Assets.Fool_online.Scripts.InRoom
                 //CardsInHand.Add(cardRootScript);
 
                 //Init animation
-                cardRootScript.AnimateMoveToMyHand(_myHandTransform);
+                cardRootScript.AnimateMoveToMyHand(handTransform);
 
                 yield return new WaitForSeconds(TalonAnimationDelay);
             }
@@ -52,10 +58,6 @@ namespace Assets.Fool_online.Scripts.InRoom
             //UpdateCardsInHand();
         }
 
-        public void EnemyGotCards(int cardsN, Transform enemyHand)
-        {
-            StartCoroutine(AnimateEnemyCardsFromTalon(cardsN, enemyHand));
-        }
 
         /// <summary>
         /// Animate taking cards from talon one by one with slight delay between every card
@@ -82,5 +84,8 @@ namespace Assets.Fool_online.Scripts.InRoom
 
             //UpdateCardsInHand();
         }
+
+
+
     }
 }

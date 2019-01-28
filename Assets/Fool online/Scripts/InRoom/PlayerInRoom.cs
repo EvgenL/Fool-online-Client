@@ -21,6 +21,8 @@ namespace Fool_online.Scripts.InRoom
 
         public bool Pass = false;
 
+        public bool Won = false;
+
         public int SlotN;
 
         #region local player only

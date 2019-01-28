@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
 using System.Xml;
+using Assets.Fool_online.Scripts.FoolNetworkScripts;
 using Fool_online.Scripts.Network.NetworksObserver;
 using UnityEngine;
 
@@ -14,9 +16,7 @@ namespace Fool_online.Scripts.Network
 //TODO implement heartbeat
     public class FoolTcpClient : FoolNetworkObservable
     {
-        public static string ClientVersion = "1.2"; //todo implement version check
-
-        private const string CONFIG_FILE_NAME = "client.config";
+        //public static string ClientVersion = "1.2"; //todo implement version check
 
         private static FoolTcpClient _instance;
 
@@ -33,7 +33,8 @@ namespace Fool_online.Scripts.Network
         }
         //TODO load from resources
         //public string ServerIP = "127.0.0.1";
-        public string ServerIP = "51.75.236.170";
+        //public string ServerIP = "51.75.236.170";
+        public string ServerIP = "192.168.0.22";
         public int ServerPort = 5055;
         public bool IsConnected = false;
         public bool IsConnectingToGameServer = false;
@@ -101,6 +102,17 @@ namespace Fool_online.Scripts.Network
 
             try
             {
+                //todo availableServers = AvailableServerSearch.GetAvailableServers();
+            }
+            catch (Exception e)
+            {
+                return;
+            }
+
+
+            try
+            {
+
                 PlayerSocket.BeginConnect(ServerIP, ServerPort, OnConnectCallback, null);
             }
             catch (Exception e)
@@ -114,41 +126,7 @@ namespace Fool_online.Scripts.Network
             }
         }
 
-        [Obsolete("This method in not used anymore")]
-        private void ReadConfigFile()
-        {
-            FileStream clientconfig = null;
-            try
-            {
-                //read file
-                clientconfig = File.Open(CONFIG_FILE_NAME, FileMode.Open);
-                StreamReader sr = new StreamReader(clientconfig);
-                string xmlstring = sr.ReadToEnd();
-                clientconfig.Close();
-
-                //parse as xml
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(xmlstring);
-
-                XmlNodeList gameservers = doc.DocumentElement.SelectNodes("/Connection/Servers/Gameserver");
-
-                foreach (XmlNode gameserver in gameservers)
-                {
-                    if (gameserver.Attributes["name"].Value == "default")
-                    {
-                        ServerIP = gameserver.ChildNodes[0].InnerText; //ip
-                        ServerPort = int.Parse(gameserver.ChildNodes[1].InnerText); //port
-                        return;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                clientconfig.Close();
-                Console.WriteLine(e);
-                throw;
-            }
-        }
+        
 
         /// <summary>
         /// Callback that loops while the client is connected

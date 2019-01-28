@@ -152,11 +152,11 @@ namespace Fool_online.Scripts.Network.NetworksObserver
         {
         }
 
-        public virtual void OnEndGame(long foolConnectionId, Dictionary<long, int> rewards)
+        public virtual void OnEndGame(long foolConnectionId, Dictionary<long, double> rewards)
         {
         }
 
-        public virtual void OnEndGameGiveUp(long foolConnectionId, Dictionary<long, int> rewards)
+        public virtual void OnEndGameGiveUp(long foolConnectionId, Dictionary<long, double> rewards)
         {
         }
 
@@ -205,6 +205,11 @@ namespace Fool_online.Scripts.Network.NetworksObserver
         /// Sent by GameManager anything on table happens
         /// </summary>
         public virtual void OnTableUpdated()
+        {
+        }
+
+
+        public virtual void OnPlayerWon(long wonPlayerId, double winnerReward)
         {
         }
 

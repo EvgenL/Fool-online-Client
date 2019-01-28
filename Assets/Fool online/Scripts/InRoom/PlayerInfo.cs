@@ -14,19 +14,19 @@ namespace Fool_online.Scripts.InRoom
 
         public enum PlayerStatusIcon
         {
-            Won,
             Fool,
             Attacker,
             Defender,
-            DefenderGaveUp
+            DefenderGaveUp,
+            Money
         }
 
         private PlayerStatusIcon CurrentStatusIcon;
-        private Image CurrentStatusIconDisplay;
 
         [SerializeField] protected Text NicknameText;
         [SerializeField] protected Image Userpic;
         [SerializeField] protected Transform HandContainer;
+        [SerializeField] protected Transform MoneyIconContainer;
 
         [SerializeField] private GameObject TextCloud;
         [SerializeField] private Text TextCloudText;
@@ -63,8 +63,17 @@ namespace Fool_online.Scripts.InRoom
         {
             AnimateHideCurrentStatusIcon();
 
-            //init icon animation
-            MessageManager.Instance.AnimatePlayerStatusIcon(TurnStatusIconContainer, icon);
+            //Money icon contains text so uses different prefab
+            if (icon == PlayerStatusIcon.Money)
+            {
+                //init icon animation
+                MessageManager.Instance.AnimatePlayerStatusIcon(MoneyIconContainer, icon);
+            }
+            else
+            {
+                //init icon animation
+                MessageManager.Instance.AnimatePlayerStatusIcon(TurnStatusIconContainer, icon);
+            }
 
             CurrentStatusIcon = icon;
         }
@@ -94,12 +103,26 @@ namespace Fool_online.Scripts.InRoom
         /// </summary>
         public void AnimateHideCurrentStatusIcon()
         {
-            CurrentStatusIconDisplay = TurnStatusIconContainer.GetComponentInChildren<Image>();
+            var currntIcon = TurnStatusIconContainer.GetComponentInChildren<Image>();
 
-            if (CurrentStatusIconDisplay != null)
+            if (currntIcon != null)
             {
-                var fadeTweener = CurrentStatusIconDisplay.DOFade(0, 0.5f);
-                fadeTweener.OnComplete(() => Destroy(CurrentStatusIconDisplay.gameObject));
+                var fadeTweener = currntIcon.DOFade(0, 0.5f);
+                fadeTweener.OnComplete(() => Destroy(currntIcon.gameObject));
+            }
+        }
+
+        public void HideMoneyIcon()
+        {
+            var currntIcon = MoneyIconContainer.GetComponentInChildren<Image>();
+
+            if (currntIcon != null)
+            {
+                var fadeTweener = currntIcon.DOFade(0, 0.5f);
+                fadeTweener.OnComplete(() => Destroy(currntIcon.gameObject));
+
+                var text = currntIcon.GetComponentInChildren<Text>();
+                text.DOFade(0, 0.5f);
             }
         }
 

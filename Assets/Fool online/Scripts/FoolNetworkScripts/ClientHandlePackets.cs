@@ -47,7 +47,8 @@ namespace Fool_online.Scripts.Network
             OtherPlayerCoversCard,
             Beaten,
             DefenderPicksCards,
-            EndGameFool
+            EndGameFool,
+            PlayerWon
         }
 
 
@@ -97,7 +98,9 @@ namespace Fool_online.Scripts.Network
             _packets.Add((long)SevrerPacketId.OtherPlayerCoversCard, Packet_OtherPlayerCoversCard);
             _packets.Add((long)SevrerPacketId.Beaten, Packet_Beaten);
             _packets.Add((long)SevrerPacketId.DefenderPicksCards, Packet_DefenderPicksCards);
-            _packets.Add((long)SevrerPacketId.EndGameFool, Packet_EndGameFool);
+            _packets.Add((long)SevrerPacketId.EndGameFool, Packet_EndGameFool); 
+            _packets.Add((long)SevrerPacketId.PlayerWon, Packet_PlayerWon);
+
         }
 
         /// <summary>
@@ -616,8 +619,8 @@ namespace Fool_online.Scripts.Network
             long foolPlayerId = buffer.ReadLong();
             //Read rewards count
             int rewardsN = buffer.ReadInteger();
-            //read rewards
-            Dictionary<long, int> rewards = new Dictionary<long, int>(rewardsN);
+            //rewards
+            Dictionary<long, double> rewards = new Dictionary<long, double>(rewardsN);
             for (int i = 0; i < rewardsN; i++)
             {
                 long player = buffer.ReadLong();
@@ -641,8 +644,8 @@ namespace Fool_online.Scripts.Network
             long foolPlayerId = buffer.ReadLong();
             //Read rewards count
             int rewardsN = buffer.ReadInteger();
-            //read rewards
-            Dictionary<long, int> rewards = new Dictionary<long, int>(rewardsN);
+            //rewards
+            Dictionary<long, double> rewards = new Dictionary<long, double>(rewardsN);
             for (int i = 0; i < rewardsN; i++)
             {
                 long player = buffer.ReadLong();
@@ -652,6 +655,32 @@ namespace Fool_online.Scripts.Network
 
             //Invoke callback on observers
             FoolNetworkObservableCallbacksWrapper.Instance.EndGameGiveUp(foolPlayerId, rewards);
+        }
+
+        private static void Packet_EndGameFool(byte[] data)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+
+            //Skip packetId
+            buffer.ReadLong();
+
+            //Read player who fool
+            long foolPlayerId = buffer.ReadLong();
+
+            //Read rewards count
+            int rewardsN = buffer.ReadInteger();
+            //rewards
+            Dictionary<long, double> rewards = new Dictionary<long, double>(rewardsN);
+            for (int i = 0; i < rewardsN; i++)
+            {
+                long player = buffer.ReadLong();
+                double reward = buffer.ReadInteger();
+                rewards.Add(player, reward);
+            }
+
+            //Invoke callback on observers
+            FoolNetworkObservableCallbacksWrapper.Instance.EndGameFool(foolPlayerId, rewards);
         }
 
         private static void Packet_OtherPlayerPassed(byte[] data)
@@ -716,8 +745,8 @@ namespace Fool_online.Scripts.Network
             //Invoke callback on observers
             FoolNetworkObservableCallbacksWrapper.Instance.DefenderPicksCards(playerId, slotN);
         }
-        
-        private static void Packet_EndGameFool(byte[] data)
+
+        private static void Packet_PlayerWon(byte[] data)
         {
             ByteBuffer buffer = new ByteBuffer();
             buffer.WriteBytes(data);
@@ -725,11 +754,15 @@ namespace Fool_online.Scripts.Network
             //Skip packetId
             buffer.ReadLong();
 
-            //Read player who fool
-            long foolPlayerId = buffer.ReadLong();
+            //Read player who won
+            long wonPlayerId = buffer.ReadLong();
+
+            //read winner's reward
+            double reward = buffer.ReadDouble();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.EndGameFool(foolPlayerId);
+            FoolNetworkObservableCallbacksWrapper.Instance.PlayerWon(wonPlayerId, reward);
         }
+        
     }
 }
