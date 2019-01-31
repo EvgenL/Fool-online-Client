@@ -2,6 +2,7 @@
 using Fool_online.Scripts.InRoom;
 using Fool_online.Scripts.InRoom.CardsScripts;
 using Fool_online.Scripts.Manager;
+using Fool_online.Ui.Mainmenu;
 using UnityEngine;
 
 namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
@@ -354,6 +355,12 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         {
             //Observable
             OnPlayerWon(wonPlayerId, winnerReward);
+        }
+
+        public void RoomList(RoomInstance[] rooms)
+        {
+            //Observable
+            OnRoomList(rooms);
         }
 
     }

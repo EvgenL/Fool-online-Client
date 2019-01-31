@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Evgen.Byffer;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using Fool_online.Scripts.InRoom;
 using Fool_online.Scripts.Manager;
+using Fool_online.Ui.Mainmenu;
 using UnityEngine;
 
 namespace Fool_online.Scripts.FoolNetworkScripts
@@ -22,6 +24,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             Information = 1,
 
             //ROOMS
+            RoomList,
             JoinRoomOk,
             FaliToJoinFullRoom,
             YouAreAlreadyInRoom,
@@ -73,6 +76,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             _packets.Add((long)SevrerPacketId.Information, Packet_Information);
 
             //ROOMS
+            _packets.Add((long)SevrerPacketId.RoomList, Packet_RoomList);
             _packets.Add((long)SevrerPacketId.JoinRoomOk, Packet_JoinRoomOk);
             _packets.Add((long)SevrerPacketId.FaliToJoinFullRoom, Packet_FaliToJoinFullRoom);
             _packets.Add((long)SevrerPacketId.YouAreAlreadyInRoom, Packet_YouAreAlreadyInRoom);
@@ -240,7 +244,53 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             Debug.Log("got Packet_CallMethod");
         }
 
+        /// <summary>
+        /// Handles SevrerPacketId.JoinRoomOk
+        /// </summary>
+        private static void Packet_RoomList(byte[] data)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
 
+            //skip packet id
+            buffer.ReadLong();
+
+            //read room count
+            int roomN = buffer.ReadInteger();
+
+            //read rooms
+            RoomInstance[] rooms = new RoomInstance[roomN];
+            for (int i = 0; i < roomN; i++)
+            {
+                rooms[i] = new RoomInstance();
+
+                //read room id
+                rooms[i].RoomId = buffer.ReadLong();
+
+                //read max players in room
+                rooms[i].MaxPlayers = buffer.ReadInteger();
+
+                //read deck size
+                rooms[i].DeckSize = buffer.ReadInteger();
+
+                //read players count
+                int playersN = buffer.ReadInteger();
+                rooms[i].ConnectedPlayersN = playersN;
+
+                //read player names
+                rooms[i].PlayerNames = new string[playersN];
+                for (int j = 0; j < playersN; j++)
+                {
+                    rooms[j].PlayerNames[j] = buffer.ReadStringUnicode();
+                }
+            }
+
+
+            //Invoke callback on observers
+            FoolNetworkObservableCallbacksWrapper.Instance.RoomList(rooms);
+        }
+
+        
         /// <summary>
         /// Handles SevrerPacketId.JoinRoomOk
         /// </summary>

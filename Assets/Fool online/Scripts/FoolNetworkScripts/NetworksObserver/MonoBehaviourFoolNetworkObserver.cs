@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Fool_online.Scripts.InRoom.CardsScripts;
+using Fool_online.Ui.Mainmenu;
 using UnityEngine;
 
 namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
@@ -209,6 +210,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
 
         public virtual void OnPlayerWon(long wonPlayerId, double winnerReward)
+        {
+        }
+        public virtual void OnRoomList(RoomInstance[] rooms)
         {
         }
 

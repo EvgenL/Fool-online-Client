@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Fool_online.Ui.Mainmenu;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,14 +19,20 @@ public class RoomDisplay : MonoBehaviour
     /// <summary>
     /// Draws RoomInstance at this display
     /// </summary>
-    /// <param name="room"></param>
     public void DrawRoom(RoomInstance room)
     {
+        _currentRoom = room;
 
+        _maxPlayers.text = $"{room.ConnectedPlayersN}/{room.MaxPlayers}";
+        _deckSize.text = room.DeckSize.ToString();
+
+        //csv from an array of strings
+        string playerNames = room.PlayerNames.Aggregate((a, b) => a + ", " + b);
+        _playerNames.text = playerNames;
     }
 
     public void OnClick()
     {
-
+        
     }
 }

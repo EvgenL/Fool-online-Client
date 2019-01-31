@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Fool_online.Scripts.InRoom.CardsScripts;
+using Fool_online.Ui.Mainmenu;
 using UnityEngine;
 
 namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
@@ -426,6 +427,17 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
                 foreach (var obs in _observers)
                 {
                     obs.OnPlayerWon(wonPlayerId, winnerReward);
+                }
+            });
+        }
+        protected void OnRoomList(RoomInstance[] rooms)
+        {
+            //This is needed for access to unity's api
+            DoInMainUnityThread(delegate {
+                CheckDestroyedObservers();
+                foreach (var obs in _observers)
+                {
+                    obs.OnRoomList(rooms);
                 }
             });
         }
