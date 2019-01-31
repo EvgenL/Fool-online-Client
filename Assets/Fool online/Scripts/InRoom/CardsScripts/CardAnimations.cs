@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.PlayerLoop;
-using UnityEngine.UI;
 
-namespace Fool_online.Scripts.CardsScripts
+namespace Fool_online.Scripts.InRoom.CardsScripts
 {
     public static class CardAnimations
     {

@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using Fool_online.Scripts.CardsScripts;
-using Fool_online.Scripts.Network;
+using Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.InRoom.CardsScripts;
+using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
-namespace Fool_online.Scripts.InRoom
+namespace Fool_online.Scripts.InRoom.PlayersDisplay
 {
     public class MyPlayerInfo : PlayerInfo
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Fool_online.Scripts.CardsScripts;
-using Fool_online.Scripts.Network.NetworksObserver;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
+using Fool_online.Scripts.InRoom.CardsScripts;
 using UnityEngine;
 
 namespace Fool_online.Scripts.InRoom

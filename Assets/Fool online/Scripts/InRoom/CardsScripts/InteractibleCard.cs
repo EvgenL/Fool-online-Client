@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using DG.Tweening;
+﻿using DOTween.Modules;
+using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Fool_online.Scripts.CardsScripts
+namespace Fool_online.Scripts.InRoom.CardsScripts
 {
     /// <summary>
     /// Respoisible fo card-mouse interactions

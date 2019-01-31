@@ -1,14 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Fool_online.Scripts.Manager;
 using UnityEngine;
 
-public class AttackerAndDefenderButton : MonoBehaviour
+namespace Fool_online.Scripts.tests
 {
-    [SerializeField] private Transform player1container;
-    [SerializeField] private Transform player2container;
-
-    public void OnClick()
+    public class AttackerAndDefenderButton : MonoBehaviour
     {
-        MessageManager.Instance.AnimateAttackerAndDefender(player1container, player2container);
+        [SerializeField] private Transform player1container;
+        [SerializeField] private Transform player2container;
+
+        public void OnClick()
+        {
+            MessageManager.Instance.AnimateAttackerAndDefender(player1container, player2container);
+        }
     }
 }

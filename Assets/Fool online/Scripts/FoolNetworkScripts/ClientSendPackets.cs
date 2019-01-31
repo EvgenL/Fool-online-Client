@@ -1,7 +1,7 @@
 ﻿using Evgen.Byffer;
-using Fool_online.Scripts.Network.NetworksObserver;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 
-namespace Fool_online.Scripts.Network
+namespace Fool_online.Scripts.FoolNetworkScripts
 {
     public static class ClientSendPackets
     {
@@ -14,8 +14,12 @@ namespace Fool_online.Scripts.Network
             NewAccount = 1,
             Login,
             ThankYou,
+            
+            
 
             //ROOMS
+            CreateRoom,
+            RefreshRoomList,
             JoinRandom,
             GiveUp,
             GetReady,
@@ -84,6 +88,34 @@ namespace Fool_online.Scripts.Network
             buffer.WriteString("Hello! I'm on server now.");
 
             SendDataToServer(buffer.ToArray());
+        }
+
+
+
+        /// <summary>
+        /// Sent when cover some card on table
+        /// </summary>
+        public static void Send_CreateRoom(int maxPlayers, int deckSize)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+
+            //Write packet id
+            buffer.WriteLong((long)ClientPacketId.CreateRoom);
+
+            //write max players
+            buffer.WriteInteger(maxPlayers);
+            //write deck size
+            buffer.WriteInteger(deckSize);
+
+            SendDataToServer(buffer.ToArray());
+        }
+
+        /// <summary>
+        /// Sent when cover some card on table
+        /// </summary>
+        public static void Send_RefreshRoomList()
+        {
+            SendOnlyPacketId(ClientPacketId.RefreshRoomList);
         }
 
         /// <summary>

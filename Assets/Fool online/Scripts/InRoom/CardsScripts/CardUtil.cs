@@ -1,7 +1,7 @@
-﻿using Fool_online.Scripts.InRoom;
+﻿using Fool_online.Scripts.Manager;
 using UnityEngine;
 
-namespace Fool_online.Scripts.CardsScripts
+namespace Fool_online.Scripts.InRoom.CardsScripts
 {
     /// <summary>
     /// Class that helps transform card codes like 0.14 into card names like AS (ace of spades)

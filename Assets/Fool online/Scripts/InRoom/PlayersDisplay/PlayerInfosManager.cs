@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Fool_online.Scripts.CardsScripts;
-using Fool_online.Scripts.Network;
-using Fool_online.Scripts.Network.NetworksObserver;
+﻿using System.Collections.Generic;
+using Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
+using Fool_online.Scripts.InRoom.CardsScripts;
+using Fool_online.Scripts.Manager;
 using UnityEngine;
 
-namespace Fool_online.Scripts.InRoom
+namespace Fool_online.Scripts.InRoom.PlayersDisplay
 {
 
     /// <summary>

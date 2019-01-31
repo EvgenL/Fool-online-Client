@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml;
-using Fool_online.Scripts.Network;
 
-namespace Assets.Fool_online.Scripts.FoolNetworkScripts
+namespace Fool_online.Scripts.FoolNetworkScripts
 {
     /// <summary>
     /// Searches for available servers listed in file 'CONFIG_FILE_NAME'

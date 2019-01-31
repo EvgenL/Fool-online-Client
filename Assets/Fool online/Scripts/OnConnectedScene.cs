@@ -1,31 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Fool_online.Scripts;
-using Fool_online.Scripts.Network;
-using Fool_online.Scripts.Network.NetworksObserver;
+﻿using Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class OnConnectedScene : MonoBehaviour   
+namespace Fool_online.Scripts
 {
-    public string NextScene = "";
-
-    private void Start()
+    public class OnConnectedScene : MonoBehaviour   
     {
-        NetworkManager.Instance.Connect();
-    }
+        public string NextScene = "";
 
-    private void Update()
-    {
-        if (FoolNetwork.connectionState == FoolNetwork.ConnectionState.Connected)
+        private void Start()
         {
-            SceneManager.LoadScene(NextScene);
-            this.enabled = false;
+            NetworkManager.Instance.Connect();
         }
-    }
 
-    /*public override void OnConnectedToGameServer()
+        private void Update()
+        {
+            if (FoolNetwork.connectionState == FoolNetwork.ConnectionState.Connected)
+            {
+                SceneManager.LoadScene(NextScene);
+                this.enabled = false;
+            }
+        }
+
+        /*public override void OnConnectedToGameServer()
     {
         SceneManager.LoadScene(NextScene);
     }*/
+    }
 }

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Fool_online.Scripts.Network;
+using Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.InRoom;
 
-namespace Fool_online.Scripts.InRoom
+namespace Fool_online.Scripts.Manager
 {
     /// <summary>
     /// We get data from server about room data. GameManager takes it from here.

@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Net.Sockets;
-using System.Xml;
-using Assets.Fool_online.Scripts.FoolNetworkScripts;
-using Fool_online.Scripts.Network.NetworksObserver;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using UnityEngine;
 
-namespace Fool_online.Scripts.Network
+namespace Fool_online.Scripts.FoolNetworkScripts
 {
     /// <summary>
     /// Connects to foll online server

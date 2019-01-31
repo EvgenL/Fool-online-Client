@@ -1,8 +1,8 @@
 ﻿using DG.Tweening;
-using Fool_online.Scripts.CardsScripts;
+using Fool_online.Scripts.InRoom.CardsScripts;
 using UnityEngine;
 
-namespace Fool_online.Scripts
+namespace Fool_online.Scripts.InRoom
 {
     public class DiscardPile : MonoBehaviour
     {

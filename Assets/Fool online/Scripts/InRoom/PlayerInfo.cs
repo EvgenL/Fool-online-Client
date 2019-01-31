@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
-using Fool_online.Scripts.CardsScripts;
+using DOTween.Modules;
+using Fool_online.Scripts.InRoom.CardsScripts;
+using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 

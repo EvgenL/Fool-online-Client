@@ -1,10 +1,8 @@
-﻿using DG.Tweening;
-using Fool_online.Scripts.InRoom;
-using UnityEditor;
+﻿using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Fool_online.Scripts.CardsScripts
+namespace Fool_online.Scripts.InRoom.CardsScripts
 {
     public class CardRoot : MonoBehaviour
     {

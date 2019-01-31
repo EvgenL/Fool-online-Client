@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using Fool_online.Scripts.CardsScripts;
 using Fool_online.Scripts.InRoom;
+using Fool_online.Scripts.InRoom.CardsScripts;
+using Fool_online.Scripts.Manager;
 using UnityEngine;
 
-namespace Fool_online.Scripts.Network.NetworksObserver
+namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 {
     /// <summary>
     /// IHateSuchLongClassNames

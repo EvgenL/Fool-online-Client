@@ -1,10 +1,7 @@
-﻿using DG.Tweening;
-using Fool_online.Scripts.CardsScripts;
-using Fool_online.Scripts.InRoom;
-using Fool_online.Scripts.Network.NetworksObserver;
-using UnityEngine;
+﻿using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
+using Fool_online.Scripts.Manager;
 
-namespace Fool_online.Scripts
+namespace Fool_online.Scripts.InRoom
 {
     public class TableRenderer : MonoBehaviourFoolNetworkObserver
     {

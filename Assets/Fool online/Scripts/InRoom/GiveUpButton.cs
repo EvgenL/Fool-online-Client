@@ -1,22 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Fool_online.Scripts.Network;
+﻿using Fool_online.Scripts.FoolNetworkScripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GiveUpButton : MonoBehaviour
+namespace Fool_online.Scripts.InRoom
 {
-    public void OnClick()
+    public class GiveUpButton : MonoBehaviour
     {
-        FoolNetwork.GiveUp();
-        SceneManager.LoadScene("Main menu");
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        public void OnClick()
         {
-            //TODO give up confirmation
+            FoolNetwork.GiveUp();
+            SceneManager.LoadScene("Main menu");
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                //TODO give up confirmation
+            }
         }
     }
 }

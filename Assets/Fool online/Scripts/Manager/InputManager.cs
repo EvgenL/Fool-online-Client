@@ -1,42 +1,44 @@
-﻿using Fool_online.Scripts.CardsScripts;
-using Fool_online.Scripts.InRoom;
-using Fool_online.Scripts.Network.NetworksObserver;
+﻿using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
+using Fool_online.Scripts.InRoom.CardsScripts;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour
+namespace Fool_online.Scripts.Manager
 {
-    public static InputManager Instatnce;
-
-
-    public RectTransform TableDropZone;
-
-    private void Awake()
+    public class InputManager : MonoBehaviour
     {
-        Instatnce = this;
-    }
+        public static InputManager Instatnce;
 
-    /// <summary>
-    /// Called on each frame when i drag card
-    /// </summary>
-    public void DraggedCardUpdate(Vector2 mousePos, CardRoot cardRoot)
-    {
-        //if it was dragged insude table rect
-        if (RectTransformUtility.RectangleContainsScreenPoint(TableDropZone, mousePos))
+
+        public RectTransform TableDropZone;
+
+        private void Awake()
         {
-            FoolNetworkObservableCallbacksWrapper.Instance.DraggedCardUpdate(mousePos, cardRoot, true);
+            Instatnce = this;
         }
-        else
-        {
-            FoolNetworkObservableCallbacksWrapper.Instance.DraggedCardUpdate(mousePos, cardRoot, false);
-        }
-    }
 
-    public void DraggedCardDrop(Vector2 mousePos, CardRoot cardRoot)
-    {
-        //if it was dropped insude table rect
-        if (RectTransformUtility.RectangleContainsScreenPoint(TableDropZone, mousePos))
+        /// <summary>
+        /// Called on each frame when i drag card
+        /// </summary>
+        public void DraggedCardUpdate(Vector2 mousePos, CardRoot cardRoot)
         {
-            FoolNetworkObservableCallbacksWrapper.Instance.CardDroppedOnTableByMe(cardRoot);
+            //if it was dragged insude table rect
+            if (RectTransformUtility.RectangleContainsScreenPoint(TableDropZone, mousePos))
+            {
+                FoolNetworkObservableCallbacksWrapper.Instance.DraggedCardUpdate(mousePos, cardRoot, true);
+            }
+            else
+            {
+                FoolNetworkObservableCallbacksWrapper.Instance.DraggedCardUpdate(mousePos, cardRoot, false);
+            }
+        }
+
+        public void DraggedCardDrop(Vector2 mousePos, CardRoot cardRoot)
+        {
+            //if it was dropped insude table rect
+            if (RectTransformUtility.RectangleContainsScreenPoint(TableDropZone, mousePos))
+            {
+                FoolNetworkObservableCallbacksWrapper.Instance.CardDroppedOnTableByMe(cardRoot);
+            }
         }
     }
 }

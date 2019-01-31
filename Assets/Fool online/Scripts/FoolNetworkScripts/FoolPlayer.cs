@@ -1,4 +1,4 @@
-﻿namespace Fool_online.Scripts.Network
+﻿namespace Fool_online.Scripts.FoolNetworkScripts
 {
     /// <summary>
     /// network player data

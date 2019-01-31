@@ -1,12 +1,12 @@
 ﻿// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2018/07/13
 
-using System;
-using UnityEngine;
+using DG.Tweening;
 using DG.Tweening.Core;
+using UnityEngine;
 
 #pragma warning disable 1591
-namespace DG.Tweening
+namespace DOTween.Modules
 {
     /// <summary>
     /// Shortcuts/functions that are not strictly related to specific Modules
@@ -25,7 +25,7 @@ namespace DG.Tweening
         /// <param name="gradient">The gradient to use</param><param name="duration">The duration of the tween</param>
         public static Sequence DOGradientColor(this Material target, Gradient gradient, float duration)
         {
-            Sequence s = DOTween.Sequence();
+            Sequence s = DG.Tweening.DOTween.Sequence();
             GradientColorKey[] colors = gradient.colorKeys;
             int len = colors.Length;
             for (int i = 0; i < len; ++i) {
@@ -49,7 +49,7 @@ namespace DG.Tweening
         /// <param name="duration">The duration of the tween</param>
         public static Sequence DOGradientColor(this Material target, Gradient gradient, string property, float duration)
         {
-            Sequence s = DOTween.Sequence();
+            Sequence s = DG.Tweening.DOTween.Sequence();
             GradientColorKey[] colors = gradient.colorKeys;
             int len = colors.Length;
             for (int i = 0; i < len; ++i) {

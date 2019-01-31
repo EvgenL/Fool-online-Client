@@ -1,28 +1,29 @@
-﻿using Fool_online.Scripts;
-using Fool_online.Scripts.Network;
-using Fool_online.Scripts.Network.NetworksObserver;
+﻿using Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ConnectionStatusText : MonoBehaviour //FoolNetworkObserver
+namespace Fool_online.Scripts
 {
-    public Text TargetText;
-    public GameObject ReconnectButton;
-
-    private void Update()
+    public class ConnectionStatusText : MonoBehaviour //FoolNetworkObserver
     {
-        if (NetworkManager.Instance.ConnectionState == FoolNetwork.ConnectionState.ConnectingGameServer)
+        public Text TargetText;
+        public GameObject ReconnectButton;
+
+        private void Update()
         {
-            TargetText.text = "Загрузка";
-            ReconnectButton.SetActive(false);
+            if (NetworkManager.Instance.ConnectionState == FoolNetwork.ConnectionState.ConnectingGameServer)
+            {
+                TargetText.text = "Загрузка";
+                ReconnectButton.SetActive(false);
+            }
+            else if (NetworkManager.Instance.ConnectionState == FoolNetwork.ConnectionState.Disconnected)
+            {
+                TargetText.text = "Сервер недоступен";
+                ReconnectButton.SetActive(true);
+            }
         }
-        else if (NetworkManager.Instance.ConnectionState == FoolNetwork.ConnectionState.Disconnected)
-        {
-            TargetText.text = "Сервер недоступен";
-            ReconnectButton.SetActive(true);
-        }
-    }
-    /*
+        /*
     //Observer callback
     public override void OnTryingConnectToGameServer()
     {
@@ -36,4 +37,5 @@ public class ConnectionStatusText : MonoBehaviour //FoolNetworkObserver
         TargetText.text = "Сервер недоступен";
         ReconnectButton.SetActive(true);
     }*/
+    }
 }

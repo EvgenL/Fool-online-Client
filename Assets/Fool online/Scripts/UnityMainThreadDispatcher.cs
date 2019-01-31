@@ -11,89 +11,92 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
 
-/// Author: Pim de Witte (pimdewitte.com) and contributors
-/// <summary>
-/// A thread-safe class which holds a queue with actions to execute on the next Update() method. It can be used to make calls to the main thread for
-/// things such as UI Manipulation in Unity. It was developed for use in combination with the Firebase Unity plugin, which uses separate threads for event handling
-/// </summary>
-public class UnityMainThreadDispatcher : MonoBehaviour
+namespace Fool_online.Scripts
 {
-
-    private static readonly Queue<Action> _executionQueue = new Queue<Action>();
-
-    public void Update()
+    /// Author: Pim de Witte (pimdewitte.com) and contributors
+    /// <summary>
+    /// A thread-safe class which holds a queue with actions to execute on the next Update() method. It can be used to make calls to the main thread for
+    /// things such as UI Manipulation in Unity. It was developed for use in combination with the Firebase Unity plugin, which uses separate threads for event handling
+    /// </summary>
+    public class UnityMainThreadDispatcher : MonoBehaviour
     {
-        lock (_executionQueue)
+
+        private static readonly Queue<Action> _executionQueue = new Queue<Action>();
+
+        public void Update()
         {
-            while (_executionQueue.Count > 0)
+            lock (_executionQueue)
             {
-                _executionQueue.Dequeue().Invoke();
+                while (_executionQueue.Count > 0)
+                {
+                    _executionQueue.Dequeue().Invoke();
+                }
             }
         }
-    }
 
-    /// <summary>
-    /// Locks the queue and adds the IEnumerator to the queue
-    /// </summary>
-    /// <param name="action">IEnumerator function that will be executed from the main thread.</param>
-    public static void Enqueue(IEnumerator action)
-    {
-        lock (_executionQueue)
+        /// <summary>
+        /// Locks the queue and adds the IEnumerator to the queue
+        /// </summary>
+        /// <param name="action">IEnumerator function that will be executed from the main thread.</param>
+        public static void Enqueue(IEnumerator action)
         {
-            _executionQueue.Enqueue(() => {
-                Instance().StartCoroutine(action);
-            });
+            lock (_executionQueue)
+            {
+                _executionQueue.Enqueue(() => {
+                    Instance().StartCoroutine(action);
+                });
+            }
         }
-    }
 
-    /// <summary>
-    /// Locks the queue and adds the Action to the queue
-    /// </summary>
-    /// <param name="action">function that will be executed from the main thread.</param>
-    public static void Enqueue(Action action)
-    {
-        Enqueue(Instance().ActionWrapper(action));
-    }
-    IEnumerator ActionWrapper(Action a)
-    {
-        a();
-        yield return null;
-    }
-
-
-    private static UnityMainThreadDispatcher _instance = null;
-
-    public static bool Exists()
-    {
-        return _instance != null;
-    }
-
-    public static UnityMainThreadDispatcher Instance()
-    {
-        if (!Exists())
+        /// <summary>
+        /// Locks the queue and adds the Action to the queue
+        /// </summary>
+        /// <param name="action">function that will be executed from the main thread.</param>
+        public static void Enqueue(Action action)
         {
-            throw new Exception("UnityMainThreadDispatcher could not find the UnityMainThreadDispatcher object. " +
-                                "Please ensure you have added the MainThreadExecutor Prefab to your scene.");
+            Enqueue(Instance().ActionWrapper(action));
         }
-        return _instance;
-    }
-
-
-    void Awake()
-    {
-        if (_instance == null)
+        IEnumerator ActionWrapper(Action a)
         {
-            _instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            a();
+            yield return null;
         }
-        else if (_instance != this)
+
+
+        private static UnityMainThreadDispatcher _instance = null;
+
+        public static bool Exists()
         {
-            DestroyImmediate(gameObject);
+            return _instance != null;
+        }
+
+        public static UnityMainThreadDispatcher Instance()
+        {
+            if (!Exists())
+            {
+                throw new Exception("UnityMainThreadDispatcher could not find the UnityMainThreadDispatcher object. " +
+                                    "Please ensure you have added the MainThreadExecutor Prefab to your scene.");
+            }
+            return _instance;
+        }
+
+
+        void Awake()
+        {
+            if (_instance == null)
+            {
+                _instance = this;
+                DontDestroyOnLoad(this.gameObject);
+            }
+            else if (_instance != this)
+            {
+                DestroyImmediate(gameObject);
+            }
         }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Fool_online.Scripts.CardsScripts;
+﻿using System.Collections.Generic;
+using Fool_online.Scripts.InRoom.CardsScripts;
 using UnityEngine;
 
-namespace Fool_online.Scripts.Network.NetworksObserver
+namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 {
     /// <summary>
     /// Observer of fool online network events

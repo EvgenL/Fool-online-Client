@@ -1,11 +1,13 @@
-﻿using Fool_online.Scripts;
-using Fool_online.Scripts.Network;
+﻿using Fool_online.Scripts.Manager;
 using UnityEngine;
 
-public class ReconnectButton : MonoBehaviour
+namespace Fool_online.Scripts
 {
-    public void OnClick()
+    public class ReconnectButton : MonoBehaviour
     {
-        NetworkManager.Instance.Connect();
+        public void OnClick()
+        {
+            NetworkManager.Instance.Connect();
+        }
     }
 }

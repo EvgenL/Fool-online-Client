@@ -1,7 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Fool_online.Scripts.FoolNetworkScripts;
 using UnityEngine;
 using UnityEngine.UI;
+
+public enum DeckSizes
+{
+    Deck24 = 24,
+    Deck36 = 36,
+    Deck52 = 52
+}
 
 public class CreateRoomForm : MonoBehaviour
 {
@@ -56,15 +64,15 @@ public class CreateRoomForm : MonoBehaviour
                 break;
         }
 
-        switch (_currDeckSize)
+        switch ((DeckSizes)_currDeckSize)
         {
-            case 24:
+            case DeckSizes.Deck24:
                 _buttonDeckSize24.isOn = true;
                 break;
-            case 36:
+            case DeckSizes.Deck36:
                 _buttonDeckSize36.isOn = true;
                 break;
-            case 52:
+            case DeckSizes.Deck52:
                 _buttonDeckSize52.isOn = true;
                 break;
         }
@@ -84,8 +92,7 @@ public class CreateRoomForm : MonoBehaviour
             _maxPlayers4.isOn ? 4 :
             _maxPlayers5.isOn ? 5 :
             _maxPlayers6.isOn ? 6 : -1;
-
-
+        
         if (maxPlayers < 2 || maxPlayers > 6)
         {
             //Debug.LogError("Wrong MaxPlayers value: " + maxPlayers);
@@ -109,11 +116,11 @@ public class CreateRoomForm : MonoBehaviour
     public void OnDeckSizeChange()
     {
         int deckSize =
-            _buttonDeckSize24.isOn ? 24 :
-            _buttonDeckSize36.isOn ? 32 :
-            _buttonDeckSize52.isOn ? 52 : -1;
+            _buttonDeckSize24.isOn ? (int)DeckSizes.Deck24 :
+            _buttonDeckSize36.isOn ? (int)DeckSizes.Deck36 :
+            _buttonDeckSize52.isOn ? (int)DeckSizes.Deck52 : -1;
 
-        if (!(deckSize == 24 || deckSize == 36 || deckSize == 52))
+        if (!(deckSize == (int)DeckSizes.Deck24 || deckSize == (int)DeckSizes.Deck36 || deckSize == (int)DeckSizes.Deck52))
         {
             //Debug.LogError("Wrong DeckSize value: " + deckSize);
             return;
@@ -164,7 +171,7 @@ public class CreateRoomForm : MonoBehaviour
         }
 
         //Can't use dect size of 24 for 4 players because that creates hight disadvantage for player defending first
-        if (_currDeckSize < 36)
+        if (_currDeckSize < (int)DeckSizes.Deck36)
         {
             if (_maxPlayers6.isOn)
             {
@@ -182,6 +189,6 @@ public class CreateRoomForm : MonoBehaviour
 
     public void OnSubmit()
     {
-
+        ClientSendPackets.Send_CreateRoom(_currMaxPlayers, _currDeckSize);
     }
 }

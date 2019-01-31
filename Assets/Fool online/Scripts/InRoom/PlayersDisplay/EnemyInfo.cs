@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Assets.Fool_online.Scripts.InRoom;
-using Fool_online.Scripts.CardsScripts;
+using Fool_online.Scripts.InRoom.CardsScripts;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Fool_online.Scripts.InRoom
+namespace Fool_online.Scripts.InRoom.PlayersDisplay
 {
     public class EnemyInfo : PlayerInfo
     {

@@ -1,8 +1,8 @@
-﻿using Fool_online.Scripts.Network;
-using Fool_online.Scripts.Network.NetworksObserver;
+﻿using Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using UnityEngine.SceneManagement;
 
-namespace Fool_online.Scripts
+namespace Fool_online.Scripts.Manager
 {
     /// <summary>
     /// Client-side logic of managing connection.

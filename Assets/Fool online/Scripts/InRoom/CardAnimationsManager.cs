@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Fool_online.Scripts;
-using Fool_online.Scripts.CardsScripts;
+﻿using System.Collections;
+using Fool_online.Scripts.InRoom.CardsScripts;
 using UnityEngine;
 
-namespace Assets.Fool_online.Scripts.InRoom
+namespace Fool_online.Scripts.InRoom
 {
     //TODO
     internal class CardAnimationsManager : MonoBehaviour

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Fool_online.Scripts.Network
+namespace Fool_online.Scripts.FoolNetworkScripts
 {
     public class MenuManager : MonoBehaviour
     {

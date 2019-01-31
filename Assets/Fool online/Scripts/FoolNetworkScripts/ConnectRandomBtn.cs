@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Fool_online.Scripts.Network
+namespace Fool_online.Scripts.FoolNetworkScripts
 {
     public class ConnectRandomBtn : MonoBehaviour
     {

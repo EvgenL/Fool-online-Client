@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Fool_online.Scripts.CardsScripts
+namespace Fool_online.Scripts.InRoom.CardsScripts
 {
     public class CardOnTable : MonoBehaviour
     {
