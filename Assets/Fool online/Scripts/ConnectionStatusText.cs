@@ -19,7 +19,15 @@ namespace Fool_online.Scripts
             }
             else if (NetworkManager.Instance.ConnectionState == FoolNetwork.ConnectionState.Disconnected)
             {
-                TargetText.text = "Сервер недоступен";
+                //if wo got some error
+                if (!string.IsNullOrEmpty(FoolNetwork.DisconnectReasonText))
+                {
+                    TargetText.text = FoolNetwork.DisconnectReasonText;
+                }
+                else
+                {
+                    TargetText.text = "Сервер недоступен";
+                }
                 ReconnectButton.SetActive(true);
             }
         }

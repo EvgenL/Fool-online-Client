@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Fool_online.Scripts.FoolNetworkScripts;
 using Fool_online.Ui.Mainmenu;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +34,6 @@ public class RoomDisplay : MonoBehaviour
 
     public void OnClick()
     {
-        
+        FoolNetwork.JoinRoom(_currentRoom.RoomId);
     }
 }

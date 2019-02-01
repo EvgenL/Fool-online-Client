@@ -1,4 +1,5 @@
-﻿using Evgen.Byffer;
+﻿using System;
+using Evgen.Byffer;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 
 namespace Fool_online.Scripts.FoolNetworkScripts
@@ -20,8 +21,10 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             //ROOMS
             CreateRoom,
             RefreshRoomList,
+            JoinRoom,
             JoinRandom,
             GiveUp,
+            LeaveRoom,
             GetReady,
             GetNotReady,
 
@@ -41,6 +44,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             if (FoolTcpClient.Instance == null || !FoolTcpClient.Instance.IsConnected)
             {
                 FoolNetworkObservableCallbacksWrapper.Instance.DisconnectedFromGameServer("Ошибка при отправке сообщения на сервер.");
+                throw new Exception("Can't send data to server: Not connected.");
             }
 
             ByteBuffer buffer = new ByteBuffer();
@@ -121,6 +125,22 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <summary>
         /// I want to join any room without parameters
         /// </summary>
+        public static void Send_JoinRoom(long roomId)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+
+            //Write packet id
+            buffer.WriteLong((long)ClientPacketId.JoinRoom);
+
+            //write room id
+            buffer.WriteLong(roomId);
+
+            SendDataToServer(buffer.ToArray());
+        }
+
+        /// <summary>
+        /// I want to join any room without parameters
+        /// </summary>
         public static void Send_JoinRandom()
         {
             SendOnlyPacketId(ClientPacketId.JoinRandom);
@@ -132,6 +152,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         public static void Send_GiveUp()
         {
             SendOnlyPacketId(ClientPacketId.GiveUp);
+        }
+
+        /// <summary>
+        /// I want to give up a game
+        /// </summary>
+        public static void Send_LeaveRoom()
+        {
+            SendOnlyPacketId(ClientPacketId.LeaveRoom);
         }
 
         /// <summary>

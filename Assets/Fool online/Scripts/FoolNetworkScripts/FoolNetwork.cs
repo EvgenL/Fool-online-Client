@@ -1,19 +1,32 @@
-﻿namespace Fool_online.Scripts.FoolNetworkScripts
+﻿using UnityEditor;
+
+namespace Fool_online.Scripts.FoolNetworkScripts
 {
     /// <summary>
     /// Main fool online networking class
     /// </summary>
     public class FoolNetwork
     {
+        public enum DisconnectReason
+        {
+            ServerUnreachable,
+            OldClientVersion
+        }
+
         /// <summary>
         /// Me
         /// </summary>
         public static FoolPlayer LocalPlayer = new FoolPlayer();
 
         /// <summary>
-        /// If was disconnected then theres would be a reason
+        /// If was disconnected then theres would be buffered a reason description
         /// </summary>
-        public static string DisconnectReason = null;
+        public static string DisconnectReasonText = null;
+
+        /// <summary>
+        /// If was disconnected then theres would be buffered a reason type
+        /// </summary>
+        public static DisconnectReason disconnectReason;
 
         /// <summary>
         /// For debugging
@@ -90,12 +103,24 @@
             ClientSendPackets.Send_JoinRandom();
         }
 
+        public static void JoinRoom(long roomId)
+        {
+            ClientSendPackets.Send_JoinRoom(roomId);
+            //todo show 'loading'
+        }
+
         /// <summary>
         /// Give up a game.
         /// </summary>
         public static void GiveUp()
         {
             ClientSendPackets.Send_GiveUp();
+            LocalPlayer.IsInRoom = false;
+        }
+
+        public static void LeaveRoom()
+        {
+            ClientSendPackets.Send_LeaveRoom();
             LocalPlayer.IsInRoom = false;
         }
 

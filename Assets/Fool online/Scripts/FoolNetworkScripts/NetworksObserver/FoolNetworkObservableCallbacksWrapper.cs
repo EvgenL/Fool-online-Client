@@ -106,7 +106,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         public void DisconnectedFromGameServer(string reason = null)
         {
             //Set player status to inRoom
-            FoolNetwork.DisconnectReason = reason;
+            FoolNetwork.DisconnectReasonText = reason;
             FoolNetwork.Disconnect();
 
             //Observable

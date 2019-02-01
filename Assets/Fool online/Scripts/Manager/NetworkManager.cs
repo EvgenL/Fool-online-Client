@@ -1,5 +1,6 @@
 ﻿using Fool_online.Scripts.FoolNetworkScripts;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
+using UnityEditor;
 using UnityEngine.SceneManagement;
 
 namespace Fool_online.Scripts.Manager
@@ -73,6 +74,10 @@ namespace Fool_online.Scripts.Manager
         private void OnApplicationQuit()
         {
             print("Quitting application. Disconneting from server.");
+            if (FoolNetwork.LocalPlayer.IsInRoom)
+            {
+                FoolNetwork.LeaveRoom();
+            }
             FoolNetwork.Disconnect();
         }
 
