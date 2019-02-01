@@ -16,6 +16,7 @@ public class OpenRoomsList : MonoBehaviourFoolNetworkObserver
 
     private void OnEnable()
     {
+        Util.DestroyAllChildren(_roomDisplaysContainer);
         Refresh();
     }
 

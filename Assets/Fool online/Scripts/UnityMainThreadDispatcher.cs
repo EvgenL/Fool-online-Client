@@ -67,7 +67,6 @@ namespace Fool_online.Scripts
             yield return null;
         }
 
-
         private static UnityMainThreadDispatcher _instance = null;
 
         public static bool Exists()
