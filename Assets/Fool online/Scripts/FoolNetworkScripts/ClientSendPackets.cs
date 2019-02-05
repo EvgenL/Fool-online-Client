@@ -41,7 +41,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <param name="data">bytes to send</param>
         private static void SendDataToServer(byte[] data)
         {
-            if (FoolTcpClient.Instance == null || !FoolTcpClient.Instance.IsConnected)
+            if (FoolWebClient.Instance == null || !FoolWebClient.Instance.IsConnected)
             {
                 FoolNetworkObservableCallbacksWrapper.Instance.DisconnectedFromGameServer("Ошибка при отправке сообщения на сервер.");
                 throw new Exception("Can't send data to server: Not connected.");
@@ -50,8 +50,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             ByteBuffer buffer = new ByteBuffer();
             buffer.WriteLong(data.Length);
             buffer.WriteBytes(data);
-            FoolTcpClient.WriteToStream(buffer.ToArray());
-            buffer = null;
+            FoolWebClient.WriteToServer(buffer.ToArray());
         }
 
         /// <summary>

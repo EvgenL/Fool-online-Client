@@ -156,7 +156,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             {
                 if (_packetLength <= PlayerBuffer.Length() - 8)
                 {
-                    PlayerBuffer.ReadLong(); //Reads out packet id to skip read position
+                    PlayerBuffer.ReadLong(); //skip 'packetLength'
                     data = PlayerBuffer.ReadBytes((int) _packetLength); //Gets full package length
 
                     HandleDataPackets(data);

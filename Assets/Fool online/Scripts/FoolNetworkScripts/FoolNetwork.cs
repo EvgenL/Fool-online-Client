@@ -74,17 +74,17 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
         }
 
-        public static bool IsConnected => (client != null && FoolTcpClient.Instance.IsConnected);
+        public static bool IsConnected => (client != null && FoolWebClient.Instance.IsConnected);
 
-        private static FoolTcpClient client;
+        private static FoolWebClient client;
 
         /// <summary>
         /// Call to connect game.
         /// </summary>
         public static void ConnectToGameServer()
         {
-            FoolTcpClient.Instance.Start();
-            client = FoolTcpClient.Instance;
+            FoolWebClient.Instance.Start();
+            client = FoolWebClient.Instance;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// </summary>
         public static void Disconnect(string reason = null)
         {
-            FoolTcpClient.Instance.Disconnect(reason);
+            FoolWebClient.Instance.Disconnect(reason);
         }
 
         /// <summary>
