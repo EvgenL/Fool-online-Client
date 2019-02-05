@@ -19,13 +19,13 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         #region Thread-safe Singleton
 
-        private static object padlock = new object();
+        //private static object padlock = new object();
 
         public static FoolNetworkObservableCallbacksWrapper Instance
         {
             get
             {
-                lock (padlock)
+                //lock (padlock)
                 {
                 if (_instance == null)
                 {
@@ -107,7 +107,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         {
             //Set player status to inRoom
             FoolNetwork.DisconnectReasonText = reason;
-            FoolNetwork.Disconnect();
 
             //Observable
             OnDisconnectedFromGameServer();

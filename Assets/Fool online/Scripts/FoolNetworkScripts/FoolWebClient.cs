@@ -34,7 +34,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         public string ServerIP = "51.75.236.170"; //french
         public string LocalServerIP = "192.168.0.22"; //my pc
         public int ServerPort = 5055;
-        private bool tryingLocal = true;
 
         public bool IsConnected = false;
         public bool IsConnectingToGameServer = false;
@@ -60,7 +59,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             OnTryingConnectToGameServer();
 
             //Create a connection
-            ConnectToGameServer(LocalServerIP, ServerPort);
+            ConnectToGameServer(ServerIP, ServerPort);
         }
 
         /// <summary>
@@ -129,14 +128,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         {
             Disconnect(closecode.ToString());
 
-            //if local server is not working connect to remote
-            if (IsConnectingToGameServer && tryingLocal)
-            {
-                tryingLocal = false;
-                ConnectToGameServer(ServerIP, ServerPort);
-            }
-
-            IsConnectingToGameServer = false;
         }
 
         /// <summary>
@@ -162,7 +153,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             {
                 mySocket = null;
                 IsConnected = false;
-                //IsConnectingToGameServer = false;
+                IsConnectingToGameServer = false;
                 //Observable
                 FoolNetworkObservableCallbacksWrapper.Instance.DisconnectedFromGameServer(disconnectReason);
             }
@@ -175,14 +166,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
                 return "NOT CONNECTED";
             }
 
-            if (tryingLocal)
-            {
-                return LocalServerIP + ":" + ServerPort;
-            }
-            else
-            {
-                return ServerIP + ":" + ServerPort;
-            }
+            return ServerIP + ":" + ServerPort;
         }
     
     }
