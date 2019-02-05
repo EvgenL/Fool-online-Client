@@ -29,9 +29,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         public static DisconnectReason disconnectReason;
 
         /// <summary>
-        /// For debugging
+        /// Gets info of server to which we did connected
         /// </summary>
-        public static bool ConnectToLocalhost = false;
+        public static string ServerInfo => FoolWebClient.Instance.GetServerInfo(); 
 
         public enum ConnectionState
         {

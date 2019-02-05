@@ -31,9 +31,10 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
         //TODO load from file
         //public string ServerIP = "127.0.0.1"; //localhost
-        //public string ServerIP = "51.75.236.170"; //french
-        public string ServerIP = "192.168.0.22"; //my pc
+        public string ServerIP = "51.75.236.170"; //french
+        public string LocalServerIP = "192.168.0.22"; //my pc
         public int ServerPort = 5055;
+        private bool tryingLocal = true;
 
         public bool IsConnected = false;
         public bool IsConnectingToGameServer = false;
@@ -59,7 +60,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             OnTryingConnectToGameServer();
 
             //Create a connection
-            ConnectToGameServer();
+            ConnectToGameServer(LocalServerIP, ServerPort);
         }
 
         /// <summary>
@@ -76,7 +77,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <summary>
         /// Connects this player to game server
         /// </summary>
-        public void ConnectToGameServer()
+        public void ConnectToGameServer(string serverIp, int serverPort)
         {
             IsConnectingToGameServer = true;
 
@@ -95,7 +96,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
 
             //Create and set up a new socket
-            mySocket = WebSocketFactory.CreateInstance("ws://" + ServerIP + ":" + ServerPort);
+            mySocket = WebSocketFactory.CreateInstance("ws://" + serverIp + ":" + serverPort);
 
             //Init callbacks
             mySocket.OnOpen += OnOpen;
@@ -121,12 +122,21 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
         private void OnError(string errormsg)
         {
-            throw new NotImplementedException();
+            //throw new Exception(errormsg);
         }
 
         private void OnClose(WebSocketCloseCode closecode)
         {
             Disconnect(closecode.ToString());
+
+            //if local server is not working connect to remote
+            if (IsConnectingToGameServer && tryingLocal)
+            {
+                tryingLocal = false;
+                ConnectToGameServer(ServerIP, ServerPort);
+            }
+
+            IsConnectingToGameServer = false;
         }
 
         /// <summary>
@@ -150,12 +160,28 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             Debug.Log("Disconnected. " + disconnectReason);
             if (mySocket != null)
             {
-                mySocket.Close();
                 mySocket = null;
                 IsConnected = false;
-                IsConnectingToGameServer = false;
+                //IsConnectingToGameServer = false;
                 //Observable
                 FoolNetworkObservableCallbacksWrapper.Instance.DisconnectedFromGameServer(disconnectReason);
+            }
+        }
+
+        public string GetServerInfo()
+        {
+            if (!IsConnected)
+            {
+                return "NOT CONNECTED";
+            }
+
+            if (tryingLocal)
+            {
+                return LocalServerIP + ":" + ServerPort;
+            }
+            else
+            {
+                return ServerIP + ":" + ServerPort;
             }
         }
     

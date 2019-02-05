@@ -5,9 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Fool online/Scenes/Register.unity
-    guid: 4b2c8a4d4e149e646ba0d5f6c3a10876
   - enabled: 1
     path: Assets/Fool online/Scenes/Connecting to server.unity
     guid: 0c26f8523a97fa844955f9db2f81a012

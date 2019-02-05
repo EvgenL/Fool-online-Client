@@ -53,6 +53,7 @@ namespace Fool_online.Scripts.Manager
         /// </summary>
         public void ShowFullScreenText(string message)
         {
+            Debug.Log(message + ". \n" + StackTraceUtility.ExtractStackTrace());
             _textMeshText.text = message;
             _textContainer.SetActive(true);
             CancelInvoke(nameof(Hide));

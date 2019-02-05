@@ -466,7 +466,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         //This is needed for access to unity's api
         private static void DoInMainUnityThread(Action action)
         {
+#if !UNITY_WEBGL
             UnityMainThreadDispatcher.Enqueue(action);
+#else
+            action.Invoke();
+#endif
         }
 
         #endregion

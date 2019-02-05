@@ -144,7 +144,10 @@ namespace Fool_online.Scripts.Manager
                     }
                     else
                     {
-                        MyPlayerInfoDisplay.ShowPassbutton();
+                        if (!IamDefending())
+                        {
+                            MyPlayerInfoDisplay.ShowPassbutton();
+                        }
                     }
                 }
 
