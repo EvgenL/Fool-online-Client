@@ -106,8 +106,6 @@ namespace Fool_online.Scripts.Manager
         /// </summary>
         public override void OnOtherPlayerPassed(long passedPlayerId, int slotN)
         {
-            //todo if attacker passed
-
                 //if defender just passed then i can add card or just pass
                 if (StaticRoomData.Denfender.ConnectionId == passedPlayerId)
                 {
@@ -117,7 +115,7 @@ namespace Fool_online.Scripts.Manager
                     }
                     else
                     {
-                        //todo wait for attacker pass
+                        // wait for attacker pass
                     }
 
                     DefenderGaveUpDefence = true;
@@ -274,7 +272,7 @@ namespace Fool_online.Scripts.Manager
         /// <summary>
         /// On i clicked get ready button
         /// </summary>
-        public void OnGetReady(bool value) //bug sometime button disaperars and doesnt send to server
+        public void OnGetReady(bool value)
         {
             if (State != GameState.PlayersGettingReady) return;
 
@@ -421,8 +419,8 @@ namespace Fool_online.Scripts.Manager
                     return;
                 }
 
-                //if table is empty or not full
-                if (cardsOnTable.Count < 6)
+                //if table is not full (5 cards on first turn, 6 on any other)
+                if (cardsOnTable.Count < 6 || (TurnN == 1 && cardsOnTable.Count < 5))
                 {
                     //ADD CARD 
                     droppedCardRoot.SetOnTable(true);
@@ -780,7 +778,7 @@ namespace Fool_online.Scripts.Manager
         }
 
         /// <summary>
-        /// Stops glowing on cards which you could beat on table //todo migrate to table renderer
+        /// Stops glowing on cards which you could beat on table //todo migrate to table renderer class
         /// </summary>
         private void StopTableCardAnimations()
         {

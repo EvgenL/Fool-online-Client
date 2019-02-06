@@ -32,7 +32,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         //TODO load from file
         //public string ServerIP = "127.0.0.1"; //localhost
         public string ServerIP = "51.75.236.170"; //french
-        public string LocalServerIP = "192.168.0.22"; //my pc
+        //public string ServerIP = "192.168.0.22"; //my pc
+
         public int ServerPort = 5055;
 
         public bool IsConnected = false;
