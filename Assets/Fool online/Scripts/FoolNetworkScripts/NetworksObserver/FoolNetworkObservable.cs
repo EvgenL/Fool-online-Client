@@ -7,6 +7,8 @@ using UnityEngine;
 namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 {
 
+    //TODO Tasks, more elegant code
+
     /// <summary>
     /// Implemented by fool networking classes to call server events on observer objects
     /// Uses subscriber pattern with observers subscribing on their constructor and unsubscribing
@@ -43,6 +45,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         //Methods that being sent to every observer
         #region Events
 
+
         protected void OnTryingConnectToGameServer()
         {
             //This is needed for access to unity's api
@@ -63,6 +66,30 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
                 foreach (var obs in _observers)
                 {
                     obs.OnConnectedToGameServer();
+                }
+            });
+        }
+
+
+        protected void OnAuthorizedOk(long connectionId)
+        {
+            //This is needed for access to unity's api
+            DoInMainUnityThread(delegate {
+                CheckDestroyedObservers();
+                foreach (var obs in _observers)
+                {
+                    obs.OnAuthorizedOk(connectionId);
+                }
+            });
+        }
+        protected void OnErrorBadAuthToken()
+        {
+            //This is needed for access to unity's api
+            DoInMainUnityThread(delegate {
+                CheckDestroyedObservers();
+                foreach (var obs in _observers)
+                {
+                    obs.OnErrorBadAuthToken();
                 }
             });
         }

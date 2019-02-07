@@ -20,7 +20,7 @@ namespace Fool_online.Scripts
             if (CheckValues())
             {
                 Debug.Log("Sending new account data to server");
-                ClientSendPackets.Send_NewAccount(InputUsername.text, InputPassword.text, InputEmail.text);
+                //ClientSendPackets.Send_NewAccount(InputUsername.text, InputPassword.text, InputEmail.text);
             }
         }
 

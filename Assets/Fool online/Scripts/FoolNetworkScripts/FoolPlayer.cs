@@ -30,5 +30,11 @@
         /// Slot/chair number in room
         /// </summary>
         public int InRoomSlotNumber;
+
+        /// <summary>
+        /// Set to true if client did send token
+        /// </summary>
+        public bool Authorized;
+
     }
 }

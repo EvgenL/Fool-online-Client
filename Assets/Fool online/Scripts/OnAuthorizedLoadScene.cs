@@ -10,23 +10,15 @@ namespace Fool_online.Scripts
     /// <summary>
     /// Class that opens scene NextScene on succesful connect to game server
     /// </summary>
-    public class OnConnectedScene : MonoBehaviourFoolNetworkObserver
+    public class OnAuthorizedLoadScene : MonoBehaviourFoolNetworkObserver
     {
         public string NextScene = "";
 
-        public override void OnConnectedToGameServer()
+        public override void OnAuthorizedOk(long cid)
         {
+            Debug.Log("Loading next scene");
             SceneManager.LoadScene(NextScene);
             this.enabled = false;
-        }
-
-        private void Update()
-        {
-            if (FoolNetwork.connectionState == FoolNetwork.ConnectionState.Connected)
-            {
-                SceneManager.LoadScene(NextScene);
-                this.enabled = false;
-            }
         }
 
     }

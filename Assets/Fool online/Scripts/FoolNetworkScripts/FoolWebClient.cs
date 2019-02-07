@@ -31,6 +31,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         private string LastIp;
         private int LastPort;
 
+        private string myToken;
+
         public bool IsConnected = false;
         public bool IsConnectingToGameServer = false;
 
@@ -47,10 +49,12 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         private WebSocket mySocket;
 
 
-        public void Start(string ip, int port)
+        public void Start(string ip, int port, string authToken)
         {
             //Observable
             OnTryingConnectToGameServer();
+
+            myToken = authToken;
 
             //Create a connection
             ConnectToGameServer(ip, port);
@@ -108,6 +112,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             FoolNetworkObservableCallbacksWrapper.Instance.ConnectedToGameServer();
             IsConnectingToGameServer = false;
             IsConnected = true;
+
+            //authorize with token
+            ClientSendPackets.Send_Authorize(myToken);
         }
 
         private void OnMessage(byte[] data)

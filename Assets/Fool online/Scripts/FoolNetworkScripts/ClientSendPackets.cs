@@ -14,10 +14,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         private enum ClientPacketId
         {
             //LOGIN
-            NewAccount = 1,
-            Login,
-            ThankYou,
-            
+            Authorize = 1,
+
             //ROOMS
             CreateRoom,
             RefreshRoomList,
@@ -66,34 +64,17 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         }
 
         /// <summary>
-        /// Sends user account to server on registration.
+        /// Sends user account to gameserver on login.
         /// </summary>
-        public static void Send_NewAccount(string username, string password, string email)
+        public static void Send_Authorize(string token)
         {
             ByteBuffer buffer = new ByteBuffer();
 
-            buffer.WriteLong((long)ClientPacketId.NewAccount); //=1
-            buffer.WriteString(username);
-            buffer.WriteString(password);
-            buffer.WriteString(email);
+            buffer.WriteLong((long)ClientPacketId.Authorize); //=1
+            buffer.WriteString(token);
 
             SendDataToServer(buffer.ToArray());
         }
-
-        /// <summary>
-        /// Tutorial function //TODO remove
-        /// </summary>
-        public static void Send_ThankYou()
-        {
-            ByteBuffer buffer = new ByteBuffer();
-
-            buffer.WriteLong((long)ClientPacketId.ThankYou);
-            buffer.WriteString("Hello! I'm on server now.");
-
-            SendDataToServer(buffer.ToArray());
-        }
-
-
 
         /// <summary>
         /// Sent when cover some card on table

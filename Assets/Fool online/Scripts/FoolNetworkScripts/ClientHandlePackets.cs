@@ -21,7 +21,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         public enum SevrerPacketId
         {
             //Connection
-            Information = 1,
+            AuthorizedOk = 1,
+            ErrorBadAuthToken,
 
             //ROOMS
             RoomList,
@@ -73,7 +74,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         {
             _packets = new Dictionary<long, Packet>();
 
-            _packets.Add((long)SevrerPacketId.Information, Packet_Information);
+            _packets.Add((long)SevrerPacketId.AuthorizedOk, Packet_AuthorizedOk);
+            _packets.Add((long)SevrerPacketId.ErrorBadAuthToken, Packet_ErrorBadAuthToken);
 
             //ROOMS
             _packets.Add((long)SevrerPacketId.RoomList, Packet_RoomList);
@@ -206,10 +208,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         ////////////////////////////DATA PACKETS////////////////////////////
         ////////////////////////////DATA PACKETS////////////////////////////
 
-        /// <summary>
-        /// Handles SevrerPacketId.Information
-        /// </summary>
-        private static void Packet_Information(byte[] data)
+        private static void Packet_AuthorizedOk(byte[] data)
         {
             ByteBuffer buffer = new ByteBuffer();
             buffer.WriteBytes(data);
@@ -226,22 +225,25 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             Debug.Log($"Connected. Your connection id = " + connectionId + ". Server says: " + msg);
 
-            ClientSendPackets.Send_ThankYou();
+            //Invoke callback on observers
+            FoolNetworkObservableCallbacksWrapper.Instance.AuthorizedOk(connectionId);
+
         }
 
-        /// <summary>
-        /// Handles SevrerPacketId.Information
-        /// </summary>
-        private static void Packet_CallMethod(byte[] data)
+        private static void Packet_ErrorBadAuthToken(byte[] data)
         {
-            ByteBuffer buffer = new ByteBuffer();
+            /*ByteBuffer buffer = new ByteBuffer();
             buffer.WriteBytes(data);
 
-            long packetId = buffer.ReadLong();
+            //skip read pakcet id
+            buffer.ReadLong();
 
-            long methodId = buffer.ReadLong();
+            long connectionId = buffer.ReadLong();*/
 
-            Debug.Log("got Packet_CallMethod");
+            Debug.Log("ErrorBadAuthToken");
+
+            //Invoke callback on observers
+            FoolNetworkObservableCallbacksWrapper.Instance.ErrorBadAuthToken();
         }
 
         /// <summary>

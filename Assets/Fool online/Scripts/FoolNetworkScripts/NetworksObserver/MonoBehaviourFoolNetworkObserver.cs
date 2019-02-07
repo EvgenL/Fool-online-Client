@@ -23,6 +23,20 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         }
 
         /// <summary>
+        /// Called when client succesfully connected to server and authorized
+        /// </summary>
+        public virtual void OnAuthorizedOk(long connectionId)
+        {
+        }
+
+        /// <summary>
+        /// Called when client sent wrong token
+        /// </summary>
+        public virtual void OnErrorBadAuthToken()
+        {
+        }
+
+        /// <summary>
         /// Called when client succesfully connected to server
         /// </summary>
         public virtual void OnConnectedToGameServer()

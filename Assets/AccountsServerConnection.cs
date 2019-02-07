@@ -36,31 +36,35 @@ public class AccountsServerConnection : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(CheckVersion(LoginServerIp, LoginServerPort));
+        //StartCoroutine(CheckVersion(LoginServerIp, LoginServerPort));
     }
 
-    private IEnumerator CheckVersion(string serverIp, int serverPort)
+    /// <summary>
+    /// Login without registration if allowed by server
+    /// </summary>
+    /// <param name="nickname">Desired nickname</param>
+    public void AnonymousLogin(string nickname)
     {
+        StartCoroutine(AnonymousLoginCoroutine(nickname));
+    }
 
+    private IEnumerator AnonymousLoginCoroutine(string nickname)
+    {
+        //Create POST reauest
         var request = new UnityWebRequest(
-            "http://" + serverIp + ":" + serverPort + "/",
-            "POST",
-            new DownloadHandlerBuffer(),
-            new UploadHandlerRaw(null));
+            "http://" + LoginServerIp + ":" + LoginServerPort + "/",
+            "POST");
 
+        //Add headers
         request.SetRequestHeader("Client-version", Application.version);
         request.SetRequestHeader("Login", "anonymous");
-        request.SetRequestHeader("Username", "test");
+        request.SetRequestHeader("Username", nickname);
 
         //Send
         //And wait for response
-        var op = request.SendWebRequest();
+        yield return request.SendWebRequest();
 
-        while (!op.isDone)
-        {
-            yield return null;
-        }
-
+        //When got response (or timeout)
         if (request.isNetworkError || request.isHttpError)
         {
             Debug.Log(request.error);
@@ -80,12 +84,39 @@ public class AccountsServerConnection : MonoBehaviour
 
             Debug.Log("Anon login OK. Connecting to game server: " + gameServerIp + ":" + gameServerPort);
 
-            NetworkManager.Instance.Connect(gameServerIp, gameServerPort);
+            NetworkManager.Instance.ConnectToGameServer(gameServerIp, gameServerPort, authToken);
         }
         else //if not passed version check
         {
 
         }
+    }
+
+
+    private IEnumerator CheckVersion(string serverIp, int serverPort)
+    {
+
+        var request = new UnityWebRequest(
+            "http://" + serverIp + ":" + serverPort + "/",
+            "POST",
+            new DownloadHandlerBuffer(),
+            new UploadHandlerRaw(null));
+
+        request.SetRequestHeader("Client-version", Application.version);
+
+        //Send
+        //And wait for response
+        yield return request.SendWebRequest();
+
+        if (request.isNetworkError || request.isHttpError)
+        {
+            Debug.Log(request.error);
+            //todo show error screen
+            yield break;
+        }
+
+        Debug.Log("Version-check: " + request.GetResponseHeader("Version-check"));
+        Debug.Log("Info: " + request.GetResponseHeader("Info"));
     }
 
 

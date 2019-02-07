@@ -81,9 +81,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <summary>
         /// Call to connect game.
         /// </summary>
-        public static void ConnectToGameServer(string ip, int port)
+        public static void ConnectToGameServer(string ip, int port, string authToken)
         {
-            FoolWebClient.Instance.Start(ip, port);
+            FoolWebClient.Instance.Start(ip, port, authToken);
             client = FoolWebClient.Instance;
         }
 

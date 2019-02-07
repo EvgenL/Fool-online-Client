@@ -17,8 +17,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
     public class FoolNetworkObservableCallbacksWrapper : FoolNetworkObservable
     {
 
-        #region Thread-safe Singleton
+        #region Singleton
 
+        //it was thread-safe but removed because not needed
         //private static object padlock = new object();
 
         public static FoolNetworkObservableCallbacksWrapper Instance
@@ -40,6 +41,19 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         private static FoolNetworkObservableCallbacksWrapper _instance;
 
         #endregion
+
+        public void AuthorizedOk(long connectionId)
+        {
+            FoolNetwork.LocalPlayer.Authorized = true;
+            //Observable
+            OnAuthorizedOk(connectionId);
+        }
+
+        public void ErrorBadAuthToken()
+        {
+            //Observable
+            OnErrorBadAuthToken();
+        }
 
         /// <summary>
         /// Called by handlePackets on joining room

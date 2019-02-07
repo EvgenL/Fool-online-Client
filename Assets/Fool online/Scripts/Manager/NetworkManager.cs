@@ -1,6 +1,7 @@
 ﻿using Fool_online.Scripts.FoolNetworkScripts;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Fool_online.Scripts.Manager
@@ -37,6 +38,9 @@ namespace Fool_online.Scripts.Manager
 #endregion
 
 
+        [Header("Scene name that would be opened after login is succesful")]
+        [SerializeField] private string _sceneAuthorized = "Main menu";
+
         private void Start()
         {
             if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Login register"))
@@ -48,7 +52,7 @@ namespace Fool_online.Scripts.Manager
         /// <summary>
         /// Connects to server. Called in scene 'Connecting to server.scene'
         /// </summary>
-        public void Connect(string ip, int port)
+        public void ConnectToGameServer(string ip, int port, string authToken)
         {
             ConnectionState = FoolNetwork.connectionState;
             if (ConnectionState == FoolNetwork.ConnectionState.ConnectingGameServer)
@@ -56,7 +60,7 @@ namespace Fool_online.Scripts.Manager
                 return;
             }
             print("Trying to connect...");
-            FoolNetwork.ConnectToGameServer(ip, port);
+            FoolNetwork.ConnectToGameServer(ip, port, authToken);
         }
 
         /// <summary>
@@ -81,20 +85,17 @@ namespace Fool_online.Scripts.Manager
             FoolNetwork.Disconnect();
         }
 
-        //Observed callback
-        public override void OnConnectedToGameServer()
+        public override void OnAuthorizedOk(long connectionId)
         {
-            print("I feel OnConnectedToGameServer.....");
+            SceneManager.LoadScene(_sceneAuthorized);
         }
 
         //Observed callback
         public override void OnDisconnectedFromGameServer()
         {
-            print("I feel OnDisconnectedFromGameServer.....");
-
             if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Connecting to server"))
             {
-                SceneManager.LoadScene("Connecting to server");
+                SceneManager.LoadScene("Login register");
             }
         }
 
