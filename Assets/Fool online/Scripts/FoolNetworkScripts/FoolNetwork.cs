@@ -31,7 +31,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <summary>
         /// Gets info of server to which we did connected
         /// </summary>
-        public static string ServerInfo => FoolWebClient.Instance.GetServerInfo(); 
+        public static string ServerInfo => FoolWebClient.Instance.GetConnectedEndPoint(); 
 
         public enum ConnectionState
         {
@@ -81,9 +81,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <summary>
         /// Call to connect game.
         /// </summary>
-        public static void ConnectToGameServer()
+        public static void ConnectToGameServer(string ip, int port)
         {
-            FoolWebClient.Instance.Start();
+            FoolWebClient.Instance.Start(ip, port);
             client = FoolWebClient.Instance;
         }
 

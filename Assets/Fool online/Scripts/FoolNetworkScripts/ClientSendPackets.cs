@@ -1,6 +1,7 @@
 ﻿using System;
 using Evgen.Byffer;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
+using UnityEngine;
 
 namespace Fool_online.Scripts.FoolNetworkScripts
 {
@@ -12,12 +13,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// </summary>
         private enum ClientPacketId
         {
+            //LOGIN
             NewAccount = 1,
             Login,
             ThankYou,
             
-            
-
             //ROOMS
             CreateRoom,
             RefreshRoomList,

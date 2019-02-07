@@ -39,16 +39,16 @@ namespace Fool_online.Scripts.Manager
 
         private void Start()
         {
-            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Connecting to server"))
+            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Login register"))
             {
-                SceneManager.LoadScene("Connecting to server");
+                SceneManager.LoadScene("Login register");
             }
         }
 
         /// <summary>
         /// Connects to server. Called in scene 'Connecting to server.scene'
         /// </summary>
-        public void Connect()
+        public void Connect(string ip, int port)
         {
             ConnectionState = FoolNetwork.connectionState;
             if (ConnectionState == FoolNetwork.ConnectionState.ConnectingGameServer)
@@ -56,7 +56,7 @@ namespace Fool_online.Scripts.Manager
                 return;
             }
             print("Trying to connect...");
-            FoolNetwork.ConnectToGameServer();
+            FoolNetwork.ConnectToGameServer(ip, port);
         }
 
         /// <summary>

@@ -1,17 +1,23 @@
-﻿using Fool_online.Scripts.FoolNetworkScripts;
+﻿using System;
+using Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Fool_online.Scripts
 {
-    public class OnConnectedScene : MonoBehaviour   
+    /// <summary>
+    /// Class that opens scene NextScene on succesful connect to game server
+    /// </summary>
+    public class OnConnectedScene : MonoBehaviourFoolNetworkObserver
     {
         public string NextScene = "";
 
-        private void Start()
+        public override void OnConnectedToGameServer()
         {
-            NetworkManager.Instance.Connect();
+            SceneManager.LoadScene(NextScene);
+            this.enabled = false;
         }
 
         private void Update()
@@ -23,9 +29,5 @@ namespace Fool_online.Scripts
             }
         }
 
-        /*public override void OnConnectedToGameServer()
-    {
-        SceneManager.LoadScene(NextScene);
-    }*/
     }
 }

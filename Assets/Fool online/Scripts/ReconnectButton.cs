@@ -1,4 +1,5 @@
-﻿using Fool_online.Scripts.Manager;
+﻿using System;
+using Fool_online.Scripts.Manager;
 using UnityEngine;
 
 namespace Fool_online.Scripts
@@ -7,7 +8,8 @@ namespace Fool_online.Scripts
     {
         public void OnClick()
         {
-            NetworkManager.Instance.Connect();
+            throw new NotImplementedException();
+            //NetworkManager.Instance.Connect();
         }
     }
 }

@@ -10,7 +10,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts
     /// <summary>
     /// Connects to fool online server
     /// </summary>
-//TODO implement heartbeat
     public class FoolWebClient : FoolNetworkObservable
     {
         //public static string ClientVersion = "1.2"; //todo implement version check
@@ -29,12 +28,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
         }
 
-        //TODO load from file
-        //public string ServerIP = "127.0.0.1"; //localhost
-        public string ServerIP = "51.75.236.170"; //french
-        //public string ServerIP = "192.168.0.22"; //my pc
-
-        public int ServerPort = 5055;
+        private string LastIp;
+        private int LastPort;
 
         public bool IsConnected = false;
         public bool IsConnectingToGameServer = false;
@@ -51,16 +46,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
         private WebSocket mySocket;
 
-        //private TcpClient PlayerSocket;
-        //private NetworkStream MyStream;
 
-        public void Start()
+        public void Start(string ip, int port)
         {
             //Observable
             OnTryingConnectToGameServer();
 
             //Create a connection
-            ConnectToGameServer(ServerIP, ServerPort);
+            ConnectToGameServer(ip, port);
         }
 
         /// <summary>
@@ -80,6 +73,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         public void ConnectToGameServer(string serverIp, int serverPort)
         {
             IsConnectingToGameServer = true;
+
+            LastIp = serverIp;
+            LastPort = serverPort;
 
             //if player socket exist
             if (mySocket != null)
@@ -160,14 +156,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
         }
 
-        public string GetServerInfo()
+        public string GetConnectedEndPoint()
         {
             if (!IsConnected)
             {
                 return "NOT CONNECTED";
             }
 
-            return ServerIP + ":" + ServerPort;
+            return LastIp + ":" + LastPort;
         }
     
     }
