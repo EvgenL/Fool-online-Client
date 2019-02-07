@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Fool_online.Scripts.FoolNetworkScripts;
+﻿using Fool_online.Scripts.FoolNetworkScripts;
 using UnityEngine;
 using UnityEngine.UI;
 

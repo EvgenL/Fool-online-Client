@@ -1,5 +1,4 @@
 ﻿using System;
-using Fool_online.Scripts.Manager;
 using UnityEngine;
 
 namespace Fool_online.Scripts

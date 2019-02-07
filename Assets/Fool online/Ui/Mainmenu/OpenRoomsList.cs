@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Fool_online.Scripts;
+﻿using Fool_online.Scripts;
 using Fool_online.Scripts.FoolNetworkScripts;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using Fool_online.Ui.Mainmenu;

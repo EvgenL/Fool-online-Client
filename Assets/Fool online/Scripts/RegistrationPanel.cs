@@ -1,5 +1,4 @@
-﻿using Fool_online.Scripts.FoolNetworkScripts;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Fool_online.Scripts

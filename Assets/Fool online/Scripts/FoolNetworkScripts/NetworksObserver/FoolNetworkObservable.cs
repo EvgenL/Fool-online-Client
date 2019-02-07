@@ -93,7 +93,18 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
                 }
             });
         }
-
+        protected void OnUpdateUserData(long connectionId, string userId, string nickname)
+        {
+            //This is needed for access to unity's api
+            DoInMainUnityThread(delegate {
+                CheckDestroyedObservers();
+                foreach (var obs in _observers)
+                {
+                    obs.OnUpdateUserData(connectionId, userId, nickname);
+                }
+            });
+        }
+        
         protected void OnDisconnectedFromGameServer()
         {
             //This is needed for access to unity's api
@@ -166,14 +177,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
             });
         }
         
-        protected void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN)
+        protected void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN, string joinedPlayerNickname)
         {
             //This is needed for access to unity's api
             DoInMainUnityThread(delegate {
                 CheckDestroyedObservers();
                 foreach (var obs in _observers)
                 {
-                    obs.OnOtherPlayerJoinedRoom(joinedPlayerId, slotN);
+                    obs.OnOtherPlayerJoinedRoom(joinedPlayerId, slotN, joinedPlayerNickname);
                 }
             });
         }

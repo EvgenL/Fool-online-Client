@@ -1,6 +1,4 @@
-﻿using UnityEditor;
-
-namespace Fool_online.Scripts.FoolNetworkScripts
+﻿namespace Fool_online.Scripts.FoolNetworkScripts
 {
     /// <summary>
     /// Main fool online networking class

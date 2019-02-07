@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Evgen.Byffer;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using Fool_online.Scripts.InRoom;
@@ -23,6 +22,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             //Connection
             AuthorizedOk = 1,
             ErrorBadAuthToken,
+            UpdateUserData,
 
             //ROOMS
             RoomList,
@@ -74,8 +74,10 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         {
             _packets = new Dictionary<long, Packet>();
 
+            //LOGIN
             _packets.Add((long)SevrerPacketId.AuthorizedOk, Packet_AuthorizedOk);
             _packets.Add((long)SevrerPacketId.ErrorBadAuthToken, Packet_ErrorBadAuthToken);
+            _packets.Add((long)SevrerPacketId.UpdateUserData, Packet_UpdateUserData);
 
             //ROOMS
             _packets.Add((long)SevrerPacketId.RoomList, Packet_RoomList);
@@ -246,6 +248,27 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             FoolNetworkObservableCallbacksWrapper.Instance.ErrorBadAuthToken();
         }
 
+        private static void Packet_UpdateUserData(byte[] data)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+
+            //skip read pakcet id
+            buffer.ReadLong();
+
+            long connectionId = buffer.ReadLong();
+
+            string UserId = buffer.ReadString();
+
+            string Nickname = buffer.ReadString();
+
+            Debug.Log("ErrorBadAuthToken");
+
+            //Invoke callback on observers
+            FoolNetworkObservableCallbacksWrapper.Instance.UpdateUserData(connectionId, UserId, Nickname);
+        }
+        
+
         /// <summary>
         /// Handles SevrerPacketId.JoinRoomOk
         /// </summary>
@@ -301,7 +324,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             ByteBuffer buffer = new ByteBuffer();
             buffer.WriteBytes(data);
 
-            long packetId = buffer.ReadLong();
+            buffer.ReadLong();
 
             long roomId = buffer.ReadLong();
 
@@ -349,6 +372,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             //Init player array
             List<long> playerIdsInRoom = new List<long>();
+            List<string> playerNicknames = new List<string>();
             //Init chair dict
             Dictionary<int, long> slots = new Dictionary<int, long>();
 
@@ -367,6 +391,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
                 {
                     FoolNetwork.LocalPlayer.InRoomSlotNumber = slotN;
                 }
+
+                //read player nickname
+                playerNicknames.Add(buffer.ReadString());
             }
 
             //Read maxPlayers
@@ -385,6 +412,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
                 {
                     PlayerInRoom pl = new PlayerInRoom(slots[i]);
                     pl.SlotN = i;
+                    pl.Nickname = playerNicknames[i];
                     StaticRoomData.Players[i] = pl;
                 }
             }
@@ -412,8 +440,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             //Read slotN of newly joined player
             int slotN = buffer.ReadInteger();
 
+            //read name
+            string nickname = buffer.ReadString();
+
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerJoinedRoom(joinedPlayerId, slotN);
+            FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerJoinedRoom(joinedPlayerId, slotN, nickname);
         }
 
         /// <summary>

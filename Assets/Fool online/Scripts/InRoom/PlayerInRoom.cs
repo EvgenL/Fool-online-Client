@@ -11,7 +11,7 @@ namespace Fool_online.Scripts.InRoom
 
         public long ConnectionId;
 
-        public string Nickname => "Игрок " + ConnectionId;
+        public string Nickname;
 
         public int CardsNumber;
 
@@ -22,6 +22,8 @@ namespace Fool_online.Scripts.InRoom
         public bool Pass = false;
 
         public bool Won = false;
+
+        public bool Left = false;
 
         public int SlotN;
 

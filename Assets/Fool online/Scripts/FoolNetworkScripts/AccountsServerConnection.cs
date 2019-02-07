@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using WebSocketSharp.Net;
@@ -27,8 +26,9 @@ public class AccountsServerConnection : MonoBehaviour
     }
     #endregion
 
-    public string LoginServerIp = "127.0.0.1";
+    public string LoginServerIp = "51.75.236.170";
     public int LoginServerPort = 5054;
+    public bool useLocal = true;
 
     public static bool IsConnectingToAccountsServer = false;
     public static bool IsConnected = false;
@@ -52,13 +52,13 @@ public class AccountsServerConnection : MonoBehaviour
     {
         //Create POST reauest
         var request = new UnityWebRequest(
-            "http://" + LoginServerIp + ":" + LoginServerPort + "/",
+            "http://" + (useLocal ? "192.168.0.22" : LoginServerIp) + ":" + LoginServerPort + "/",
             "POST");
 
         //Add headers
         request.SetRequestHeader("Client-version", Application.version);
         request.SetRequestHeader("Login", "anonymous");
-        request.SetRequestHeader("Username", nickname);
+        request.SetRequestHeader("Nickname", nickname);
 
         //Send
         //And wait for response

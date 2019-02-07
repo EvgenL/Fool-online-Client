@@ -65,7 +65,7 @@ namespace Fool_online.Scripts.Manager
         /// <summary>
         /// Observer callback
         /// </summary>
-        public override void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN)
+        public override void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN, string joinedPlayerNickname)
         {
             CheckIfAllPlayersJoined();
         }
@@ -236,7 +236,8 @@ namespace Fool_online.Scripts.Manager
 
         public override void OnEndGameFool(long foolPlayerId)
         {
-            MessageManager.Instance.ShowFullScreenText("Игрок " + foolPlayerId + " дурак");
+            string foolNickname = StaticRoomData.GetPlayerNickname(foolPlayerId);
+            MessageManager.Instance.ShowFullScreenText(foolNickname + " - дурак");
 
             Invoke("EndGame", 4f);
 
@@ -374,7 +375,8 @@ namespace Fool_online.Scripts.Manager
 
         public override void OnEndGameGiveUp(long foolConnectionId, Dictionary<long, double> rewards)
         {
-            MessageManager.Instance.ShowFullScreenText("Игрок " + foolConnectionId + " сдался.");
+            string nickname = StaticRoomData.GetPlayerNickname(foolConnectionId);
+            MessageManager.Instance.ShowFullScreenText(nickname + " сдался.");
             EndGame();
         }
 

@@ -1,7 +1,4 @@
-﻿using System;
-using Fool_online.Scripts.FoolNetworkScripts;
-using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
-using Fool_online.Scripts.Manager;
+﻿using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Assets.Fool_online.Scripts.FoolNetworkScripts.LoginRegister;
-using Fool_online.Scripts;
-using Fool_online.Scripts.FoolNetworkScripts;
-using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
+﻿using System.Collections.Generic;
 using HybridWebSocket;
 using UnityEngine;
 using UnityEngine.Networking;

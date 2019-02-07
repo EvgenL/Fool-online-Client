@@ -36,6 +36,10 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         {
         }
 
+        public virtual void OnUpdateUserData(long connectionId, string userId, string nickname)
+        {
+        }
+
         /// <summary>
         /// Called when client succesfully connected to server
         /// </summary>
@@ -88,7 +92,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         /// <summary>
         /// Called on somebody expect you joins room. Also OnRoomData called.
         /// </summary>
-        public virtual void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN)
+        public virtual void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN, string joinedPlayerNickname)
         {
         }
 

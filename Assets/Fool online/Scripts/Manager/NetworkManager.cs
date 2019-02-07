@@ -1,6 +1,5 @@
 ﻿using Fool_online.Scripts.FoolNetworkScripts;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

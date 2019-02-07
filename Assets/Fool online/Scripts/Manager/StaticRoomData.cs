@@ -49,5 +49,11 @@ namespace Fool_online.Scripts.Manager
         public static PlayerInRoom Attacker => Players.Single(player => player.ConnectionId == WhoseAttack);
 
         public static bool Iwon => MyPlayer.Won;
+
+        public static string GetPlayerNickname(long connectionId)
+        {
+            var a = Players;
+            return Players.Single(player => player.ConnectionId == connectionId).Nickname;
+        }
     }
 }

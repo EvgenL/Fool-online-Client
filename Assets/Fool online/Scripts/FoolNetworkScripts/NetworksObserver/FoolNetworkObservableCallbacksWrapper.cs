@@ -55,6 +55,15 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
             OnErrorBadAuthToken();
         }
 
+        public void UpdateUserData(long connectionId, string userId, string nickname)
+        {
+            FoolNetwork.LocalPlayer.UserId = userId;
+            FoolNetwork.LocalPlayer.Nickname = nickname;
+            //Observable
+            OnUpdateUserData(connectionId, userId, nickname);
+        }
+
+        
         /// <summary>
         /// Called by handlePackets on joining room
         /// </summary>
@@ -132,39 +141,36 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
             OnRoomData();
         }
 
-        public void OtherPlayerJoinedRoom(long joinedPlayerId, int slotN)
+        public void OtherPlayerJoinedRoom(long joinedPlayerId, int slotN, string joinedPlayerNickname)
         {
             StaticRoomData.ConnectedPlayersCount++;
-            string s = "StaticRoomData.OccupiedSlots = {";
-            foreach (var slot in StaticRoomData.OccupiedSlots)
-            {
-                s += $" [slot {slot.Key}, player {slot.Value}] ";
-            }
-            s += "}";
-            Debug.Log("OtherPlayerJoinedRoom");
-            Debug.Log(s);
 
             StaticRoomData.OccupiedSlots.Add(slotN, joinedPlayerId);
             StaticRoomData.PlayerIds.Add(joinedPlayerId);
 
-            PlayerInRoom pl = new PlayerInRoom(joinedPlayerId);
-            pl.SlotN = slotN;
-            StaticRoomData.Players[slotN] = pl;
+            PlayerInRoom newPlayer = new PlayerInRoom(joinedPlayerId);
+            newPlayer.SlotN = slotN;
+            newPlayer.Nickname = joinedPlayerNickname;
+            StaticRoomData.Players[slotN] = newPlayer;
 
             //Observable
             OnRoomData();
 
             //Observable
-            OnOtherPlayerJoinedRoom(joinedPlayerId, slotN);
+            OnOtherPlayerJoinedRoom(joinedPlayerId, slotN, joinedPlayerNickname);
         }
 
         public void OtherPlayerLeftRoom(long leftPlayerId, int slotN)
         {
-            StaticRoomData.ConnectedPlayersCount--;
-            StaticRoomData.OccupiedSlots.Remove(slotN);
-            StaticRoomData.PlayerIds.Remove(leftPlayerId);
+            //Observable
+            OnOtherPlayerLeftRoom(leftPlayerId, slotN);
 
-            StaticRoomData.Players[slotN] = null;
+            //StaticRoomData.ConnectedPlayersCount--;
+            //StaticRoomData.OccupiedSlots.Remove(slotN);
+            //StaticRoomData.PlayerIds.Remove(leftPlayerId);
+
+            //StaticRoomData.Players[slotN] = null;
+            StaticRoomData.Players[slotN].Left = true;
 
             foreach (var player in StaticRoomData.Players)
             {
@@ -173,12 +179,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
                     player.IsReady = false;
                 }
             }
-
             //Observable
             OnRoomData();
-
-            //Observable
-            OnOtherPlayerLeftRoom(leftPlayerId, slotN);
         }
 
         public void OtherPlayerGotReady(long playerId, int slotN)
@@ -279,6 +281,19 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         {
             //Observable
             OnEndGame(foolConnectionId, rewards);
+
+            foreach (var player in StaticRoomData.Players)
+            {
+                if (player.Left)
+                {
+
+                    StaticRoomData.ConnectedPlayersCount--;
+                    StaticRoomData.OccupiedSlots.Remove(player.SlotN);
+                    StaticRoomData.PlayerIds.Remove(player.ConnectionId);
+
+                    StaticRoomData.Players[player.SlotN] = null;
+                }
+            }
         }
 
         public void EndGameGiveUp(long foolConnectionId, Dictionary<long, double> rewards)

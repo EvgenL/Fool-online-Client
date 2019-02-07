@@ -6,9 +6,14 @@
     public class FoolPlayer
     {
         /// <summary>
+        /// Real Name Of Player
+        /// </summary>
+        public string UserId;
+
+        /// <summary>
         /// Display Name Of Player
         /// </summary>
-        public string Nickname => "Игрок " + ConnectionId;
+        public string Nickname;
 
         /// <summary>
         /// ConnectionId sent by server on connect
