@@ -151,6 +151,15 @@ namespace Fool_online.Scripts.InRoom
             SetReadyCheckmark(false);
         }
 
+        public virtual void DrawLeft()
+        {
+            NicknameText.text += "(вышел)";
+
+            HideTextCloud();
+            AnimateHideCurrentStatusIcon();
+            SetReadyCheckmark(false);
+        }
+
 
         public virtual void SetReadyCheckmark(bool value)
         {

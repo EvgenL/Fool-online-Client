@@ -260,9 +260,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             string UserId = buffer.ReadString();
 
-            string Nickname = buffer.ReadString();
-
-            Debug.Log("ErrorBadAuthToken");
+            string Nickname = buffer.ReadStringUnicode();
 
             //Invoke callback on observers
             FoolNetworkObservableCallbacksWrapper.Instance.UpdateUserData(connectionId, UserId, Nickname);
@@ -393,7 +391,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
                 }
 
                 //read player nickname
-                playerNicknames.Add(buffer.ReadString());
+                playerNicknames.Add(buffer.ReadStringUnicode());
             }
 
             //Read maxPlayers
@@ -441,7 +439,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             int slotN = buffer.ReadInteger();
 
             //read name
-            string nickname = buffer.ReadString();
+            string nickname = buffer.ReadStringUnicode();
 
             //Invoke callback on observers
             FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerJoinedRoom(joinedPlayerId, slotN, nickname);

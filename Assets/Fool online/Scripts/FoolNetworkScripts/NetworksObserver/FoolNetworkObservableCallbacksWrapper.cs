@@ -145,8 +145,18 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         {
             StaticRoomData.ConnectedPlayersCount++;
 
-            StaticRoomData.OccupiedSlots.Add(slotN, joinedPlayerId);
-            StaticRoomData.PlayerIds.Add(joinedPlayerId);
+            // if this slot was occupied once then replace slot values
+            if (StaticRoomData.OccupiedSlots.TryGetValue(slotN, out long n))
+            {
+                StaticRoomData.OccupiedSlots[slotN] = joinedPlayerId;
+                StaticRoomData.PlayerIds.Remove(n);
+                StaticRoomData.PlayerIds.Add(joinedPlayerId);
+            }
+            else // else create new slot values
+            {
+                StaticRoomData.OccupiedSlots.Add(slotN, joinedPlayerId);
+                StaticRoomData.PlayerIds.Add(joinedPlayerId);
+            }
 
             PlayerInRoom newPlayer = new PlayerInRoom(joinedPlayerId);
             newPlayer.SlotN = slotN;
@@ -162,14 +172,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public void OtherPlayerLeftRoom(long leftPlayerId, int slotN)
         {
+            StaticRoomData.ConnectedPlayersCount--;
+
             //Observable
             OnOtherPlayerLeftRoom(leftPlayerId, slotN);
 
-            //StaticRoomData.ConnectedPlayersCount--;
-            //StaticRoomData.OccupiedSlots.Remove(slotN);
-            //StaticRoomData.PlayerIds.Remove(leftPlayerId);
-
-            //StaticRoomData.Players[slotN] = null;
             StaticRoomData.Players[slotN].Left = true;
 
             foreach (var player in StaticRoomData.Players)
@@ -216,6 +223,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public void StartGame()
         {
+            StaticRoomData.IsPlaying = true;
+
             foreach (var player in StaticRoomData.Players)
             {
                 player.Won = false;
@@ -279,12 +288,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public void EndGame(long foolConnectionId, Dictionary<long, double> rewards)
         {
+            StaticRoomData.IsPlaying = false;
+
             //Observable
             OnEndGame(foolConnectionId, rewards);
 
-            foreach (var player in StaticRoomData.Players)
+            /*foreach (var player in StaticRoomData.Players)
             {
-                if (player.Left)
+                if (player != null && player.Left)
                 {
 
                     StaticRoomData.ConnectedPlayersCount--;
@@ -293,21 +304,19 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
                     StaticRoomData.Players[player.SlotN] = null;
                 }
-            }
+            }*/
         }
 
-        public void EndGameGiveUp(long foolConnectionId, Dictionary<long, double> rewards)
+        public void EndGameGiveUp(long foolPlayerId, Dictionary<long, double> rewards)
         {
+            EndGame(foolPlayerId, rewards);
             //Observable
-            OnEndGame(foolConnectionId, rewards);
-            //Observable
-            OnEndGameGiveUp(foolConnectionId, rewards);
+            OnEndGameGiveUp(foolPlayerId, rewards);
         }
 
         public void EndGameFool(long foolPlayerId, Dictionary<long, double> rewards)
         {
-            //Observable
-            OnEndGame(foolPlayerId, rewards);
+            EndGame(foolPlayerId, rewards);
             //Observable
             OnEndGameFool(foolPlayerId);
         }

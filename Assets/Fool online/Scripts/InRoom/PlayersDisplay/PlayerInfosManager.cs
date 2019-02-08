@@ -152,16 +152,25 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         /// </summary>
         public override void OnOtherPlayerLeftRoom(long leftPlayerId, int slotN)
         {
-            SlotsScripts[slotN].DrawEmpty();
-
-            //Uncheck everybody's checkmarks
-            foreach (var slot in SlotsScripts)
+            // if game is playing then mark slot as player-left
+            if (StaticRoomData.IsPlaying)
             {
-                slot.SetReadyCheckmark(false);
+                SlotsScripts[slotN].DrawLeft();
+            }
+            else // if game is not playing then mark slot as empty
+            {
+                SlotsScripts[slotN].DrawEmpty();
+
+                //Uncheck everybody's checkmarks
+                foreach (var slot in SlotsScripts)
+                {
+                    slot.SetReadyCheckmark(false);
+                }
+
+                HideTextClouds();
+                HideStatusIcons();
             }
 
-            HideTextClouds();
-            HideStatusIcons();
         }
 
         /// <summary>
@@ -258,6 +267,17 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
 
         public override void OnEndGame(long foolConnectionId, Dictionary<long, double> rewards)
         {
+            //todo animate rewards, wait, mark all slots of players who left as empty
+
+            // mark all slots of players who left as empty
+            for (int i = 0; i < SlotsScripts.Length; i++)
+            {
+                if (StaticRoomData.Players[i].Left)
+                {
+                    SlotsScripts[i].DrawEmpty();
+                }
+            }
+
             HideTextClouds();
             HideStatusIcons();
         }

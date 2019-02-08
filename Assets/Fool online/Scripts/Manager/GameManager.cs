@@ -549,7 +549,7 @@ namespace Fool_online.Scripts.Manager
         /// </summary>
         private bool IcanAddCards()
         {
-            return _attackerPassedPriority || ILedAttack(); //&& todo am i neighbour 
+            return _attackerPassedPriority || ILedAttack() && !IamDefending(); //&& todo am i neighbour 
         }
 
         /// <summary>

@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Text;
+using Assets.Fool_online.Scripts.FoolNetworkScripts;
 using UnityEngine;
 using UnityEngine.Networking;
 using WebSocketSharp.Net;
@@ -57,8 +59,22 @@ public class AccountsServerConnection : MonoBehaviour
 
         //Add headers
         request.SetRequestHeader("Client-version", Application.version);
-        request.SetRequestHeader("Login", "anonymous");
-        request.SetRequestHeader("Nickname", nickname);
+        //request.SetRequestHeader("Login", "anonymous"); //moved to body
+        //request.SetRequestHeader("Nickname", nickname);
+
+        var jsonLoginData = new JsonLogin
+        {
+            LoginMethod = "anonymous",
+            UserId = nickname
+        };
+
+        //add login data to body
+        var jsonString = JsonUtility.ToJson(jsonLoginData);
+        byte[] bodyRaw = Encoding.Unicode.GetBytes(jsonString);
+        request.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+        //using unicode there so player can set nickname on any language
+        request.uploadHandler.contentType = "text/json; charset=unicode"; 
+
 
         //Send
         //And wait for response

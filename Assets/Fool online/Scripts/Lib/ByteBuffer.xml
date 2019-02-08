@@ -29,6 +29,11 @@
             State variable changed every time sometring is read or writen
             </summary>
         </member>
+        <member name="F:Evgen.Byffer.ByteBuffer.MaxStringLength">
+            <summary>
+            Safety
+            </summary>
+        </member>
         <member name="M:Evgen.Byffer.ByteBuffer.ToArray">
             <summary>
             Converts buffer list to array

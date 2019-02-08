@@ -37,7 +37,6 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         public void ShowGetReadyButton()
         {
             GetReadyButton.SetActive(true);
-            print("My player info: get ready");
         }
 
         public void HideGetReadyButton()

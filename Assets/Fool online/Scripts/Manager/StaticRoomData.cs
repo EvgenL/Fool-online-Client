@@ -50,6 +50,8 @@ namespace Fool_online.Scripts.Manager
 
         public static bool Iwon => MyPlayer.Won;
 
+        public static bool IsPlaying = false;
+
         public static string GetPlayerNickname(long connectionId)
         {
             var a = Players;
