@@ -211,8 +211,8 @@ namespace Fool_online.Scripts.Manager
         /// </summary>
         public override void OnBeaten()
         {
-            cardsOnTable.Clear();
-            cardsOnTableCovering.Clear();
+            MyPlayerInfoDisplay.HideAllButtons();
+            MyPlayerInfoDisplay.HideTextCloud();
 
             //Wait for server to send us NextTurn
             State = GameState.Paused;
@@ -311,6 +311,9 @@ namespace Fool_online.Scripts.Manager
         /// </summary>
         public override void OnNextTurn(long whoseTurnPlayerId, int slotN, long defendingPlayerId, int defSlotN, int turnN)
         {
+            cardsOnTable.Clear();
+            cardsOnTableCovering.Clear();
+
             DefenderGaveUpDefence = false;
             _attackerPassedPriority = false;
 
@@ -688,7 +691,8 @@ namespace Fool_online.Scripts.Manager
         {
             TalonDisplay.HideTalon();
 
-            TableDisplay.RemoveCardsFromTableToDiscardPile();
+            TableDisplay.RemoveCardsFromTableToDiscardPile(cardsOnTable);
+            TableDisplay.RemoveCardsFromTableToDiscardPile(cardsOnTableCovering);
 
             //cards on table
             cardsOnTable.Clear();

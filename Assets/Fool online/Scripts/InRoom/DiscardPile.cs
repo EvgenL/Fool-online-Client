@@ -15,7 +15,7 @@ namespace Fool_online.Scripts.InRoom
         {
             if (cardRoot == null) return;
             //bug null reference if other player leaves
-            cardRoot.interactibleCard.transform.DOMove(transform.position, 1f);
+            cardRoot.interactibleCard.transform.DOMove(transform.position, 1f).SetEase(Ease.InOutCubic);
             cardRoot.SetOnTable(true);
             cardRoot.interactibleCard.enabled = false;
             cardRoot.DestroyCard(2f);

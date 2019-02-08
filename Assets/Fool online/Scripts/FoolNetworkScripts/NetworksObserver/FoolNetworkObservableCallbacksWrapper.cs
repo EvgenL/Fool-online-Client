@@ -209,7 +209,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public void YouGotCardsFromTalon(string[] cards)
         {
-            StaticRoomData.MyPlayer.AddCardsN(cards.Length);
             StaticRoomData.MyPlayer.TakeCards(cards);
 
             //Observable

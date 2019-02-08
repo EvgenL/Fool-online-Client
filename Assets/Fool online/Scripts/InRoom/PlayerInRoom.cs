@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Fool_online.Scripts.InRoom
 {
@@ -13,7 +14,21 @@ namespace Fool_online.Scripts.InRoom
 
         public string Nickname;
 
-        public int CardsNumber;
+        public int cn;
+
+        public int CardsNumber
+        {
+            get
+            {
+                Debug.Log("Get " + cn);
+                return cn;
+            }
+            set
+            {
+                Debug.Log("Set " + value);
+                cn = value;
+            }
+        }
 
         public bool WaitForRecconect = false;
 
