@@ -212,11 +212,19 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
             }
             else if (GameManager.Instance.AllCardsCovered())
             {
-                SlotsScripts[slotN].ShowTextCloud("Бито");
+                // if player has no more cards left then dont show text cloud
+                if (StaticRoomData.Players[slotN].CardsNumber > 0)
+                {
+                    SlotsScripts[slotN].ShowTextCloud("Бито");
+                }
             }
             else
             {
-                SlotsScripts[slotN].ShowTextCloud("Пас");
+                // if player has no more cards left then dont show text cloud
+                if (StaticRoomData.Players[slotN].CardsNumber > 0)
+                {
+                    SlotsScripts[slotN].ShowTextCloud("Пас");
+                }
             }
 
             //Set status icons

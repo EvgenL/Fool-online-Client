@@ -40,6 +40,8 @@ namespace Fool_online.Scripts.Manager
         public List<CardRoot> cardsOnTable = new List<CardRoot>();
         public List<CardRoot> cardsOnTableCovering = new List<CardRoot>();
 
+        public int CardsOnTableNumber => cardsOnTable.Count + cardsOnTableCovering.Count;
+
         public bool DefenderGaveUpDefence {private set; get; }
         private bool _attackerPassedPriority = false;
 
@@ -422,7 +424,9 @@ namespace Fool_online.Scripts.Manager
                 }
 
                 //if table is not full (5 cards on first turn, 6 on any other)
-                if (cardsOnTable.Count < 6 || (TurnN == 1 && cardsOnTable.Count < 5))
+                // and player defending has cards
+                if ( (cardsOnTable.Count < 6 || (TurnN == 1 && cardsOnTable.Count < 5) )
+                    && StaticRoomData.Denfender.CardsNumber >= cardsOnTable.Count - cardsOnTableCovering.Count + 1)
                 {
                     //ADD CARD 
                     droppedCardRoot.SetOnTable(true);
@@ -435,9 +439,20 @@ namespace Fool_online.Scripts.Manager
                     //Send to server
                     ClientSendPackets.Send_DropCardOnTable(droppedCardRoot.CardCode);
 
+                    // if my hand is empty then count as pass
+                    if (StaticRoomData.MyPlayer.CardsNumber == 0)
+                    {
+                        print("my hand is empty so i pass");
+
+                        if (ILedAttack())
+                        {
+                            _attackerPassedPriority = true;
+                        }
+                    }
+
                     TableUpdated();
                 }
-                //if table IS full
+                //if table IS full or player defending has no more cards
                 else
                 {
                     //Too much cards on table
@@ -448,7 +463,7 @@ namespace Fool_online.Scripts.Manager
             else if (IamDefending())
             {
                 //if table is empty
-                if (cardsOnTable.Count == 0)
+                if (cardsOnTable.Count == 0 || AllCardsCovered())
                 {
                     //you are defending
                     MessageManager.Instance.ShowFullScreenText("На вас ходят");
@@ -549,7 +564,7 @@ namespace Fool_online.Scripts.Manager
         /// </summary>
         private bool IcanAddCards()
         {
-            return _attackerPassedPriority || ILedAttack() && !IamDefending(); //&& todo am i neighbour 
+            return (_attackerPassedPriority || ILedAttack()) && !IamDefending(); //&& todo am i neighbour 
         }
 
         /// <summary>
@@ -879,6 +894,12 @@ namespace Fool_online.Scripts.Manager
         internal bool AllCardsCovered()
         {
             return cardsOnTable.All(card => card.IsCoveredByACard);
+        }
+
+        private bool DefenderHasCards()
+        {
+            print("Defender has " + StaticRoomData.Denfender.CardsNumber + " cards");
+            return StaticRoomData.Denfender.CardsNumber > 0;
         }
 
 

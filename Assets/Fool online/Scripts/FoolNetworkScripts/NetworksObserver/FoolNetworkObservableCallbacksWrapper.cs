@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Fool_online.Scripts.InRoom;
 using Fool_online.Scripts.InRoom.CardsScripts;
 using Fool_online.Scripts.Manager;
@@ -208,6 +209,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public void YouGotCardsFromTalon(string[] cards)
         {
+            StaticRoomData.MyPlayer.AddCardsN(cards.Length);
             StaticRoomData.MyPlayer.TakeCards(cards);
 
             //Observable
@@ -216,11 +218,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public void EnemyGotCardsFromTalon(long playerId, int slotN, int cardsN)
         {
-            StaticRoomData.Players[slotN].TakeCards(cardsN);
+            StaticRoomData.Players[slotN].AddCardsN(cardsN);
             //Observable
             OnEnemyGotCardsFromTalon(playerId, slotN, cardsN);
         }
-
+        
         public void StartGame()
         {
             StaticRoomData.IsPlaying = true;
@@ -262,6 +264,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public void DropCardOnTableOk(string cardCode)
         {
+            StaticRoomData.MyPlayer.AddCardsN(-1);
             //Observable
             OnDropCardOnTableOk(cardCode);
         }
@@ -282,6 +285,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         }
         public void OtherPlayerDropsCardOnTable(long playerId, int slotN, string cardCode)
         {
+            StaticRoomData.Players[slotN].AddCardsN(-1);
             //Observable
             OnOtherPlayerDropsCardOnTable(playerId, slotN, cardCode);
         }
@@ -331,11 +335,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         public void OtherPlayerCoversCard(long coveredPlayerId, int slotN,
             string cardOnTableCode, string cardDroppedCode)
         {
-            /*foreach (var player in StaticRoomData.Players)
-            {
-                player.Pass = false;
-            }*/
-
+            StaticRoomData.Players[slotN].AddCardsN(-1);
             //Observable
             OnOtherPlayerCoversCard(coveredPlayerId, slotN, cardOnTableCode, cardDroppedCode);
         }
@@ -348,6 +348,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public void DefenderPicksCards(long pickedPlayerId, int slotN)
         {
+            StaticRoomData.Players[slotN].AddCardsN(GameManager.Instance.CardsOnTableNumber);
             //Observable
             OnDefenderPicksCards(pickedPlayerId, slotN);
         }
@@ -375,6 +376,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         /// </summary>
         public void CardDroppedOnTableByMe(CardRoot cardRoot)
         {
+            StaticRoomData.MyPlayer.AddCardsN(-1);
             //Observable
             OnCardDroppedOnTableByMe(cardRoot);
         }
@@ -390,6 +392,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public void PlayerWon(long wonPlayerId, double winnerReward)
         {
+            StaticRoomData.Players.Single(player => player.ConnectionId == wonPlayerId).Won = true;
             //Observable
             OnPlayerWon(wonPlayerId, winnerReward);
         }

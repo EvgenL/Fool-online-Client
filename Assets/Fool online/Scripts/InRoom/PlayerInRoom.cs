@@ -47,7 +47,7 @@ namespace Fool_online.Scripts.InRoom
         /// Non-local player only
         /// Take invisible cards
         /// </summary>
-        public void TakeCards(int amount)
+        public void AddCardsN(int amount)
         {
             CardsNumber += amount;
         }

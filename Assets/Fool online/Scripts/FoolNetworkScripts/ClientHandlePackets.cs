@@ -304,7 +304,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
                 rooms[i].PlayerNames = new string[playersN];
                 for (int j = 0; j < playersN; j++)
                 {
-                    rooms[j].PlayerNames[j] = buffer.ReadStringUnicode();
+                    rooms[i].PlayerNames[j] = buffer.ReadStringUnicode(); //todo bug
                 }
             }
 
@@ -758,7 +758,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             {
                 long player = buffer.ReadLong();
                 double reward = buffer.ReadInteger();
-                rewards.Add(player, reward);
+                //rewards.Add(player, reward);
             }
 
             //Invoke callback on observers
