@@ -1,22 +1,16 @@
 ﻿
 
-
+//DEFINES
 #define TEST_MODE_LOCALHOST // if defined, will connect to localhost
 
 
 
 
 
-using System.Collections;
 using System.Text;
 using System.Xml.Linq;
-using Assets.Fool_online.Scripts.FoolNetworkScripts;
-using Fool_online.Scripts.FoolNetworkScripts;
-using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using HybridWebSocket;
 using UnityEngine;
-using UnityEngine.Networking;
-using WebSocketSharp.Net;
 using NetworkManager = Fool_online.Scripts.Manager.NetworkManager;
 
 

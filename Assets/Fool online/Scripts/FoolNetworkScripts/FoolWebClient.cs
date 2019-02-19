@@ -35,9 +35,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         public bool IsConnected = false;
         public bool IsConnectingToGameServer = false;
 
-        //Flag: is data ready to be handled by main thread
-        private byte[] recievedBytes;
-
         /// <summary>
         /// Sometimes we recieve more than 1 message per frame. We buffer all the recieved messages
         /// and process them later on in Update()
