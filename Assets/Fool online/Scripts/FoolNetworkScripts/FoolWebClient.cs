@@ -42,7 +42,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// Sometimes we recieve more than 1 message per frame. We buffer all the recieved messages
         /// and process them later on in Update()
         /// </summary>
-        private readonly Queue<byte[]> bufferedRecievedBytes = new Queue<byte[]>();
+        private readonly Queue<byte[]> bufferedRecievedMessages = new Queue<byte[]>();
 
 
         private WebSocket mySocket;
@@ -64,9 +64,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// </summary>
         public void Update()
         {
-            while (bufferedRecievedBytes.Count > 0)
+            while (bufferedRecievedMessages.Count > 0)
             {
-                ClientHandlePackets.HandleData(bufferedRecievedBytes.Dequeue());
+                ClientHandlePackets.HandleData(bufferedRecievedMessages.Dequeue());
             }
         }
 
@@ -119,7 +119,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         private void OnMessage(byte[] data)
         {
             //Buffer this message 
-            bufferedRecievedBytes.Enqueue(data);
+            bufferedRecievedMessages.Enqueue(data);
         }
 
         private void OnError(string errormsg)

@@ -1,11 +1,28 @@
-﻿using System.Collections;
+﻿
+
+
+#define TEST_MODE_LOCALHOST // if defined, will connect to localhost
+
+
+
+
+
+using System.Collections;
 using System.Text;
+using System.Xml.Linq;
 using Assets.Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
+using HybridWebSocket;
 using UnityEngine;
 using UnityEngine.Networking;
 using WebSocketSharp.Net;
 using NetworkManager = Fool_online.Scripts.Manager.NetworkManager;
 
+
+/// <summary>
+/// Connects to accounts server. Asks for game server ip and auth token
+/// </summary>
 public class AccountsServerConnection : MonoBehaviour
 {
 
@@ -30,16 +47,23 @@ public class AccountsServerConnection : MonoBehaviour
 
     public string LoginServerIp = "51.75.236.170";
     public int LoginServerPort = 5054;
-    public bool useLocal = true;
 
     public static bool IsConnectingToAccountsServer = false;
     public static bool IsConnected = false;
 
+    /// <summary>
+    /// My client socket for sending data to server
+    /// </summary>
+    private WebSocket mySocket;
+
     // Start is called before the first frame update
     void Start()
     {
-        //StartCoroutine(CheckVersion(LoginServerIp, LoginServerPort));
+        //StartCoroutine(todo CheckVersion(LoginServerIp, LoginServerPort));
     }
+
+
+
 
     /// <summary>
     /// Login without registration if allowed by server
@@ -47,98 +71,141 @@ public class AccountsServerConnection : MonoBehaviour
     /// <param name="nickname">Desired nickname</param>
     public void AnonymousLogin(string nickname)
     {
-        StartCoroutine(AnonymousLoginCoroutine(nickname));
+#if TEST_MODE_LOCALHOST
+        string ip = "127.0.0.1";
+#else
+        string ip = LoginServerIp;
+#endif
+        ConnectAndAnonymousLogin(ip, LoginServerPort, nickname);
     }
 
-    private IEnumerator AnonymousLoginCoroutine(string nickname)
+    /// <summary>
+    /// Sends to server data for anonymous login
+    /// </summary>
+    private void ConnectAndAnonymousLogin(string serverIp, int serverPort, string nickname)
     {
-        //Create POST reauest
-        var request = new UnityWebRequest(
-            "http://" + (useLocal ? "192.168.0.22" : LoginServerIp) + ":" + LoginServerPort + "/",
-            "POST");
+        //Create request body
+        XElement body = new XElement(
+            new XElement("Request",
+                //add version
+                new XElement("VersionCheck", Application.version
+                    ),
+                //add login data
+                new XElement("Connection",
+                    new XElement("LoginMethod", "Anonymous"),
+                    new XElement("Nickname", nickname)
+                    )
+                )
+            );
 
-        //Add headers
-        request.SetRequestHeader("Client-version", Application.version);
-        //request.SetRequestHeader("Login", "anonymous"); //moved to body
-        //request.SetRequestHeader("Nickname", nickname);
+        ConnectAndSend(serverIp, serverPort, body);
+    }
 
-        var jsonLoginData = new JsonLogin
+    /// <summary>
+    /// Connects to server then dends XML data
+    /// </summary>
+    private void ConnectAndSend(string serverIp, int serverPort, XElement body)
+    {
+        //Create and set up a new socket
+        mySocket = WebSocketFactory.CreateInstance("ws://" + serverIp + ":" + serverPort);
+
+        //Init callbacks
+        mySocket.OnOpen += SendBufferedBody;
+        mySocket.OnMessage += OnMessage;
+        mySocket.OnError += OnError;
+        mySocket.OnClose += OnClose;
+        bufferedBody = body;
+
+        //Connect
+        mySocket.Connect();
+    }
+
+    /// <summary>
+    /// Triggered on open to send request immdiatelly
+    /// </summary>
+    private void SendBufferedBody()
+    {
+        byte[] data = Encoding.Unicode.GetBytes(bufferedBody.ToString());
+
+        mySocket.Send(data);
+    }
+
+
+    private void OnMessage(byte[] data)
+    {
+        Debug.Log("OnMessage from server\n" + Encoding.Unicode.GetString(data));
+
+        //parse response data
+        string bodyString = Encoding.Unicode.GetString(data);
+        XElement body = XElement.Parse(bodyString);
+
+        //check for errors
+        XElement error = GetChildElement(body, "Error");
+        if (error != null)
         {
-            LoginMethod = "anonymous",
-            UserId = nickname
-        };
-
-        //add login data to body
-        var jsonString = JsonUtility.ToJson(jsonLoginData);
-        byte[] bodyRaw = Encoding.Unicode.GetBytes(jsonString);
-        request.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
-        //using unicode there so player can set nickname on any language
-        request.uploadHandler.contentType = "text/json; charset=unicode"; 
-
-
-        //Send
-        //And wait for response
-        yield return request.SendWebRequest();
-
-        //When got response (or timeout)
-        if (request.isNetworkError || request.isHttpError)
-        {
-            Debug.Log(request.error);
-            //todo show error screen
-            yield break;
+            //todo proper error handling
+            Debug.LogError("Recieved error!\n" + GetChildElement(error, "Info").Value);
+            return;
         }
 
-        Debug.Log(request.GetResponseHeader("Version-check"));
-        Debug.Log(request.GetResponseHeader("Info"));
-
-        //if request returned OK then connect to geme server
-        if (request.responseCode == (int)HttpStatusCode.OK)
+        //check for version check data
+        XElement versionCheck = GetChildElement(body, "VersionCheck");
+        if (versionCheck != null && versionCheck.Value == "OK")
         {
-            string gameServerIp = request.GetResponseHeader("Game-server-ip");
-            int gameServerPort = int.Parse(request.GetResponseHeader("Game-server-port"));
-            string authToken = request.GetResponseHeader("Auth-token");
+            Debug.Log("Recieved versionCheck OK\n" + versionCheck.ToString());
+        }
+
+        //check for login data
+        XElement loginData = GetChildElement(body, "LoginData");
+        if (loginData != null)
+        {
+            Debug.Log("Recieved loginData\n" + loginData.ToString());
+
+            //read server data
+            string gameServerIp = GetChildElement(loginData, "GameServerIp").Value;
+            int gameServerPort = int.Parse(GetChildElement(loginData, "GameServerPort").Value);
+            string token = GetChildElement(loginData, "Token").Value;
 
             Debug.Log("Anon login OK. Connecting to game server: " + gameServerIp + ":" + gameServerPort);
+            Debug.Log("token: " + token);
 
-            NetworkManager.Instance.ConnectToGameServer(gameServerIp, gameServerPort, authToken);
+            NetworkManager.Instance.ConnectToGameServer(gameServerIp, gameServerPort, token);
+            return;
         }
-        else //if not passed version check
-        {
 
-        }
+        /*
+*/
     }
 
-
-    private IEnumerator CheckVersion(string serverIp, int serverPort)
+    private void OnError(string errormsg)
     {
-
-        var request = new UnityWebRequest(
-            "http://" + serverIp + ":" + serverPort + "/",
-            "POST",
-            new DownloadHandlerBuffer(),
-            new UploadHandlerRaw(null));
-
-        request.SetRequestHeader("Client-version", Application.version);
-
-        //Send
-        //And wait for response
-        yield return request.SendWebRequest();
-
-        if (request.isNetworkError || request.isHttpError)
-        {
-            Debug.Log(request.error);
-            //todo show error screen
-            yield break;
-        }
-
-        Debug.Log("Version-check: " + request.GetResponseHeader("Version-check"));
-        Debug.Log("Info: " + request.GetResponseHeader("Info"));
+        Debug.Log("Accounts server connection error:\n" + errormsg, this);
+        //todo show error msg
+        //throw new Exception(errormsg);
     }
 
-
-    // Update is called once per frame
-    void Update()
+    private void OnClose(WebSocketCloseCode closecode)
     {
-        
+        Debug.Log("Accounts server connection closed:\n" + closecode, this);
+        mySocket = null;
+    }
+
+    /// <summary>
+    /// Finds element nested in XML XElement by local name
+    /// </summary>
+    /// <param name="body">XElement which to look</param>
+    /// <param name="elementLocalName">Target name</param>
+    /// <returns>Found xelement. Null if none</returns>
+    private static XElement GetChildElement(XElement body, string elementLocalName)
+    {
+        foreach (var element in body.Elements())
+        {
+            if (element.Name.LocalName == elementLocalName)
+            {
+                return element;
+            }
+        }
+
+        return null;
     }
 }

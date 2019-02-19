@@ -263,7 +263,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public void DropCardOnTableOk(string cardCode)
         {
-            StaticRoomData.MyPlayer.AddCardsN(-1);
             //Observable
             OnDropCardOnTableOk(cardCode);
         }

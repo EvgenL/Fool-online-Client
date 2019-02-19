@@ -11,6 +11,8 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts
     /// </summary>
     public class JsonLogin
     {
+        public string ClientVersion;
+
         /// <summary>
         /// anonymous, oauth, by-email, etc
         /// </summary>
