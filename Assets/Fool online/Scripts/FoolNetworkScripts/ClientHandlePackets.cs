@@ -228,6 +228,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             Debug.Log($"Connected. Your connection id = " + connectionId + ". Server says: " + msg);
 
             //Invoke callback on observers
+
             FoolObservable.OnAuthorizedOk(connectionId);
 
         }

@@ -61,6 +61,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// </summary>
         public void Update()
         {
+
             while (bufferedRecievedMessages.Count > 0)
             {
                 ClientHandlePackets.HandleData(bufferedRecievedMessages.Dequeue());
@@ -105,7 +106,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
         private void OnOpen()
         {
-            //observable
             OnConnectedToGameServer();
 
             IsConnectingToGameServer = false;

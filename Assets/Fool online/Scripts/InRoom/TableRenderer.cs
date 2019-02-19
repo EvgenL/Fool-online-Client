@@ -7,11 +7,31 @@ using UnityEngine;
 
 namespace Fool_online.Scripts.InRoom
 {
+    /// <summary>
+    /// Class responsive for drawing cards on table
+    /// </summary>
     public class TableRenderer : MonoBehaviourFoolObserver
     {
-        public float RemoveCardsToDiscardDelay = 2f;
 
-        public DiscardPile Discard;
+        /// <summary>
+        /// Animation delay before removing cards on turn ended
+        /// </summary>
+        [Header("Animation delay before removing cards on turn ended")]
+        [SerializeField] private float RemoveCardsToDiscardDelay = 2f;
+
+        /// <summary>
+        /// Отбой
+        /// </summary>
+        [Header("Отбой")]
+        [SerializeField] private DiscardPile Discard;
+
+        /// <summary>
+        /// Clear table if there was any cards
+        /// </summary>
+        private void Start()
+        {
+            Util.DestroyAllChildren(transform);
+        }
 
         //Observer callback
         public override void OnBeaten()
@@ -22,6 +42,12 @@ namespace Fool_online.Scripts.InRoom
             cards.AddRange(cardsOnTable);
             cards.AddRange(cardsOnTableCovering);
             StartCoroutine(DelayRemoveCardsFromTableToDiscardPile(cards));
+        }
+
+        //todo
+        public void ClearTableAnimation()
+        {
+
         }
 
         /// <summary>
@@ -44,5 +70,7 @@ namespace Fool_online.Scripts.InRoom
                 Discard.AnimateRemoveCardToDiscardPile(cardOnTable);
             }
         }
+
+
     }
 }

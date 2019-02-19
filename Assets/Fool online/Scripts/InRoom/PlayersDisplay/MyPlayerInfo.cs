@@ -7,10 +7,12 @@ using UnityEngine.UI;
 
 namespace Fool_online.Scripts.InRoom.PlayersDisplay
 {
+    /// <summary>
+    /// Class responsive for displaying my nickname, status and cards
+    /// </summary>
     public class MyPlayerInfo : PlayerInfo
     {
         [SerializeField] private MyHandRenderer _myHand;
-        [SerializeField] private GameObject GetReadyButton;
         [SerializeField] private GameObject EndTurnButton;
         [SerializeField] private Text EndTurnButtonText;
 
@@ -32,17 +34,6 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         public void OnEndTurnButtonClick()
         {
             GameManager.Instance.OnMePass();
-        }
-
-        public void ShowGetReadyButton()
-        {
-            GetReadyButton.SetActive(true);
-        }
-
-        public void HideGetReadyButton()
-        {
-            GetReadyButton.SetActive(false);
-            GetReadyButton.GetComponentInChildren<Toggle>().isOn = false;
         }
 
         public void RemoveCardFromHand(CardRoot cardRoot)
@@ -77,7 +68,6 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         public void HideAllButtons()
         {
             EndTurnButton.SetActive(false);
-            HideGetReadyButton();
         }
 
 

@@ -269,6 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f505c239e61d58740a37da0010d4c813, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RemoveCardsToDiscardDelay: 2
   Discard: {fileID: 1726244500}
 --- !u!1 &52082421
 GameObject:
@@ -870,17 +871,16 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 139553823118186684, guid: 76f18ff21d196cb489b42716ab2b3820,
+    - target: {fileID: 139553823118186682, guid: 76f18ff21d196cb489b42716ab2b3820,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClick
       objectReference: {fileID: 0}
-    - target: {fileID: 139553821922787640, guid: 76f18ff21d196cb489b42716ab2b3820,
+    - target: {fileID: 139553823118186682, guid: 76f18ff21d196cb489b42716ab2b3820,
         type: 3}
-      propertyPath: m_FontData.m_Font
+      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 12800000, guid: 0f922ce9512adc34f830721ae357febd,
-        type: 3}
+      objectReference: {fileID: 440002714}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 76f18ff21d196cb489b42716ab2b3820, type: 3}
 --- !u!224 &440002711 stripped
@@ -889,6 +889,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 440002710}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &440002714 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 440002714, guid: 76f18ff21d196cb489b42716ab2b3820,
+    type: 3}
+  m_PrefabInstance: {fileID: 440002710}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 470c71f7178bee640ad86dc3fb975ad3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &516109002
 GameObject:
   m_ObjectHideFlags: 0
@@ -2542,7 +2554,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1792118314}
   m_Layer: 5
-  m_Name: TableDropZone
+  m_Name: TableInputDropZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

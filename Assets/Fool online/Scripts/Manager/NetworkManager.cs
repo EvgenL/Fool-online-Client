@@ -1,4 +1,5 @@
-﻿using Fool_online.Scripts.FoolNetworkScripts;
+﻿using System.Threading;
+using Fool_online.Scripts.FoolNetworkScripts;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -38,13 +39,15 @@ namespace Fool_online.Scripts.Manager
 
 
         [Header("Scene name that would be opened after login is succesful")]
-        [SerializeField] private string _sceneAuthorized = "Main menu";
+        [SerializeField] private string _sceneOnAuthorized = "Main menu";
+        [Header("Scene name that would be opened after connection lost")]
+        [SerializeField] private string _sceneOnDisconnected = "Login register";
 
         private void Start()
         {
             if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Login register"))
             {
-                SceneManager.LoadScene("Login register");
+                SceneManager.LoadScene(_sceneOnDisconnected);
             }
         }
 
@@ -58,7 +61,7 @@ namespace Fool_online.Scripts.Manager
             {
                 return;
             }
-            print("Trying to connect...");
+            print("Trying to connect game server...");
             FoolNetwork.ConnectToGameServer(ip, port, authToken);
         }
 
@@ -86,7 +89,7 @@ namespace Fool_online.Scripts.Manager
 
         public override void OnAuthorizedOk(long connectionId)
         {
-            SceneManager.LoadScene(_sceneAuthorized);
+            SceneManager.LoadScene(_sceneOnAuthorized);
         }
 
         //Observed callback

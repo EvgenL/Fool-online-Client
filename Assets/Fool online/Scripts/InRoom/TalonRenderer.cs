@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 namespace Fool_online.Scripts.InRoom
 {
+
+    /// <summary>
+    /// Class displayng talon (прикуп)
+    /// </summary>
     public class TalonRenderer : MonoBehaviourFoolObserver
     {
         [Header("Talon")]

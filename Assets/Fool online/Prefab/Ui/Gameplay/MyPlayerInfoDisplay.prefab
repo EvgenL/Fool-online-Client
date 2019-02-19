@@ -45,6 +45,7 @@ GameObject:
   m_Component:
   - component: {fileID: 139553821707443508}
   - component: {fileID: 139553821707443509}
+  - component: {fileID: 440002714}
   m_Layer: 5
   m_Name: MyPlayerInfoDisplay
   m_TagString: Untagged
@@ -98,9 +99,21 @@ MonoBehaviour:
   TextCloudText: {fileID: 139553822315322895}
   CardsInHand: []
   _myHand: {fileID: 0}
-  GetReadyButton: {fileID: 139553823118186684}
   EndTurnButton: {fileID: 139553822966714891}
   EndTurnButtonText: {fileID: 139553822009717857}
+--- !u!114 &440002714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139553821707443511}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 470c71f7178bee640ad86dc3fb975ad3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GetReadyButton: {fileID: 139553823118186684}
 --- !u!1 &139553821763601036
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,7 +254,7 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 0f922ce9512adc34f830721ae357febd, type: 3}
     m_FontSize: 43
     m_FontStyle: 0
     m_BestFit: 0
@@ -891,8 +904,8 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 139553821707443509}
-        m_MethodName: OnGetReadyButtonClick
+      - m_Target: {fileID: 440002714}
+        m_MethodName: OnClick
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

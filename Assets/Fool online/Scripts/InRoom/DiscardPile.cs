@@ -4,9 +4,12 @@ using UnityEngine;
 
 namespace Fool_online.Scripts.InRoom
 {
+    /// <summary>
+    /// Class displayng Discard Pile (отбой)
+    /// </summary>
     public class DiscardPile : MonoBehaviour
     {
-
+        //todo show discarded card backs
         /// <summary>
         /// Animates moving card to discardpile (отбой)
         /// </summary>

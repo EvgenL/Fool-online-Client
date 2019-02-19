@@ -15,14 +15,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         /// <summary>
         /// Constructor attaches this method to Obervable
         /// </summary>
-        protected MonoBehaviourFoolObserver()
+        public MonoBehaviourFoolObserver()
         {
             FoolObservable.Attach(this);
         }
 
         private void OnEnable()
         {
-            FoolObservable.Detach(this);
+            FoolObservable.Attach(this);
         }
 
         private void OnDisable()

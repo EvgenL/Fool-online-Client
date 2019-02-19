@@ -22,47 +22,88 @@ namespace Fool_online.Scripts.Manager
             Paused
         }
 
+        /// <summary>
+        /// Current game state
+        /// </summary>
         public GameState State = GameState.WaitingForPlayersToConnect;
 
+        /// <summary>
+        /// singleton instance
+        /// </summary>
         public static GameManager Instance;
 
+        /// <summary>
+        /// Calss handling top part of the screen with enemy names and cards
+        /// </summary>
         public PlayerInfosManager PlayerInfosManager;
 
+        /// <summary>
+        /// Class responsive for drawing cards on table
+        /// </summary>
         public TableRenderer TableDisplay;
 
+        /// <summary>
+        /// Class responsive for displaying my nickname, status and cards
+        /// </summary>
         public MyPlayerInfo MyPlayerInfoDisplay;
 
+        /// <summary>
+        /// Class displayng talon (прикуп)
+        /// </summary>
         public TalonRenderer TalonDisplay;
-        public DiscardPile Discard; //todo show discarded cardbacks
 
+        /// <summary>
+        /// Class displayng Discard Pile (отбой)
+        /// </summary>
+        public DiscardPile Discard;
+
+
+        /// <summary>
+        /// table. todo remove
+        /// </summary>
         public RectTransform TableContainerTransform;
 
+        /// <summary>
+        /// cards currently on table
+        /// </summary>
         public List<CardRoot> cardsOnTable = new List<CardRoot>();
+
+        /// <summary>
+        /// cards currently covering other cards
+        /// </summary>
         public List<CardRoot> cardsOnTableCovering = new List<CardRoot>();
 
+        /// <summary>
+        /// total nomber of cards both on table and covering
+        /// </summary>
         public int CardsOnTableNumber => cardsOnTable.Count + cardsOnTableCovering.Count;
 
+        /// <summary>
+        /// did defender passed their turn
+        /// </summary>
         public bool DefenderGaveUpDefence {private set; get; }
+
+        /// <summary>
+        /// did attacker passed their turn
+        /// </summary>
         private bool _attackerPassedPriority = false;
 
-        private void Awake()
-        {
-            Instance = this;
-        }
-
-        private void Start()
-        {
-            PlayerInfosManager.InitRoomData();
-
-            CheckIfAllPlayersJoined();
-            
-            Util.DestroyAllChildren(TableContainerTransform);
-        }
-    
         /// <summary>
         /// Number of current turn
         /// </summary>
-        public int TurnN {private set; get; }
+        public int TurnN { private set; get; }
+
+        /// <summary>
+        /// Set instance on awake
+        /// </summary>
+        private void Awake()
+        {
+            Instance = this;
+
+            //Show 'ready' button if me joined last
+            CheckIfAllPlayersJoined();
+        }
+
 
         /// <summary>
         /// Observer callback
@@ -83,8 +124,7 @@ namespace Fool_online.Scripts.Manager
             }
             else if (State == GameState.Playing)
             {
-                //TODO not end game but wait
-                //EndGame();
+                //TODO pause game and wait for him to recconect
             }
         }
 
@@ -255,7 +295,6 @@ namespace Fool_online.Scripts.Manager
             if (StaticRoomData.ConnectedPlayersCount == StaticRoomData.MaxPlayers)
             {
                 State = GameState.PlayersGettingReady;
-                MyPlayerInfoDisplay.ShowGetReadyButton();
             }
             else
             {
@@ -267,8 +306,6 @@ namespace Fool_online.Scripts.Manager
                 {
                     State = GameState.PlayersGettingReady;
                 }
-
-                MyPlayerInfoDisplay.HideGetReadyButton();
             }
         }
 
@@ -394,9 +431,6 @@ namespace Fool_online.Scripts.Manager
             foreach (var player in StaticRoomData.Players) {
                 if (player != null && !player.IsReady) return;
             }
-
-            //else if everybody's ready start game
-            MyPlayerInfoDisplay.HideGetReadyButton();
 
             //Wait for server to start game
             State = GameState.Paused;
@@ -851,7 +885,7 @@ namespace Fool_online.Scripts.Manager
                     }
                     else //..and card on table IS trump
                     {
-                        //No card can beat trump if its not trump
+                        //Non-trump card can't beat trump
                     }
                 }
             }
@@ -881,7 +915,7 @@ namespace Fool_online.Scripts.Manager
         }
 
 
-        public void TakeAllCardsFromTable()
+        private void TakeAllCardsFromTable()
         {
             foreach (var cardOnTable in cardsOnTable)
             {
@@ -895,15 +929,9 @@ namespace Fool_online.Scripts.Manager
             cardsOnTableCovering.Clear();
         }
 
-        internal bool AllCardsCovered()
+        public bool AllCardsCovered()
         {
             return cardsOnTable.All(card => card.IsCoveredByACard);
-        }
-
-        private bool DefenderHasCards()
-        {
-            print("Defender has " + StaticRoomData.Denfender.CardsNumber + " cards");
-            return StaticRoomData.Denfender.CardsNumber > 0;
         }
 
 

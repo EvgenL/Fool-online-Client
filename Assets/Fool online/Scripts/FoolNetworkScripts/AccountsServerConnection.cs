@@ -160,22 +160,19 @@ public class AccountsServerConnection : MonoBehaviour
         XElement loginData = GetChildElement(body, "LoginData");
         if (loginData != null)
         {
-            Debug.Log("Recieved loginData\n" + loginData.ToString());
-
             //read server data
             string gameServerIp = GetChildElement(loginData, "GameServerIp").Value;
             int gameServerPort = int.Parse(GetChildElement(loginData, "GameServerPort").Value);
             string token = GetChildElement(loginData, "Token").Value;
 
+            Debug.Log("Got token: " + token);
+
             Debug.Log("Anon login OK. Connecting to game server: " + gameServerIp + ":" + gameServerPort);
-            Debug.Log("token: " + token);
 
             NetworkManager.Instance.ConnectToGameServer(gameServerIp, gameServerPort, token);
             return;
         }
 
-        /*
-*/
     }
 
     private void OnError(string errormsg)

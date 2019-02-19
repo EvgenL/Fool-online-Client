@@ -25,9 +25,17 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         private const float DelayBeforeNextTurn = 0.5f;
 
         /// <summary>
+        /// Draw room on start
+        /// </summary>
+        private void Start()
+        {
+            InitRoomData();
+        }
+
+        /// <summary>
         /// Draw everything when local player enters room
         /// </summary>
-        public void InitRoomData()
+        private void InitRoomData()
         {
             if (!FoolNetwork.IsConnected) return;
             //Clear slots is there were
@@ -123,7 +131,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         {
             SlotsScripts[slotN].DrawPlayer(StaticRoomData.Players[slotN]);
         }
-        
+
         /// <summary>
         /// Hides redy checkmarks
         /// </summary>
