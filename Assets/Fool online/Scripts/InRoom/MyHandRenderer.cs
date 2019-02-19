@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Fool_online.Scripts.InRoom
 {
-    public class MyHandRenderer : MonoBehaviourFoolNetworkObserver
+    public class MyHandRenderer : MonoBehaviourFoolObserver
     {
         [SerializeField] private GameObject _cardPrefab;
         [SerializeField] private Transform _talonTransform;

@@ -40,7 +40,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         {
             if (FoolWebClient.Instance == null || !FoolWebClient.Instance.IsConnected)
             {
-                FoolNetworkObservableCallbacksWrapper.Instance.DisconnectedFromGameServer("Ошибка при отправке сообщения на сервер.");
+                FoolObservable.OnDisconnectedFromGameServer("Ошибка при отправке сообщения на сервер.");
                 throw new Exception("Can't send data to server: Not connected.");
             }
 

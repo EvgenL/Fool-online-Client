@@ -24,11 +24,11 @@ namespace Fool_online.Scripts.Manager
             //if it was dragged insude table rect
             if (RectTransformUtility.RectangleContainsScreenPoint(TableDropZone, mousePos))
             {
-                FoolNetworkObservableCallbacksWrapper.Instance.DraggedCardUpdate(mousePos, cardRoot, true);
+                FoolObservable.OnDraggedCardUpdate(mousePos, cardRoot, true);
             }
             else
             {
-                FoolNetworkObservableCallbacksWrapper.Instance.DraggedCardUpdate(mousePos, cardRoot, false);
+                FoolObservable.OnDraggedCardUpdate(mousePos, cardRoot, false);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Fool_online.Scripts.Manager
             //if it was dropped insude table rect
             if (RectTransformUtility.RectangleContainsScreenPoint(TableDropZone, mousePos))
             {
-                FoolNetworkObservableCallbacksWrapper.Instance.CardDroppedOnTableByMe(cardRoot);
+                FoolObservable.OnCardDroppedOnTableByMe(cardRoot);
             }
         }
     }

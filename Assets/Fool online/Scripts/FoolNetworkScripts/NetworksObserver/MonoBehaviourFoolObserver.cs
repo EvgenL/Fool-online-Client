@@ -8,12 +8,34 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
     /// <summary>
     /// Observer of fool online network events
     /// </summary>
-    public abstract class MonoBehaviourFoolNetworkObserver : MonoBehaviour
+    public abstract class MonoBehaviourFoolObserver : MonoBehaviour
     {
-        protected MonoBehaviourFoolNetworkObserver()
+        #region Attach
+
+        /// <summary>
+        /// Constructor attaches this method to Obervable
+        /// </summary>
+        protected MonoBehaviourFoolObserver()
         {
-            FoolNetworkObservable.Attach(this);
+            FoolObservable.Attach(this);
         }
+
+        private void OnEnable()
+        {
+            FoolObservable.Detach(this);
+        }
+
+        private void OnDisable()
+        {
+            FoolObservable.Detach(this);
+        }
+
+        private void OnDestroy()
+        {
+            FoolObservable.Detach(this);
+        }
+
+#endregion
 
         /// <summary>
         /// Called when client tries reach the server
@@ -232,12 +254,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         }
         public virtual void OnRoomList(RoomInstance[] rooms)
         {
-        }
-
-
-        private void OnDestroy()
-        {
-            FoolNetworkObservable.Detach(this);
         }
     }
 }

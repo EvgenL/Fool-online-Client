@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Fool_online.Scripts.InRoom
 {
-    public class TalonRenderer : MonoBehaviourFoolNetworkObserver
+    public class TalonRenderer : MonoBehaviourFoolObserver
     {
         [Header("Talon")]
         public Text CardsLeftText;

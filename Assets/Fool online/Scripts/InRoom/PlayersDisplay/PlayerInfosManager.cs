@@ -11,7 +11,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
     /// <summary>
     /// Calss handling top part of the screen with enemy names and cards
     /// </summary>
-    public class PlayerInfosManager : MonoBehaviourFoolNetworkObserver
+    public class PlayerInfosManager : MonoBehaviourFoolObserver
     {
         public GameObject EnemySlotPrefab;
         public Transform SlotsContainer;

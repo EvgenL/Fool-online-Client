@@ -9,7 +9,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
     /// <summary>
     /// Connects to fool online server
     /// </summary>
-    public class FoolWebClient : FoolNetworkObservable
+    public class FoolWebClient : FoolObservable
     {
         //public static string ClientVersion = "1.2"; //todo implement version check
 
@@ -105,7 +105,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
         private void OnOpen()
         {
-            FoolNetworkObservableCallbacksWrapper.Instance.ConnectedToGameServer();
+            //observable
+            OnConnectedToGameServer();
+
             IsConnectingToGameServer = false;
             IsConnected = true;
 
@@ -154,8 +156,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
                 mySocket = null;
                 IsConnected = false;
                 IsConnectingToGameServer = false;
+
                 //Observable
-                FoolNetworkObservableCallbacksWrapper.Instance.DisconnectedFromGameServer(disconnectReason);
+                OnDisconnectedFromGameServer(disconnectReason);
             }
         }
 

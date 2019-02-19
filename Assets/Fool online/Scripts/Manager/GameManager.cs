@@ -12,7 +12,7 @@ namespace Fool_online.Scripts.Manager
     /// <summary>
     /// Calss responsive for fool game rules
     /// </summary>
-    public class GameManager : MonoBehaviourFoolNetworkObserver
+    public class GameManager : MonoBehaviourFoolObserver
     {
         public enum GameState
         {
@@ -670,7 +670,7 @@ namespace Fool_online.Scripts.Manager
                 PlayerInfosManager.HideTextClouds();
             }
 
-            FoolNetworkObservableCallbacksWrapper.Instance.TableUpdated();
+            FoolObservable.OnTableUpdated();
         }
 
         private void EndGame()
@@ -732,7 +732,7 @@ namespace Fool_online.Scripts.Manager
                 ClientSendPackets.Send_Pass();
                // MyPlayerInfoDisplay.ShowTextCloud("Бито");
                 StaticRoomData.MyPlayer.Pass = true;
-                FoolNetworkObservableCallbacksWrapper.Instance.MePassed();
+                FoolObservable.OnMePassed();
             }
             //if i am defending 
             else if (IamDefending())
@@ -743,7 +743,7 @@ namespace Fool_online.Scripts.Manager
                 ClientSendPackets.Send_Pass();
                // MyPlayerInfoDisplay.ShowTextCloud("Беру");
                 StaticRoomData.MyPlayer.Pass = true;
-                FoolNetworkObservableCallbacksWrapper.Instance.MePassed();
+                FoolObservable.OnMePassed();
             }
             //if my turn and i am attacking
             else if (IcanAddCards())
@@ -752,7 +752,7 @@ namespace Fool_online.Scripts.Manager
                 ClientSendPackets.Send_Pass();
                // MyPlayerInfoDisplay.ShowTextCloud("Пас");
                 StaticRoomData.MyPlayer.Pass = true;
-                FoolNetworkObservableCallbacksWrapper.Instance.MePassed();
+                FoolObservable.OnMePassed();
             }
 
         }

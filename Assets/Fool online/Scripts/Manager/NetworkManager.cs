@@ -9,7 +9,7 @@ namespace Fool_online.Scripts.Manager
     /// Client-side logic of managing connection.
     /// Connects to server on awake.
     /// </summary>
-    public class NetworkManager : MonoBehaviourFoolNetworkObserver
+    public class NetworkManager : MonoBehaviourFoolObserver
     {
         /// <summary>
         /// Current state of connection

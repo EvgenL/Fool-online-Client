@@ -58,7 +58,7 @@ public class AccountsServerConnection : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //StartCoroutine(todo CheckVersion(LoginServerIp, LoginServerPort));
+        //StartCoroutine(//todo CheckVersion(LoginServerIp, LoginServerPort));
     }
 
 
@@ -75,6 +75,8 @@ public class AccountsServerConnection : MonoBehaviour
 #else
         string ip = LoginServerIp;
 #endif
+        print("Anonymous Login. Server: " + ip);
+
         ConnectAndAnonymousLogin(ip, LoginServerPort, nickname);
     }
 

@@ -228,7 +228,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             Debug.Log($"Connected. Your connection id = " + connectionId + ". Server says: " + msg);
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.AuthorizedOk(connectionId);
+            FoolObservable.OnAuthorizedOk(connectionId);
 
         }
 
@@ -245,7 +245,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             Debug.Log("ErrorBadAuthToken");
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.ErrorBadAuthToken();
+            FoolObservable.OnErrorBadAuthToken();
         }
 
         private static void Packet_UpdateUserData(byte[] data)
@@ -263,7 +263,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             string Nickname = buffer.ReadStringUnicode();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.UpdateUserData(connectionId, UserId, Nickname);
+            FoolObservable.OnUpdateUserData(connectionId, UserId, Nickname);
         }
         
 
@@ -310,7 +310,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.RoomList(rooms);
+            FoolObservable.OnRoomList(rooms);
         }
 
         
@@ -327,7 +327,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             long roomId = buffer.ReadLong();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.JoinRoom(roomId);
+            FoolObservable.OnJoinRoom(roomId);
 
             Debug.Log("You joined room: " + roomId);
         }
@@ -338,7 +338,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         private static void Packet_FaliToJoinFullRoom(byte[] data)
         {
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.FailedToJoinFullRoom();
+            FoolObservable.OnFailedToJoinFullRoom();
 
             Debug.Log("Failed to join room: it's full");
         }
@@ -349,7 +349,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         private static void Packet_YouAreAlreadyInRoom(byte[] data)
         {
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.YouAreAlreadyInRoom();
+            FoolObservable.OnYouAreAlreadyInRoom();
 
             Debug.Log("got Packet_YouAreAlreadyInRoom");
         }
@@ -416,7 +416,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.RoomDataUpdated();
+            FoolObservable.OnRoomDataUpdated();
 
         }
 
@@ -442,7 +442,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             string nickname = buffer.ReadStringUnicode();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerJoinedRoom(joinedPlayerId, slotN, nickname);
+            FoolObservable.OnOtherPlayerJoinedRoom(joinedPlayerId, slotN, nickname);
         }
 
         /// <summary>
@@ -465,7 +465,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             Debug.Log("Player left: " + leftPlayerId);
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerLeftRoom(leftPlayerId, slotN);
+            FoolObservable.OnOtherPlayerLeftRoom(leftPlayerId, slotN);
         }
 
         /// <summary>
@@ -486,7 +486,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             int slotN = buffer.ReadInteger();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerGotReady(playerId, slotN);
+            FoolObservable.OnOtherPlayerGotReady(playerId, slotN);
         }
 
         /// <summary>
@@ -507,7 +507,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             int slotN = buffer.ReadInteger();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerGotNotReady(playerId, slotN);
+            FoolObservable.OnOtherPlayerGotNotReady(playerId, slotN);
         }
 
 
@@ -533,7 +533,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.YouGotCardsFromTalon(cards);
+            FoolObservable.OnYouGotCardsFromTalon(cards);
         }
 
         /// <summary>
@@ -555,13 +555,13 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             int slotN = buffer.ReadInteger();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.EnemyGotCardsFromTalon(playerId, slotN, cardsN);
+            FoolObservable.OnEnemyGotCardsFromTalon(playerId, slotN, cardsN);
         }
 
         private static void Packet_StartGame(byte[] data)
         {
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.StartGame();
+            FoolObservable.OnStartGame();
         }
 
         private static void Packet_NextTurn(byte[] data)
@@ -586,7 +586,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             Debug.Log($"Player {firstPlayerId} (slot {slotN}) does turn. Defender: Player {defendingPlayerId} (slot {defendingPlayerId})");
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.NextTurn(firstPlayerId, slotN, defendingPlayerId, defSlotN, turnN);
+            FoolObservable.OnNextTurn(firstPlayerId, slotN, defendingPlayerId, defSlotN, turnN);
         }
 
         /// <summary>
@@ -607,7 +607,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             string trumpCard = buffer.ReadString();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.TalonData(talonLength, trumpCard);
+            FoolObservable.OnTalonData(talonLength, trumpCard);
         }
 
         private static void Packet_DropCardOnTableOk(byte[] data)
@@ -622,7 +622,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             string cardCode = buffer.ReadString();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.DropCardOnTableOk(cardCode);
+            FoolObservable.OnDropCardOnTableOk(cardCode);
         }
 
         private static void Packet_DropCardOnTableErrorNotYourTurn(byte[] data)
@@ -637,7 +637,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             string cardCode = buffer.ReadString();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.DropCardOnTableErrorNotYourTurn(cardCode);
+            FoolObservable.OnDropCardOnTableErrorNotYourTurn(cardCode);
         }
 
         private static void Packet_DropCardOnTableErrorTableIsFull(byte[] data)
@@ -652,7 +652,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             string cardCode = buffer.ReadString();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.DropCardOnTableErrorTableIsFull(cardCode);
+            FoolObservable.OnDropCardOnTableErrorTableIsFull(cardCode);
         }
 
         private static void Packet_DropCardOnTableErrorCantDropThisCard(byte[] data)
@@ -667,7 +667,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             string cardCode = buffer.ReadString();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.DropCardOnTableErrorCantDropThisCard(cardCode);
+            FoolObservable.OnDropCardOnTableErrorCantDropThisCard(cardCode);
         }
 
         private static void Packet_OtherPlayerDropsCardOnTable(byte[] data)
@@ -686,7 +686,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             string cardCode = buffer.ReadString();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerDropsCardOnTable(playerId, slotN, cardCode);
+            FoolObservable.OnOtherPlayerDropsCardOnTable(playerId, slotN, cardCode);
         }
 
         private static void Packet_EndGame(byte[] data)
@@ -711,7 +711,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.EndGame(foolPlayerId, rewards);
+            FoolObservable.OnEndGame(foolPlayerId, rewards);
         }
 
         private static void Packet_EndGameGiveUp(byte[] data)
@@ -736,7 +736,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.EndGameGiveUp(foolPlayerId, rewards);
+            FoolObservable.OnEndGameGiveUp(foolPlayerId, rewards);
         }
 
         private static void Packet_EndGameFool(byte[] data)
@@ -762,7 +762,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.EndGameFool(foolPlayerId, rewards);
+            FoolObservable.OnEndGameFool(foolPlayerId, rewards);
         }
 
         private static void Packet_OtherPlayerPassed(byte[] data)
@@ -779,7 +779,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             int slotN = buffer.ReadInteger();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.OtherPlayerPassed(passedPlayerId, slotN);
+            FoolObservable.OnOtherPlayerPassed(passedPlayerId, slotN);
         }
 
         private static void Packet_OtherPlayerCoversCard(byte[] data)
@@ -801,14 +801,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             string cardDroppedCode = buffer.ReadString();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance
-                .OtherPlayerCoversCard(coveredPlayerId, slotN, cardOnTableCode, cardDroppedCode);
+            FoolObservable
+                .OnOtherPlayerCoversCard(coveredPlayerId, slotN, cardOnTableCode, cardDroppedCode);
         }
 
         private static void Packet_Beaten(byte[] data)
         {
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.Beaten();
+            FoolObservable.OnBeaten();
         }
 
         private static void Packet_DefenderPicksCards(byte[] data)
@@ -825,7 +825,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             int slotN = buffer.ReadInteger();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.DefenderPicksCards(playerId, slotN);
+            FoolObservable.OnDefenderPicksCards(playerId, slotN);
         }
 
         private static void Packet_PlayerWon(byte[] data)
@@ -843,7 +843,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             double reward = buffer.ReadDouble();
 
             //Invoke callback on observers
-            FoolNetworkObservableCallbacksWrapper.Instance.PlayerWon(wonPlayerId, reward);
+            FoolObservable.OnPlayerWon(wonPlayerId, reward);
         }
         
     }

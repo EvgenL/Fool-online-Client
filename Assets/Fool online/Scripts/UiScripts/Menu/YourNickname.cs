@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// Displays player name
 /// onto Text component
 /// </summary>
-public class YourNickname : MonoBehaviourFoolNetworkObserver
+public class YourNickname : MonoBehaviourFoolObserver
 {
     // Start is called before the first frame update
     void Start()

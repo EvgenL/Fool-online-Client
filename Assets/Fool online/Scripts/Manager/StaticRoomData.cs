@@ -6,6 +6,7 @@ using Fool_online.Scripts.InRoom;
 namespace Fool_online.Scripts.Manager
 {
     /// <summary>
+    /// Used for passing room data between scenes
     /// We get data from server about room data. GameManager takes it from here.
     /// Basically is extent of GameManager class.
     /// Also this class managed by server events such as OtherPlayerJoinedRoom and OtherPlayerLeftRoom in class FoolNetworkObservableCallbacks

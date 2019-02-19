@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Fool_online.Scripts.InRoom
 {
-    public class TableRenderer : MonoBehaviourFoolNetworkObserver
+    public class TableRenderer : MonoBehaviourFoolObserver
     {
         public float RemoveCardsToDiscardDelay = 2f;
 

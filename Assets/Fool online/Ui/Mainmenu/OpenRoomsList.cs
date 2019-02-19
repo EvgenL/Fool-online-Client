@@ -4,7 +4,7 @@ using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using Fool_online.Ui.Mainmenu;
 using UnityEngine;
 
-public class OpenRoomsList : MonoBehaviourFoolNetworkObserver
+public class OpenRoomsList : MonoBehaviourFoolObserver
 {
     [Header("Prefab of room display which will be spawned")]
     [SerializeField] private GameObject _roomDisplayPrefab;

@@ -7,7 +7,7 @@ namespace Fool_online.Scripts
     /// <summary>
     /// Class that opens scene NextScene on succesful connect to game server
     /// </summary>
-    public class OnAuthorizedLoadScene : MonoBehaviourFoolNetworkObserver
+    public class OnAuthorizedLoadScene : MonoBehaviourFoolObserver
     {
         public string NextScene = "";
 
