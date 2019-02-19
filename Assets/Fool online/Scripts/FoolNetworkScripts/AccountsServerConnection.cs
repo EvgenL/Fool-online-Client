@@ -50,6 +50,11 @@ public class AccountsServerConnection : MonoBehaviour
     /// </summary>
     private WebSocket mySocket;
 
+    /// <summary>
+    /// Data to send
+    /// </summary>
+    private XElement bufferedBody;
+
     // Start is called before the first frame update
     void Start()
     {
