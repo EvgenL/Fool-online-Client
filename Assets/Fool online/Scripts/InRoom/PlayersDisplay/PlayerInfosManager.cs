@@ -132,6 +132,8 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
             SlotsScripts[slotN].DrawPlayer(StaticRoomData.Players[slotN]);
         }
 
+        #region Observer events
+
         /// <summary>
         /// Hides redy checkmarks
         /// </summary>
@@ -218,7 +220,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
                 SlotsScripts[slotN].ShowTextCloud("Беру");
                 SlotsScripts[slotN].SetStatusIconNoAnimation(PlayerInfo.PlayerStatusIcon.DefenderGaveUp);
             }
-            else if (GameManager.Instance.AllCardsCovered())
+            else if (RoomLogic.Instance.AllCardsCovered())
             {
                 // if player has no more cards left then dont show text cloud
                 if (StaticRoomData.Players[slotN].CardsNumber > 0)
@@ -250,12 +252,9 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
                 }
             }
         }
-
-
-
-
+        
         /// <summary>
-        /// observer event
+        /// observer method: next turn start
         /// </summary>
         public override void OnNextTurn(long whoseTurnPlayerId, int slotN, long defendingPlayerId, int defSlotN, int turnN)
         {
@@ -266,7 +265,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
             PlayerInfo attacker = SlotsScripts[slotN];
             PlayerInfo defender = SlotsScripts[defSlotN];
 
-            if (GameManager.Instance.TurnN == 0)
+            if (RoomLogic.Instance.TurnN == 0)
             {
                 MessageManager.Instance.DelayNextAnimation(DelayBeforeNextTurn * 2);
             }
@@ -297,6 +296,8 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
             HideTextClouds();
             HideStatusIcons();
         }
+
+        #endregion
 
         private void HideStatusIcons()
         {

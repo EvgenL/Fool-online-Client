@@ -406,7 +406,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public static void OnDefenderPicksCards(long pickedPlayerId, int slotN)
         {
-            StaticRoomData.Players[slotN].AddCardsN(GameManager.Instance.CardsOnTableNumber);
+            StaticRoomData.Players[slotN].AddCardsN(RoomLogic.Instance.CardsOnTableNumber);
 
             foreach (var obs in _observers)
             {

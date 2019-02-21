@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using HybridWebSocket;
+using Fool_online.Plugins;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Assets.Fool_online.Scripts.FoolNetworkScripts
+namespace Fool_online.Scripts.FoolNetworkScripts.LoginRegister
 {
     /// <summary>
     /// When clients enters the game he connects to Accounts Server which will

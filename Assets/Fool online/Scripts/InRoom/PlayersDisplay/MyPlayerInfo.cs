@@ -28,12 +28,12 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
 
         public void OnGetReadyButtonClick(bool value)
         {
-            GameManager.Instance.OnGetReady(value);
+            RoomLogic.Instance.OnGetReady(value);
         }
 
         public void OnEndTurnButtonClick()
         {
-            GameManager.Instance.OnMePass();
+            RoomLogic.Instance.OnMePass();
         }
 
         public void RemoveCardFromHand(CardRoot cardRoot)

@@ -7,11 +7,8 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using AOT;
 
-namespace HybridWebSocket
+namespace Fool_online.Plugins
 {
 
     /// <summary>

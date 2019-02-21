@@ -110,17 +110,15 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
 
         public CardRoot SpawnCard(string cardCode)
         {
-            //TODO scarle
+            //TODO scale
             //Spawn card as child of hand trahsform.
             var cardGo = Instantiate(CardBackPrefab, HandContainer);
 
-            if (CardsInHand.Count > 0) //bug null
+            if (CardsInHand.Count > 0)
             {
                 cardGo.transform.position = CardsInHand[0].transform.position;
                 cardGo.transform.rotation = CardsInHand[0].transform.rotation;
                 cardGo.transform.localScale = CardsInHand[0].transform.localScale;
-
-                
             }
             else
             {

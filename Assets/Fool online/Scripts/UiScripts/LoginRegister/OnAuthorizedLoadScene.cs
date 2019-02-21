@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Fool_online.Scripts
+namespace Fool_online.Scripts.UiScripts.LoginRegister
 {
     /// <summary>
     /// Class that opens scene NextScene on succesful connect to game server

@@ -3,7 +3,7 @@ using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Fool_online.Scripts
+namespace Fool_online.Scripts.UiScripts.Menu
 {
     public class ConnectionStatusText : MonoBehaviour //FoolNetworkObserver
     {

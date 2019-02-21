@@ -1,37 +1,39 @@
 ﻿using System.Linq;
 using Fool_online.Scripts.FoolNetworkScripts;
-using Fool_online.Ui.Mainmenu;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// Single room display in Open Romms List
-/// </summary>
-public class RoomDisplay : MonoBehaviour
+namespace Fool_online.Ui.Mainmenu
 {
-    [SerializeField] private Text _playerNames;
-    [SerializeField] private Text _maxPlayers;
-    [SerializeField] private Text _deckSize;
-
-    private RoomInstance _currentRoom;
-
     /// <summary>
-    /// Draws RoomInstance at this display
+    /// Single room display in Open Romms List
     /// </summary>
-    public void DrawRoom(RoomInstance room)
+    public class RoomDisplay : MonoBehaviour
     {
-        _currentRoom = room;
+        [SerializeField] private Text _playerNames;
+        [SerializeField] private Text _maxPlayers;
+        [SerializeField] private Text _deckSize;
 
-        _maxPlayers.text = $"{room.ConnectedPlayersN}/{room.MaxPlayers}";
-        _deckSize.text = room.DeckSize.ToString();
+        private RoomInstance _currentRoom;
 
-        //csv from an array of strings
-        string playerNames = room.PlayerNames.Aggregate((a, b) => a + ", " + b);
-        _playerNames.text = playerNames;
-    }
+        /// <summary>
+        /// Draws RoomInstance at this display
+        /// </summary>
+        public void DrawRoom(RoomInstance room)
+        {
+            _currentRoom = room;
 
-    public void OnClick()
-    {
-        FoolNetwork.JoinRoom(_currentRoom.RoomId);
+            _maxPlayers.text = $"{room.ConnectedPlayersN}/{room.MaxPlayers}";
+            _deckSize.text = room.DeckSize.ToString();
+
+            //csv from an array of strings
+            string playerNames = room.PlayerNames.Aggregate((a, b) => a + ", " + b);
+            _playerNames.text = playerNames;
+        }
+
+        public void OnClick()
+        {
+            FoolNetwork.JoinRoom(_currentRoom.RoomId);
+        }
     }
 }

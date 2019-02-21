@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Fool_online.Scripts
+namespace Fool_online.Scripts.UiScripts.LoginRegister
 {
     public class ButtonRegisterOk : MonoBehaviour
     {

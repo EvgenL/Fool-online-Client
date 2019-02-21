@@ -10,11 +10,12 @@ using UnityEngine;
 namespace Fool_online.Scripts.Manager
 {
     /// <summary>
-    /// Calss responsive for fool game rules
+    /// Class responsive for room logic.
+    /// Ex-GameManager
     /// </summary>
-    public class GameManager : MonoBehaviourFoolObserver
+    public class RoomLogic : RoomActions
     {
-        public enum GameState
+        public enum RoomState
         {
             WaitingForPlayersToConnect,
             PlayersGettingReady,
@@ -25,43 +26,37 @@ namespace Fool_online.Scripts.Manager
         /// <summary>
         /// Current game state
         /// </summary>
-        public GameState State = GameState.WaitingForPlayersToConnect;
+        private RoomState State = RoomState.WaitingForPlayersToConnect;
 
         /// <summary>
         /// singleton instance
         /// </summary>
-        public static GameManager Instance;
+        public static RoomLogic Instance;
 
         /// <summary>
         /// Calss handling top part of the screen with enemy names and cards
         /// </summary>
-        public PlayerInfosManager PlayerInfosManager;
+        [SerializeField] private PlayerInfosManager PlayerInfosManager;
 
         /// <summary>
         /// Class responsive for drawing cards on table
         /// </summary>
-        public TableRenderer TableDisplay;
+        [SerializeField] private TableRenderer TableDisplay;
 
         /// <summary>
         /// Class responsive for displaying my nickname, status and cards
         /// </summary>
-        public MyPlayerInfo MyPlayerInfoDisplay;
+        [SerializeField] private MyPlayerInfo MyPlayerInfoDisplay;
 
         /// <summary>
         /// Class displayng talon (прикуп)
         /// </summary>
-        public TalonRenderer TalonDisplay;
+        [SerializeField] private TalonRenderer TalonDisplay;
 
         /// <summary>
         /// Class displayng Discard Pile (отбой)
         /// </summary>
-        public DiscardPile Discard;
-
-
-        /// <summary>
-        /// table. todo remove
-        /// </summary>
-        public RectTransform TableContainerTransform;
+        [SerializeField] private DiscardPile Discard;
 
         /// <summary>
         /// cards currently on table
@@ -118,11 +113,11 @@ namespace Fool_online.Scripts.Manager
         /// </summary>
         public override void OnOtherPlayerLeftRoom(long leftPlayerId, int slotN)
         {
-            if (State == GameState.PlayersGettingReady || State == GameState.WaitingForPlayersToConnect)
+            if (State == RoomState.PlayersGettingReady || State == RoomState.WaitingForPlayersToConnect)
             {
                 CheckIfAllPlayersJoined();
             }
-            else if (State == GameState.Playing)
+            else if (State == RoomState.Playing)
             {
                 //TODO pause game and wait for him to recconect
             }
@@ -134,7 +129,11 @@ namespace Fool_online.Scripts.Manager
         public override void OnOtherPlayerDropsCardOnTable(long playerId, int slotN, string cardCode)
         {
             var enemy = PlayerInfosManager.SlotsScripts[slotN];
-            var cardRoot = (enemy as EnemyInfo).DropCardOnTable(TableContainerTransform, cardCode);
+
+            var cardRoot = (enemy as EnemyInfo).SpawnCard(cardCode);
+
+            //init animation
+            TableDisplay.AnimateDropCardOnTable(cardRoot);
 
             //Add to list
             cardsOnTable.Add(cardRoot);
@@ -174,7 +173,7 @@ namespace Fool_online.Scripts.Manager
                             if (AllButDefenderPassed())
                             {
                                 //wait for next turn
-                                State = GameState.Paused;
+                                State = RoomState.Paused;
                             }
                         }
                         else
@@ -194,7 +193,7 @@ namespace Fool_online.Scripts.Manager
             if (AllPassed())
             {
                 //Waiting for server to send us next turn info
-                State = GameState.Paused;
+                State = RoomState.Paused;
             }
         }
 
@@ -255,7 +254,7 @@ namespace Fool_online.Scripts.Manager
             MyPlayerInfoDisplay.HideTextCloud();
 
             //Wait for server to send us NextTurn
-            State = GameState.Paused;
+            State = RoomState.Paused;
         }
 
         public override void OnDefenderPicksCards(long pickedPlayerId, int slotN)
@@ -273,7 +272,7 @@ namespace Fool_online.Scripts.Manager
             cardsOnTableCovering.Clear();
 
             //Wait for server to send us NextTurn
-            State = GameState.Paused;
+            State = RoomState.Paused;
         }
 
         public override void OnEndGameFool(long foolPlayerId)
@@ -283,7 +282,7 @@ namespace Fool_online.Scripts.Manager
 
             Invoke("EndGame", 4f);
 
-            State = GameState.WaitingForPlayersToConnect;
+            State = RoomState.WaitingForPlayersToConnect;
         }
 
 
@@ -294,17 +293,17 @@ namespace Fool_online.Scripts.Manager
         {
             if (StaticRoomData.ConnectedPlayersCount == StaticRoomData.MaxPlayers)
             {
-                State = GameState.PlayersGettingReady;
+                State = RoomState.PlayersGettingReady;
             }
             else
             {
-                if (State == GameState.Playing)
+                if (State == RoomState.Playing)
                 {
-                    State = GameState.WaitingForPlayersToConnect;
+                    State = RoomState.WaitingForPlayersToConnect;
                 }
                 else
                 {
-                    State = GameState.PlayersGettingReady;
+                    State = RoomState.PlayersGettingReady;
                 }
             }
         }
@@ -314,7 +313,7 @@ namespace Fool_online.Scripts.Manager
         /// </summary>
         public void OnGetReady(bool value)
         {
-            if (State != GameState.PlayersGettingReady) return;
+            if (State != RoomState.PlayersGettingReady) return;
 
             if (value)
             {
@@ -355,7 +354,7 @@ namespace Fool_online.Scripts.Manager
             _attackerPassedPriority = false;
 
             this.TurnN = turnN;
-            State = GameState.Playing;
+            State = RoomState.Playing;
 
             //if first turn
             if (this.TurnN == 1)
@@ -433,7 +432,7 @@ namespace Fool_online.Scripts.Manager
             }
 
             //Wait for server to start game
-            State = GameState.Paused;
+            State = RoomState.Paused;
         }
 
         /// <summary>
@@ -443,7 +442,7 @@ namespace Fool_online.Scripts.Manager
         {
             StopTableCardAnimations();
 
-            if (State != GameState.Playing) return;
+            if (State != RoomState.Playing) return;
 
             if (AllPassed() || 
                 (AllButDefenderPassed() &&
@@ -470,9 +469,8 @@ namespace Fool_online.Scripts.Manager
                     cardsOnTable.Add(droppedCardRoot);
                     MyPlayerInfoDisplay.RemoveCardFromHand(droppedCardRoot);
                     //init animation
-                    droppedCardRoot.AnimateMoveToTransform(TableContainerTransform);
-                    //StartCoroutine(AnimatePutMyCardOnTableOnNextFrame(droppedCardRoot, TableContainerTransform));
-                    //TODO save in buffer for in case if server will say no
+                    TableDisplay.AnimateDropCardOnTable(droppedCardRoot);
+                    //TODO save action in buffer for in case if server will say no so we can ctrl+z this action
                     //Send to server
                     ClientSendPackets.Send_DropCardOnTable(droppedCardRoot.CardCode);
 
@@ -758,7 +756,7 @@ namespace Fool_online.Scripts.Manager
         {
             MyPlayerInfoDisplay.HideAllButtons();
 
-            if (State != GameState.Playing) return;
+            if (State != RoomState.Playing) return;
 
             if (AllCardsCovered())
             {

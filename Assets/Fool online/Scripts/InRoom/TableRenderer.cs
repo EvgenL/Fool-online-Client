@@ -4,6 +4,7 @@ using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using Fool_online.Scripts.InRoom.CardsScripts;
 using Fool_online.Scripts.Manager;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Fool_online.Scripts.InRoom
 {
@@ -36,12 +37,24 @@ namespace Fool_online.Scripts.InRoom
         //Observer callback
         public override void OnBeaten()
         {
-            var cardsOnTable = GameManager.Instance.cardsOnTable;
-            var cardsOnTableCovering = GameManager.Instance.cardsOnTableCovering;
+            var cardsOnTable = RoomLogic.Instance.cardsOnTable;
+            var cardsOnTableCovering = RoomLogic.Instance.cardsOnTableCovering;
             var cards = new List<CardRoot>();
             cards.AddRange(cardsOnTable);
             cards.AddRange(cardsOnTableCovering);
             StartCoroutine(DelayRemoveCardsFromTableToDiscardPile(cards));
+        }
+
+        /// <summary>
+        /// Animates drop card on table
+        /// </summary>
+        /// <param name="cardRoot"></param>
+        public void AnimateDropCardOnTable(CardRoot cardRoot)
+        {
+            cardRoot.AnimateMoveToTransform(this.transform);
+
+            transform.SetParent(this.transform, false);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.transform as RectTransform);
         }
 
         //todo
@@ -65,6 +78,7 @@ namespace Fool_online.Scripts.InRoom
         /// </summary>
         public void RemoveCardsFromTableToDiscardPile(List<CardRoot> cards)
         {
+
             foreach (var cardOnTable in cards)
             {
                 Discard.AnimateRemoveCardToDiscardPile(cardOnTable);
