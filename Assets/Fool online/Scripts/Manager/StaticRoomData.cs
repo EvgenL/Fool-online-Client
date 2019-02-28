@@ -46,17 +46,12 @@ namespace Fool_online.Scripts.Manager
         public static string CardFrontSkin = "Default";
         public static string CardBackSkin = "Default";
 
-        public static PlayerInRoom Denfender => Players.Single(player => player.ConnectionId == WhoseDefend);
+        public static PlayerInRoom Defender => Players.Single(player => player.ConnectionId == WhoseDefend);
         public static PlayerInRoom Attacker => Players.Single(player => player.ConnectionId == WhoseAttack);
 
         public static bool Iwon => MyPlayer.Won;
 
         public static bool IsPlaying = false;
 
-        public static string GetPlayerNickname(long connectionId)
-        {
-            var a = Players;
-            return Players.Single(player => player.ConnectionId == connectionId).Nickname;
-        }
     }
 }

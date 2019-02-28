@@ -89,23 +89,9 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         private void AddCardToHand(CardRoot cardRootScript)
         {
             CardsInHand.Add(cardRootScript);
-            cardRootScript.interactibleCard.CanBeDragged = false;
+            //enable interaction
+            cardRootScript.InteractionEnable();
             cardsN++;
-        }
-
-        /// <summary>
-        /// Spawns and drops card on table
-        /// </summary>
-        /// <returns>Dropped card</returns>
-        public CardRoot DropCardOnTable(Transform table, string cardCode)
-        {
-            //Spawn card as child of table trahsform.
-            var cardRootScript = SpawnCard(cardCode);
-
-            //Init animation
-            cardRootScript.AnimateMoveToTransform(table);
-
-            return cardRootScript;
         }
 
         public CardRoot SpawnCard(string cardCode)
@@ -131,7 +117,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
             cardRootScript.InitGraphics(cardCode);
 
             //Make it non-interactible
-            cardRootScript.SetOnTable(true);
+            cardRootScript.InteractionDisable();
 
             RemoveOneCardFromHand();
 
@@ -149,15 +135,9 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
             }
         }
 
-        public override void PickCardsFromTable(List<CardRoot> cardsOnTable, List<CardRoot> cardsOnTableCovering)
+        public override void PickCardsFromTable(List<CardRoot> cards)
         {
-            foreach (var card in cardsOnTable)
-            {
-                card.AnimateMoveToTransform(_cardPickPoint);
-                SpawnCardInHand();
-                card.DestroyCard(2f);
-            }
-            foreach (var card in cardsOnTableCovering)
+            foreach (var card in cards)
             {
                 card.AnimateMoveToTransform(_cardPickPoint);
                 SpawnCardInHand();

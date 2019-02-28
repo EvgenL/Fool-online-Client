@@ -73,7 +73,7 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
 
         public void OnUpdateDrag()
         {
-            InputManager.Instatnce.DraggedCardUpdate(Input.mousePosition, cardRoot);
+            InputManager.Instance.DraggedCardUpdate(Input.mousePosition, cardRoot);
         }
 
         public void OnEndDrag()
@@ -85,7 +85,7 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
                 AnimationState = CardAnimationState.MovingToRoot;
                 UnZoom();
                 ShowInUi();
-                InputManager.Instatnce.DraggedCardDrop(Input.mousePosition, cardRoot);
+                InputManager.Instance.DraggedCardDrop(Input.mousePosition, cardRoot);
             }
         }
 
@@ -192,17 +192,17 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
             transform.SetParent(cardRoot.transform, true); //Sets parent of this object to Canvas to show above up everything
         }
 
-        public void AnimateMoveFromToRoot(Vector3 startPosition)
+        public void AnimateMoveToRootFrom(Vector3 startPosition)
         {
-            AnimateMoveFromToRoot(startPosition, Quaternion.identity, Vector3.one);
+            AnimateMoveToRootFrom(startPosition, Quaternion.identity, Vector3.one);
         }
 
-        public void AnimateMoveFromToRoot(Vector3 startPosition, Quaternion startRotation)
+        public void AnimateMoveToRootFrom(Vector3 startPosition, Quaternion startRotation)
         {
-            AnimateMoveFromToRoot(startPosition, startRotation, Vector3.one);
+            AnimateMoveToRootFrom(startPosition, startRotation, Vector3.one);
         }
 
-        public void AnimateMoveFromToRoot(Vector3 startPosition, Quaternion startRotation, Vector3 startScale)
+        public void AnimateMoveToRootFrom(Vector3 startPosition, Quaternion startRotation, Vector3 startScale)
         {
             //Set start
             transform.position = startPosition;

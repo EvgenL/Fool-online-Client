@@ -17,14 +17,13 @@ namespace Fool_online.Scripts.InRoom
         /// <summary>
         /// Animation delay before removing cards on turn ended
         /// </summary>
-        [Header("Animation delay before removing cards on turn ended")]
-        [SerializeField] private float RemoveCardsToDiscardDelay = 2f;
+        [Header("Animation delay before removing cards on turn ended")] [SerializeField]
+        private float RemoveCardsToDiscardDelay = 2f;
 
         /// <summary>
         /// Отбой
         /// </summary>
-        [Header("Отбой")]
-        [SerializeField] private DiscardPile Discard;
+        [Header("Отбой")] [SerializeField] private DiscardPile Discard;
 
         /// <summary>
         /// Clear table if there was any cards
@@ -34,54 +33,68 @@ namespace Fool_online.Scripts.InRoom
             Util.DestroyAllChildren(transform);
         }
 
-        //Observer callback
+        #region Observer methods
+
+        /// <summary>
+        /// Observer callback
+        /// </summary>
         public override void OnBeaten()
         {
-            var cardsOnTable = RoomLogic.Instance.cardsOnTable;
-            var cardsOnTableCovering = RoomLogic.Instance.cardsOnTableCovering;
-            var cards = new List<CardRoot>();
-            cards.AddRange(cardsOnTable);
-            cards.AddRange(cardsOnTableCovering);
-            StartCoroutine(DelayRemoveCardsFromTableToDiscardPile(cards));
+            AnimateRemoveCardsFromTableToDiscardPile(RemoveCardsToDiscardDelay);
         }
+
+        /// <summary>
+        /// Observer callback
+        /// </summary>
+        public override void OnEndGame(long foolConnectionId, Dictionary<long, double> rewards)
+        {
+            AnimateRemoveCardsFromTableToDiscardPile(RemoveCardsToDiscardDelay);
+        }
+
+        #endregion
 
         /// <summary>
         /// Animates drop card on table
         /// </summary>
-        /// <param name="cardRoot"></param>
         public void AnimateDropCardOnTable(CardRoot cardRoot)
         {
             cardRoot.AnimateMoveToTransform(this.transform);
 
-            transform.SetParent(this.transform, false);
             LayoutRebuilder.ForceRebuildLayoutImmediate(this.transform as RectTransform);
         }
 
-        //todo
-        public void ClearTableAnimation()
-        {
-
-        }
-
         /// <summary>
-        /// Delays method RemoveCardsFromTableToDiscardPile for RemoveCardsToDiscardDelay secounds.
-        /// I use coroutine unstead of Invoke to pass parameter
+        /// Animates cover existing card on table
         /// </summary>
-        private IEnumerator DelayRemoveCardsFromTableToDiscardPile(List<CardRoot> cards)
+        public void AnimateCoverCardOnTable(CardRoot cardOnTable, CardRoot cardHeld)
         {
-            yield return new WaitForSeconds(RemoveCardsToDiscardDelay);
-            RemoveCardsFromTableToDiscardPile(cards);
+            cardHeld.AnimateMoveToTransform(cardOnTable.transform);
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(this.transform as RectTransform);
         }
 
         /// <summary>
         /// Animates removing cards from table also destroys game objects of cards
         /// </summary>
-        public void RemoveCardsFromTableToDiscardPile(List<CardRoot> cards)
+        public void AnimateRemoveCardsFromTableToDiscardPile(float delay = 0f)
         {
-
+            var cards = GetComponentsInChildren<CardRoot>();
             foreach (var cardOnTable in cards)
             {
-                Discard.AnimateRemoveCardToDiscardPile(cardOnTable);
+                Discard.AnimateRemoveCardToDiscardPile(cardOnTable, delay);
+            }
+        }
+
+        /// <summary>
+        /// Stops glowing animation of cards which was activated
+        /// at card grab
+        /// </summary>
+        public void StopAnimationGlowingCardsOnTable()
+        {
+            var cards = GetComponentsInChildren<CardRoot>();
+            foreach (var cardOnTable in cards)
+            {
+                cardOnTable.AnimateIdleGlow();
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using Fool_online.Scripts.Manager;
+﻿using DG.Tweening;
+using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
 {
     public class CardRoot : MonoBehaviour
     {
-        private bool IsOnTable = false; //In hand or on table
+        //private bool IsOnTable = false; //In hand or on table
         public bool IsCoveredByACard = false;
         public CardRoot CoveredByCard;
 
@@ -15,8 +16,34 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
         public int Value; //Сила
         public string CardCode;
 
-        public InteractibleCard interactibleCard;
+        [SerializeField] private InteractibleCard interactibleCard;
 
+
+        /// <summary>
+        /// Returns number of a card suit
+        /// where
+        /// 0 is Spades
+        /// 1 is hearts
+        /// 2 is diamonds
+        /// 3 is clubs
+        /// </summary>
+        public int GetCardSuit()
+        {
+            return CardUtil.Suit(CardCode);
+        }
+
+        /// <summary>
+        /// Returns number of a card value
+        /// where for example
+        /// 6 is 6
+        /// 9 is 9
+        /// 11 is J (Jocker = Валет)
+        /// 14 is A (Ace = Туз
+        /// </summary>
+        public int GetCardValue()
+        {
+            return CardUtil.Value(CardCode);
+        }
 
         /// <summary>
         /// If this card is covered by some other card then 
@@ -24,10 +51,10 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
         /// </summary>
         public Transform CoveredCardContainer;
 
-        [Header("Card animated local scales in different locations")]
-        [SerializeField] private float _scaleInEnemyHand = 0.33f;
-        [SerializeField] private float _scaleInMyHand = 1f;
-        [SerializeField] private float _scaleOnTable = 1f;
+        //[Header("Card animated local scales in different locations")]
+        //[SerializeField] private float _scaleInEnemyHand = 0.33f;
+        //[SerializeField] private float _scaleInMyHand = 1f;
+        //[SerializeField] private float _scaleOnTable = 1f;
 
 
         public void InitGraphics(string cardCode)
@@ -45,6 +72,10 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
             CardVisual.sprite = sprite;
         }
 
+        /// <summary>
+        /// Aniamates card smoothly move from its current position to targeted transform
+        /// Changes parent to tagreted transform
+        /// </summary>
         public void AnimateMoveToTransform(Transform container)
         {
             Vector3 startPos = interactibleCard.transform.position;
@@ -59,53 +90,36 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
             LayoutGroup layout = container.GetComponent<LayoutGroup>();
             if (layout != null)
             {
-                //LayoutRebuilder.MarkLayoutForRebuild(handTransform as RectTransform); //this doesnt do this on exact frame
+                //LayoutRebuilder.MarkLayoutForRebuild(handTransform as RectTransform); //this doesnt make this happen on exact frame
                 LayoutRebuilder.ForceRebuildLayoutImmediate(container as RectTransform);
             }
 
-            interactibleCard.AnimateMoveFromToRoot(startPos, startRot, startScale);
+            interactibleCard.AnimateMoveToRootFrom(startPos, startRot, startScale);
         }
 
-        public void AnimateMoveToMyHand(Transform handTransform)
+        /// <summary>
+        /// Tweens card to move to some position
+        /// </summary>
+        /// <param name="targetPos">Position to where move</param>
+        /// <param name="duration">Duration of animation</param>
+        /// <param name="delay">delay before start of animation</param>
+        public void AnimateMoveToPosition(Vector3 targetPos, float duration, float delay)
         {
-            Vector3 startPos = interactibleCard.transform.position;
-            Quaternion startRot = interactibleCard.transform.rotation;
-            Vector3 startScale = transform.localScale; 
 
-            transform.SetParent(handTransform);
-            transform.localScale = Vector3.one * _scaleInMyHand;
-            transform.localRotation = Quaternion.identity;
+            interactibleCard.transform
+                .DOMove(targetPos, duration)
+                .SetEase(Ease.InOutCubic)
+                .SetDelay(delay)
+                .Play()
+                ;
 
-            //if card was put on table or in hand, we need to force rebuild layout on this frame
-            LayoutGroup layout = handTransform.GetComponent<LayoutGroup>();
-            if (layout != null)
-            {
-                //LayoutRebuilder.MarkLayoutForRebuild(handTransform as RectTransform); //this doesnt do this on exact frame
-                LayoutRebuilder.ForceRebuildLayoutImmediate(handTransform as RectTransform);
-            }
+            InteractionDisable();
 
-            //init animation on card
-            interactibleCard.AnimateMoveFromToRoot(startPos, startRot, startScale);
         }
 
         public void DestroyCard(float delay)
         {
             Destroy(gameObject, delay);
-        }
-
-        /// <summary>
-        /// Disables interations with card on table
-        /// </summary>
-        public void SetOnTable(bool value)
-        {
-            IsOnTable = value;
-            interactibleCard.CanBeDragged = !value;
-
-            if (value == false)
-            {
-                IsCoveredByACard = false;
-                CoveredByCard = null;
-            }
         }
         
         /// <summary>
@@ -115,6 +129,42 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
         {
             int trumpSuit = CardUtil.Suit(StaticRoomData.TrumpCardCode);
             return Suit == trumpSuit;
+        }
+
+        public void InteractionDisable()
+        {
+            interactibleCard.CanBeDragged = false;
+
+            IsCoveredByACard = false;
+            CoveredByCard = null;
+        }
+
+        public void InteractionEnable()
+        {
+            interactibleCard.CanBeDragged = true;
+
+            IsCoveredByACard = false;
+            CoveredByCard = null;
+        }
+
+        public void AnimateIdleGlow()
+        {
+            interactibleCard.AnimateIdle();
+        }
+
+        public void AnimateTargetedGlow()
+        {
+            interactibleCard.AnimateCanBeTargeted();
+        }
+
+        public void AnimateCanBeTargetedGlow()
+        {
+            interactibleCard.AnimateCanBeTargeted();
+        }
+
+        public Vector3 GetDisplayPosition()
+        {
+            return interactibleCard.transform.position;
         }
     }
 }

@@ -824,9 +824,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             long playerId = buffer.ReadLong();
             //Read his slotN
             int slotN = buffer.ReadInteger();
+            //Read cards on table number
+            int cardsN = buffer.ReadInteger();
 
             //Invoke callback on observers
-            FoolObservable.OnDefenderPicksCards(playerId, slotN);
+            FoolObservable.OnDefenderPicksCards(playerId, slotN, cardsN);
         }
 
         private static void Packet_PlayerWon(byte[] data)

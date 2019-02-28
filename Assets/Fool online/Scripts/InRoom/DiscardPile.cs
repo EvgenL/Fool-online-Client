@@ -13,15 +13,13 @@ namespace Fool_online.Scripts.InRoom
         /// <summary>
         /// Animates moving card to discardpile (отбой)
         /// </summary>
-        /// <param name="cardRoot"></param>
-        public void AnimateRemoveCardToDiscardPile(CardRoot cardRoot)
+        public void AnimateRemoveCardToDiscardPile(CardRoot cardRoot, float delay = 0f)
         {
             if (cardRoot == null) return;
             //bug null reference if other player leaves
-            cardRoot.interactibleCard.transform.DOMove(transform.position, 1f).SetEase(Ease.InOutCubic);
-            cardRoot.SetOnTable(true);
-            cardRoot.interactibleCard.enabled = false;
-            cardRoot.DestroyCard(2f);
+            float duration = 1f;
+            cardRoot.AnimateMoveToPosition(transform.position, duration, delay);
+            cardRoot.DestroyCard(delay + duration);
         }
     }
 }

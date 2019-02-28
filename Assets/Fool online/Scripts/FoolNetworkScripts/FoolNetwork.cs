@@ -1,4 +1,6 @@
-﻿namespace Fool_online.Scripts.FoolNetworkScripts
+﻿using Fool_online.Scripts.Manager;
+
+namespace Fool_online.Scripts.FoolNetworkScripts
 {
     /// <summary>
     /// Main fool online networking class
@@ -118,7 +120,14 @@
 
         public static void LeaveRoom()
         {
-            ClientSendPackets.Send_LeaveRoom();
+            if (StaticRoomData.IsPlaying)
+            {
+                ClientSendPackets.Send_GiveUp();
+            }
+            else
+            {
+                ClientSendPackets.Send_LeaveRoom();
+            }
             LocalPlayer.IsInRoom = false;
         }
 

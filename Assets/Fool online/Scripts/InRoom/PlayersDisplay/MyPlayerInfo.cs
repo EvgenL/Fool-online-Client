@@ -2,6 +2,7 @@
 using Fool_online.Scripts.FoolNetworkScripts;
 using Fool_online.Scripts.InRoom.CardsScripts;
 using Fool_online.Scripts.Manager;
+using Fool_online.Scripts.UiScripts.Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -26,14 +27,9 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
             _myHand.ClearHand();
         }
 
-        public void OnGetReadyButtonClick(bool value)
-        {
-            RoomLogic.Instance.OnGetReady(value);
-        }
-
         public void OnEndTurnButtonClick()
         {
-            RoomLogic.Instance.OnMePass();
+            InputManager.Instance.OnMePass();
         }
 
         public void RemoveCardFromHand(CardRoot cardRoot)
@@ -65,7 +61,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         /// <summary>
         /// Hides EndTurnButton and/or GetReadyButton from my player info display
         /// </summary>
-        public void HideAllButtons()
+        public void HidePassButton()
         {
             EndTurnButton.SetActive(false);
         }
@@ -76,21 +72,27 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
             CardsInHand.Add(cardRoot);
 
             //Enable interactions
-            cardRoot.SetOnTable(false);
+            cardRoot.InteractionEnable();
 
             cardRoot.AnimateMoveToTransform(HandContainer);
         }
 
-        public override void PickCardsFromTable(List<CardRoot> cardsOnTable, List<CardRoot> cardsOnTableCovering)
+        public override void PickCardsFromTable(List<CardRoot> cards)
         {
-            foreach (var card in cardsOnTable)
+            foreach (var card in cards)
             {
                 PickUpCard(card);
             }
-            foreach (var card in cardsOnTableCovering)
+        }
+
+        public override void AnimateRemoveCardsToDiscardPile(DiscardPile discard, float delay)
+        {
+            foreach (var cardInHand in _myHand.CardsInHand)
             {
-                PickUpCard(card);
+                discard.AnimateRemoveCardToDiscardPile(cardInHand, delay);
             }
+
+            _myHand.CardsInHand.Clear();
         }
 
     }

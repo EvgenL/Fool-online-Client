@@ -8,7 +8,7 @@ namespace Fool_online.Scripts.InRoom
     {
         public void OnClick()
         {
-            FoolNetwork.GiveUp();
+            FoolNetwork.LeaveRoom();
             SceneManager.LoadScene("Main menu");
         }
 

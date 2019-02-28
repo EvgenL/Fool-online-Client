@@ -43,9 +43,9 @@ namespace Fool_online.Scripts.InRoom
         }
 
 
-        public void HideTalon()
+        public void HideTalon(float delay)
         {
-            transform.DOMove(hidPosition, 1f);
+            transform.DOMove(hidPosition, 1f).SetDelay(delay);
         }
 
         private void ShowTalon(int cards, string talonCardCode = null)

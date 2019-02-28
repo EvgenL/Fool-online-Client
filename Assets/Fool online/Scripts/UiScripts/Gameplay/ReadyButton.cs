@@ -14,7 +14,7 @@ namespace Fool_online.Scripts.UiScripts.Gameplay
         /// <summary>
         /// Show 'ready' button if me joined last
         /// </summary>
-        private void Awake()
+        private void Start()
         {
             CheckIfAllPlayersJoined();
         }
@@ -72,7 +72,7 @@ namespace Fool_online.Scripts.UiScripts.Gameplay
 
         public void OnClick(bool value)
         {
-            RoomLogic.Instance.OnGetReady(value);
+            InputManager.Instance.OnGetReadyClick(value);
         }
 
     }

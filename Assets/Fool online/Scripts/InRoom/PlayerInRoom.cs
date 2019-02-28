@@ -16,19 +16,7 @@ namespace Fool_online.Scripts.InRoom
 
         public int cn;
 
-        public int CardsNumber
-        {
-            get
-            {
-                Debug.Log("Get " + cn);
-                return cn;
-            }
-            set
-            {
-                Debug.Log("Set " + value);
-                cn = value;
-            }
-        }
+        public int CardsNumber;
 
         public bool WaitForRecconect = false;
 
@@ -62,7 +50,7 @@ namespace Fool_online.Scripts.InRoom
         /// Non-local player only
         /// Take invisible cards
         /// </summary>
-        public void AddCardsN(int amount)
+        public void TakeCards(int amount)
         {
             CardsNumber += amount;
         }

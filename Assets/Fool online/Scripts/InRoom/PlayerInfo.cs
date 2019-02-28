@@ -137,12 +137,12 @@ namespace Fool_online.Scripts.InRoom
             CardsInHand.Clear();
         }
 
-        public virtual void DrawPlayer(PlayerInRoom playerInRoom)
+        public virtual void DrawPlayerslot(PlayerInRoom playerInRoom)
         {
             NicknameText.text = playerInRoom.Nickname;
         }
 
-        public virtual void DrawEmpty()
+        public virtual void DrawEmptySlot()
         {
             NicknameText.text = "Ожидание противника";
 
@@ -151,7 +151,7 @@ namespace Fool_online.Scripts.InRoom
             SetReadyCheckmark(false);
         }
 
-        public virtual void DrawLeft()
+        public virtual void DrawLeftSlot()
         {
             NicknameText.text += "(вышел)";
 
@@ -166,6 +166,19 @@ namespace Fool_online.Scripts.InRoom
         }
 
 
-        public abstract void PickCardsFromTable(List<CardRoot> cardsOnTable, List<CardRoot> cardsOnTableCovering);
+        public abstract void PickCardsFromTable(List<CardRoot> cards);
+
+        /// <summary>
+        /// Moves all cards to discard at game end
+        /// </summary>
+        public virtual void AnimateRemoveCardsToDiscardPile(DiscardPile discard, float delay)
+        {
+            foreach (var cardInHand in CardsInHand)
+            {
+                discard.AnimateRemoveCardToDiscardPile(cardInHand, delay);
+            }
+
+            CardsInHand.Clear();
+        }
     }
 }

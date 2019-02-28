@@ -5,9 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Fool online/Scenes/Connecting to server.unity
-    guid: 0c26f8523a97fa844955f9db2f81a012
   - enabled: 1
     path: Assets/Fool online/Scenes/Login register.unity
     guid: acafff15fa54e8d42ae47306c1f1a138
@@ -16,5 +13,5 @@ EditorBuildSettings:
     guid: 8ffceee40727e224abf9b0c1b15f6128
   - enabled: 1
     path: Assets/Fool online/Scenes/Gameplay.unity
-    guid: b2ca36db13c452149a057e3241615e11
+    guid: 7aede594832931c428f029ed4bcc9af6
   m_configObjects: {}

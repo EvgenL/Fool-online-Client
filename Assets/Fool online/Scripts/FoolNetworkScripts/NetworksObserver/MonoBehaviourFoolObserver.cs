@@ -12,25 +12,21 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
     {
         #region Attach
 
+
         /// <summary>
-        /// Constructor attaches this method to Obervable
+        /// Called on awake
+        /// attaches this method to Obervable
         /// </summary>
-        public MonoBehaviourFoolObserver()
+        protected void OnEnable()
         {
             FoolObservable.Attach(this);
         }
 
-        private void OnEnable()
-        {
-            FoolObservable.Attach(this);
-        }
-
-        private void OnDisable()
-        {
-            FoolObservable.Detach(this);
-        }
-
-        private void OnDestroy()
+        /// <summary>
+        /// Called on destroy
+        /// attaches this method to Obervable
+        /// </summary>
+        protected void OnDisable()
         {
             FoolObservable.Detach(this);
         }
@@ -221,37 +217,43 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         }
 
         /// <summary>
-        /// Sent by GameManager when i click endturnbutton
+        /// Sent by InputManager when i click pass turn button
         /// </summary>
         public virtual void OnMePassed()
         {
         }
 
         /// <summary>
-        /// Sent by InputManager
+        /// Sent by InputManager when i click 'ready' button
         /// </summary>
-        public virtual void OnDraggedCardUpdate(Vector2 mousePos, CardRoot draggedCardRoot, bool inTableZone)
+        public virtual void OnMeGotReady(bool value)
         {
         }
 
         /// <summary>
-        /// Sent by InputManager
+        /// Sent by InputManager when i drag card arund the screen
         /// </summary>
-        public virtual void OnCardDroppedOnTableByMe(CardRoot cardRoot)
+        public virtual void OnDraggedCardUpdate(Vector2 mousePos, CardRoot heldCardRoot, bool inTableZone)
         {
         }
 
         /// <summary>
-        /// Sent by GameManager anything on table happens
+        /// Sent by InputManager when i release card from hand
         /// </summary>
-        public virtual void OnTableUpdated()
+        public virtual void OnCardDroppedOnTableByMe(CardRoot heldCard)
         {
         }
 
-
+        /// <summary>
+        /// Called multiple times per game on somebody left without cards and talon is empty
+        /// </summary>
         public virtual void OnPlayerWon(long wonPlayerId, double winnerReward)
         {
         }
+
+        /// <summary>
+        /// Recieved after UpdateRoomList request
+        /// </summary>
         public virtual void OnRoomList(RoomInstance[] rooms)
         {
         }

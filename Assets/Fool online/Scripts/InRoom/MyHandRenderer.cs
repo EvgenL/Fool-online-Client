@@ -16,6 +16,7 @@ namespace Fool_online.Scripts.InRoom
         public override void OnYouGotCards(string[] cards)
         {
             StartCoroutine(AnimateCardsFromTalon(cards));
+            CardsInHand = CardsInHand;
         }
 
         private IEnumerator AnimateCardsFromTalon(string[] cards)
@@ -31,7 +32,7 @@ namespace Fool_online.Scripts.InRoom
                 CardsInHand.Add(cardRootScript);
 
                 //Init animation
-                cardRootScript.AnimateMoveToMyHand(this.transform);
+                cardRootScript.AnimateMoveToTransform(this.transform);
 
                 yield return new WaitForSeconds(0.1f); //StaticParameters.TalonAnimationDelay);
             }

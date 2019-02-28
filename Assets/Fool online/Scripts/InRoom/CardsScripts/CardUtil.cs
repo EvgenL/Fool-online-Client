@@ -54,10 +54,27 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
             return cardName;
         }
 
+        /// <summary>
+        /// Returns number of a card value
+        /// where for example
+        /// 6 is 6
+        /// 9 is 9
+        /// 11 is J (Jocker = Валет)
+        /// 14 is A (Ace = Туз
+        /// </summary>
         public static int Value(string cardCode)
         {
             return int.Parse(cardCode.Split('.')[1]);
         }
+
+        /// <summary>
+        /// Returns number of a card suit
+        /// where
+        /// 0 is Spades
+        /// 1 is hearts
+        /// 2 is diamonds
+        /// 3 is clubs
+        /// </summary>
         public static int Suit(string cardCode)
         {
             return int.Parse(cardCode.Split('.')[0]);

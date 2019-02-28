@@ -42,10 +42,12 @@ namespace Fool_online.Scripts.Manager
         [SerializeField] private string _sceneOnAuthorized = "Main menu";
         [Header("Scene name that would be opened after connection lost")]
         [SerializeField] private string _sceneOnDisconnected = "Login register";
+        [Header("Scene name for game")]
+        [SerializeField] private string _sceneGameplay = "Gameplay";
 
         private void Start()
         {
-            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Login register"))
+            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(_sceneOnDisconnected))
             {
                 SceneManager.LoadScene(_sceneOnDisconnected);
             }
@@ -95,22 +97,16 @@ namespace Fool_online.Scripts.Manager
         //Observed callback
         public override void OnDisconnectedFromGameServer()
         {
-            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName("Connecting to server"))
+            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(_sceneOnDisconnected))
             {
-                SceneManager.LoadScene("Login register");
+                SceneManager.LoadScene(_sceneOnDisconnected);
             }
         }
 
         //Observed callback
         public override void OnJoinRoom()
         {
-            SceneManager.LoadScene("Gameplay");
-        }
-
-        //Observed callback
-        public override void OnRoomData()
-        {
-            print("NetworkManager: OnRoomData");
+            SceneManager.LoadScene(_sceneGameplay);
         }
     }
 }

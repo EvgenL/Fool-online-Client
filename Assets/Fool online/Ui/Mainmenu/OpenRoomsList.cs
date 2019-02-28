@@ -14,14 +14,17 @@ namespace Fool_online.Ui.Mainmenu
 
         //private RoomInstance _currentRooms;
 
-        private void OnEnable()
+        private new void OnEnable()
         {
-            Util.DestroyAllChildren(_roomDisplaysContainer);
             Refresh();
+
+            base.OnEnable();
         }
 
         public void Refresh()
         {
+            Util.DestroyAllChildren(_roomDisplaysContainer);
+
             ClientSendPackets.Send_RefreshRoomList();
             //todo animaton until OnRoomList
         }

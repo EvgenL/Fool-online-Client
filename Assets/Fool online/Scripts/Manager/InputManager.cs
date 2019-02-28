@@ -6,14 +6,14 @@ namespace Fool_online.Scripts.Manager
 {
     public class InputManager : MonoBehaviour
     {
-        public static InputManager Instatnce;
+        public static InputManager Instance;
 
 
         public RectTransform TableDropZone;
 
         private void Awake()
         {
-            Instatnce = this;
+            Instance = this;
         }
 
         /// <summary>
@@ -39,6 +39,22 @@ namespace Fool_online.Scripts.Manager
             {
                 FoolObservable.OnCardDroppedOnTableByMe(cardRoot);
             }
+        }
+
+        /// <summary>
+        /// Called by 'pass' button
+        /// </summary>
+        public void OnMePass()
+        {
+            FoolObservable.OnMePassed();
+        }
+
+        /// <summary>
+        /// Called by 'ready' button
+        /// </summary>
+        public void OnGetReadyClick(bool value)
+        {
+            FoolObservable.OnMeGotReady(value);
         }
     }
 }

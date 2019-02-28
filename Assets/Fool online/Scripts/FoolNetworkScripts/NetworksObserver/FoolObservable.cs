@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Fool_online.Scripts.InRoom;
 using Fool_online.Scripts.InRoom.CardsScripts;
 using Fool_online.Scripts.Manager;
 using Fool_online.Ui.Mainmenu;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 {
@@ -244,7 +247,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public static void OnEnemyGotCardsFromTalon(long playerId, int slotN, int cardsN)
         {
-            StaticRoomData.Players[slotN].AddCardsN(cardsN);
+            StaticRoomData.Players[slotN].TakeCards(cardsN);
 
             foreach (var obs in _observers)
             {
@@ -333,7 +336,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public static void OnOtherPlayerDropsCardOnTable(long playerId, int slotN, string cardCode)
         {
-            StaticRoomData.Players[slotN].AddCardsN(-1);
+            StaticRoomData.Players[slotN].TakeCards(-1);
 
             foreach (var obs in _observers)
             {
@@ -388,7 +391,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         public static void OnOtherPlayerCoversCard(long coveredPlayerId, int slotN,
             string cardOnTableCode, string cardDroppedCode)
         {
-            StaticRoomData.Players[slotN].AddCardsN(-1);
+            StaticRoomData.Players[slotN].TakeCards(-1);
 
             foreach (var obs in _observers)
             {
@@ -404,9 +407,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
             }
         }
 
-        public static void OnDefenderPicksCards(long pickedPlayerId, int slotN)
+        public static void OnDefenderPicksCards(long pickedPlayerId, int slotN, int cardsN)
         {
-            StaticRoomData.Players[slotN].AddCardsN(RoomLogic.Instance.CardsOnTableNumber);
+            StaticRoomData.Players[slotN].TakeCards(cardsN);
 
             foreach (var obs in _observers)
             {
@@ -432,6 +435,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
             }
         }
 
+        public static void OnMeGotReady(bool value)
+        {
+            foreach (var obs in _observers)
+            {
+                obs.OnMeGotReady(value);
+            }
+        }
+
         public static void OnDraggedCardUpdate(Vector2 mousePos, CardRoot draggedCardRoot, bool inTableZone)
         {
             foreach (var obs in _observers)
@@ -442,19 +453,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public static void OnCardDroppedOnTableByMe(CardRoot cardRoot)
         {
-            StaticRoomData.MyPlayer.AddCardsN(-1);
+            StaticRoomData.MyPlayer.TakeCards(-1);
 
             foreach (var obs in _observers)
             {
                 obs.OnCardDroppedOnTableByMe(cardRoot);
-            }
-        }
-
-        public static void OnTableUpdated()
-        {
-            foreach (var obs in _observers)
-            {
-                obs.OnTableUpdated();
             }
         }
 

@@ -7,6 +7,9 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using AOT;
 
 namespace Fool_online.Plugins
 {
