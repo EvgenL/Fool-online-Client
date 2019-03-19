@@ -24,7 +24,7 @@ public class SelectLoginMethod : MonoBehaviour
     }
     public void OnClickEmailLogin()
     {
-        OnClickAnonLogin();
+        MenuManger.ShowEmailLogin();
     }
     public void OnClickEmailRegister()
     {

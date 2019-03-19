@@ -89,6 +89,7 @@ namespace Fool_online.Scripts.Manager
             FoolNetwork.Disconnect();
         }
 
+
         public override void OnAuthorizedOk(long connectionId)
         {
             SceneManager.LoadScene(_sceneOnAuthorized);

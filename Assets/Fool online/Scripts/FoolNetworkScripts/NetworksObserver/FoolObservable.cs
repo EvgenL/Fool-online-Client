@@ -87,15 +87,16 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
             }
         }
 
-        public static void OnUpdateUserData(long connectionId, string userId, string nickname)
+        public static void OnUpdateUserData(long connectionId, long userId, string nickname, double money)
         {
             FoolNetwork.LocalPlayer.UserId = userId;
             FoolNetwork.LocalPlayer.Nickname = nickname;
+            FoolNetwork.LocalPlayer.Money = money;
 
 
             foreach (var obs in _observers)
             {
-                obs.OnUpdateUserData(connectionId, userId, nickname);
+                obs.OnUpdateUserData(connectionId, userId, nickname, money);
             }
         }
 

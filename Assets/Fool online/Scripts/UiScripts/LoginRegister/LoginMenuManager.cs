@@ -12,6 +12,12 @@ public class LoginMenuManager : MonoBehaviour
 
     [SerializeField] private GameObject ContainerEmailRegister;
 
+    private void Awake()
+    {
+        // todo remember last login method
+        ShowSelectLoginMethod();
+    }
+
     public void ShowSelectLoginMethod()
     {
         Show(1);

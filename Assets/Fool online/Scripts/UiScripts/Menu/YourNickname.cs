@@ -17,10 +17,15 @@ namespace Fool_online.Scripts.UiScripts.Menu
             text.text = FoolNetwork.LocalPlayer.Nickname;
         }
 
-        public override void OnUpdateUserData(long connectionId, string userId, string nickname)
+        public override void OnUpdateUserData(long connectionId, long userId, string nickname, double money)
         {
-            var text = GetComponent<Text>();
-            text.text = nickname;
+            // if that data is about me
+            if (connectionId == FoolNetwork.LocalPlayer.ConnectionId)
+            {
+                // draw nickname 
+                var text = GetComponent<Text>();
+                text.text = nickname;
+            }
         }
     }
 }

@@ -54,7 +54,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         {
         }
 
-        public virtual void OnUpdateUserData(long connectionId, string userId, string nickname)
+        public virtual void OnUpdateUserData(long connectionId, long userId, string nickname, double money)
         {
         }
 

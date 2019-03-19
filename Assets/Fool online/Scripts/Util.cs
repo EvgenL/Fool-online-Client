@@ -15,18 +15,5 @@ namespace Fool_online.Scripts
                 GameObject.Destroy(child.gameObject);
             }
         }
-
-        public static bool TestEmail(string email)
-        {
-            try
-            {
-                var addr = new System.Net.Mail.MailAddress(email);
-                return addr.Address == email;
-            }
-            catch
-            {
-                return false;
-            }
-        }
     }
 }
