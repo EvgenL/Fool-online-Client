@@ -59,7 +59,7 @@ public class EmailRegisterContainer : MonoBehaviour
         // validate pass
         if (password.Length < 6)
         {
-            ErrorTextPassword.text = "Придумайте пароль длинее 6-ти символов";
+            ErrorTextPassword.text = "Придумайте пароль длиннее 6-ти символов";
             ErrorTextPassword.gameObject.SetActive(true);
             errorFlag = true;
         }

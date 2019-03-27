@@ -16,6 +16,9 @@ namespace Fool_online.Ui.Mainmenu
         [SerializeField]  private int _currMaxPlayers = 3;
         [SerializeField]  private int _currDeckSize = 36;
 
+        [Header("Bet option")]
+        [SerializeField] private Slider _betSlider;
+
         [Header("Max players option")]
         [SerializeField] private Toggle _maxPlayers2;
         [SerializeField] private Toggle _maxPlayers3;
@@ -189,7 +192,8 @@ namespace Fool_online.Ui.Mainmenu
 
         public void OnSubmit()
         {
-            ClientSendPackets.Send_CreateRoom(_currMaxPlayers, _currDeckSize);
+            ClientSendPackets.Send_CreateRoom(_currMaxPlayers, _currDeckSize); // TODO send bet
         }
+
     }
 }

@@ -8,7 +8,7 @@ namespace Fool_online.Scripts.UiScripts.Menu
     /// Displays player name
     /// onto Text component
     /// </summary>
-    public class YourNickname : MonoBehaviourFoolObserver
+    public class MyNickname : MonoBehaviourFoolObserver
     {
         // Start is called before the first frame update
         void Start()
@@ -23,8 +23,11 @@ namespace Fool_online.Scripts.UiScripts.Menu
             if (connectionId == FoolNetwork.LocalPlayer.ConnectionId)
             {
                 // draw nickname 
-                var text = GetComponent<Text>();
-                text.text = nickname;
+                var textBox = GetComponent<Text>();
+                if (textBox != null)
+                {
+                    textBox.text = nickname;
+                }
             }
         }
     }
