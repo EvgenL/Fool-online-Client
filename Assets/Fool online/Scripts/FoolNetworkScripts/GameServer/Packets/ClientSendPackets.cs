@@ -40,8 +40,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         {
             if (FoolWebClient.Instance == null || !FoolWebClient.Instance.IsConnected)
             {
-                FoolObservable.OnDisconnectedFromGameServer("Ошибка при отправке сообщения на сервер.");
-                throw new Exception("Can't send data to server: Not connected.");
+                //FoolObservable.OnDisconnectedFromGameServer("Ошибка при отправке сообщения на сервер.");
+                FoolObservable.OnSendError();
+                UnityEngine.Debug.LogWarning("Can't send data to server: Not connected.");
             }
 
             ByteBuffer buffer = new ByteBuffer();

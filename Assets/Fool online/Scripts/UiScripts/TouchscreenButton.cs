@@ -15,6 +15,7 @@ public class TouchscreenButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
 
     public UnityEvent OnPointerDownEvent;
     public UnityEvent OnPointerUpEvent;
+    public UnityEvent OnDeselectedEvent;
 
 
     public void OnPointerDown(PointerEventData eventData)
@@ -26,6 +27,19 @@ public class TouchscreenButton : MonoBehaviour, IPointerDownHandler, IPointerUpH
     public void OnPointerUp(PointerEventData eventData)
     {
         if (Interactible)
-            OnPointerUpEvent.Invoke();
+        {
+            RectTransform rectTransform = transform as RectTransform;
+
+            var pointerPos = rectTransform.InverseTransformPoint(eventData.position);
+
+            if (rectTransform.rect.Contains(pointerPos))
+            {
+                OnPointerUpEvent.Invoke();
+            }
+            else
+            {
+                OnDeselectedEvent.Invoke();
+            }
+        }
     }
 }

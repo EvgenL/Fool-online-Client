@@ -107,7 +107,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
             foreach (var obs in _observers)
             {
-                obs.OnDisconnectedFromGameServer();
+                obs.OnDisconnectedFromGameServer(reason);
             }
         }
 
@@ -478,6 +478,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
             foreach (var obs in _observers)
             {
                 obs.OnRoomList(rooms);
+            }
+        }
+
+        public static void OnSendError()
+        {
+            foreach (var obs in _observers)
+            {
+                obs.OnSendError();
             }
         }
 

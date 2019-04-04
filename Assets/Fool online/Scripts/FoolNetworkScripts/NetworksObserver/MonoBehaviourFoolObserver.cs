@@ -68,7 +68,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         /// <summary>
         /// Called when client was disconnected from server
         /// </summary>
-        public virtual void OnDisconnectedFromGameServer()
+        public virtual void OnDisconnectedFromGameServer(string reason = null)
         {
         }
 
@@ -257,5 +257,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         public virtual void OnRoomList(RoomInstance[] rooms)
         {
         }
+
+        /// <summary>
+        /// Recieved When trying send data to server bu not connected
+        /// </summary>
+        public virtual void OnSendError()
+        {
+        }
+
+        
     }
 }

@@ -41,9 +41,11 @@ namespace Fool_online.Scripts.Manager
         [Header("Scene name that would be opened after login is succesful")]
         [SerializeField] private string _sceneOnAuthorized = "Main menu";
         [Header("Scene name that would be opened after connection lost")]
-        [SerializeField] private string _sceneOnDisconnected = "Login register";
+        [SerializeField] private string _sceneOnDisconnected = "On disconnected";
         [Header("Scene name for game")]
         [SerializeField] private string _sceneGameplay = "Gameplay";
+        [Header("Scene name for logging in")]
+        [SerializeField] private string _sceneLogin = "Login register";
 
         private void Start()
         {
@@ -89,14 +91,14 @@ namespace Fool_online.Scripts.Manager
             FoolNetwork.Disconnect();
         }
 
+        #region Observer callbacks
 
         public override void OnAuthorizedOk(long connectionId)
         {
             SceneManager.LoadScene(_sceneOnAuthorized);
         }
 
-        //Observed callback
-        public override void OnDisconnectedFromGameServer()
+        public override void OnDisconnectedFromGameServer(string reason = null)
         {
             if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(_sceneOnDisconnected))
             {
@@ -104,10 +106,19 @@ namespace Fool_online.Scripts.Manager
             }
         }
 
-        //Observed callback
+        public override void OnSendError()
+        {
+            OnDisconnectedFromGameServer("Соединение с сервером потеряно");
+            // TODO Показать это сообщение на экране, не переключая сцену и пытаться восстановить подключение 
+            // Если после определённого числа попыток подключиться так и не удалось - переключить сцену
+        } 
+
         public override void OnJoinRoom()
         {
             SceneManager.LoadScene(_sceneGameplay);
         }
+
+        #endregion
+
     }
 }
