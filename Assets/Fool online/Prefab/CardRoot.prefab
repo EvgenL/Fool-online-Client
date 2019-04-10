@@ -67,9 +67,6 @@ MonoBehaviour:
   CardCode: 
   interactibleCard: {fileID: 64}
   CoveredCardContainer: {fileID: 59}
-  _scaleInEnemyHand: 0.33
-  _scaleInMyHand: 1
-  _scaleOnTable: 1
 --- !u!1 &27
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +135,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 9ecee88707a6d464680514d833edb7c2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1fd75ea443503ad4d808a83be34e6c10, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

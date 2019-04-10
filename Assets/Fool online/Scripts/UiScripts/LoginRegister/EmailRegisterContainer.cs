@@ -79,7 +79,7 @@ public class EmailRegisterContainer : MonoBehaviour
         if (!errorFlag)
         {
             string sha1password = AccountsUtil.GetSha1(password);
-            SendAccountData.SendEmailRegistration(nickname, email, sha1password);
+            AccountPackets.SendEmailRegistration(nickname, email, sha1password);
         }
     }
 

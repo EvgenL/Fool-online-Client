@@ -33,7 +33,7 @@ namespace Fool_online.Scripts.UiScripts.LoginRegister
 
             if (!errorFlag)
             {
-                SendAccountData.SendAnonLogin(nickname);
+                AccountPackets.SendAnonLogin(nickname);
             }
         }
     }

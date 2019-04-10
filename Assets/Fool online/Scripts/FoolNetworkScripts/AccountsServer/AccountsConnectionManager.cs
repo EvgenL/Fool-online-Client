@@ -1,11 +1,11 @@
 ﻿
 
-//DEFINES
-#define TEST_MODE_LOCALHOST // if defined, will connect to localhost
 
 
 using System.Text;
 using System.Xml.Linq;
+using Assets.Fool_online.Scripts.FoolNetworkScripts;
+using Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer;
 using Fool_online.Plugins;
 using UnityEngine;
 using NetworkManager = Fool_online.Scripts.Manager.NetworkManager;
@@ -14,14 +14,15 @@ using NetworkManager = Fool_online.Scripts.Manager.NetworkManager;
 namespace Fool_online.Scripts.FoolNetworkScripts
 {
     /// <summary>
-    /// Connects to accounts server. Asks for game server ip and auth token
+    /// Connects to accounts server.
+    /// Checks version and initializes AccountsTransport
     /// </summary>
-    public class AccountsServerConnection : MonoBehaviour
+    public class AccountsConnectionManager : MonoBehaviour
     {
 
 
         #region Singleton
-        public static AccountsServerConnection Instance;
+        public static AccountsConnectionManager Instance;
 
         private void Awake()
         {
@@ -39,11 +40,15 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         #endregion
 
 
-        [SerializeField] private string LoginServerIp = "51.75.236.170";
-        [SerializeField] private int LoginServerPort = 5054;
+        [SerializeField] private string _accountsServerIp = "51.75.236.170";
+        [SerializeField] private int _accountsServerPort = 5054;
+
+        [Header("If check - connect to 127.0.0.1")]
+        [SerializeField] private bool _testModeLocalhost = true;
 
         public static bool IsConnectingToAccountsServer = false;
         public static bool IsConnected = false;
+
 
         /// <summary>
         /// My client socket for sending data to server
@@ -58,23 +63,30 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         // Start is called before the first frame update
         void Start()
         {
+            // Initialize AccountsTransport with server endpoint
+            string ip = _testModeLocalhost ? "127.0.0.1" : _accountsServerIp;
+            AccountsTransport.SetIpEndpoint(ip, _accountsServerPort);
+
+
             //StartCoroutine(//todo CheckVersion(LoginServerIp, LoginServerPort));
         }
 
 
 
-
+        /*
         /// <summary>
-        /// Login without registration if allowed by server
+        /// Login without registration if allowed
         /// </summary>
         /// <param name="nickname">Desired nickname</param>
         public void AnonymousLogin(string nickname)
         {
-#if TEST_MODE_LOCALHOST
-            string ip = "127.0.0.1";
-#else
-        string ip = LoginServerIp;
-#endif
+            string ip = LoginServerIp;
+
+            if (_testModeLocalhost)
+            {
+                ip = "127.0.0.1";
+            }
+
             print("Anonymous Login. Server: " + ip);
 
             ConnectAndAnonymousLogin(ip, LoginServerPort, nickname);
@@ -101,6 +113,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             ConnectAndSend(serverIp, serverPort, body);
         }
+        */
 
         /// <summary>
         /// Connects to server then dends XML data
@@ -131,7 +144,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             mySocket.Send(data);
         }
 
-
         private void OnMessage(byte[] data)
         {
             //parse response data
@@ -139,29 +151,29 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             XElement body = XElement.Parse(bodyString);
 
             //check for errors
-            XElement error = GetChildElement(body, "Error");
+            XElement error = body.GetChildElement("Error");
             if (error != null)
             {
-                //todo proper error handling
-                Debug.LogError("Recieved error!\n" + GetChildElement(error, "Info").Value);
+                //todo proper error handling. show message on screen
+                Debug.LogError("Recieved error!\n" + error.GetChildElement("Info").Value);
                 return;
             }
 
             //check for version check data
-            XElement versionCheck = GetChildElement(body, "VersionCheck");
+            XElement versionCheck = body.GetChildElement("VersionCheck");
             if (versionCheck != null && versionCheck.Value == "OK")
             {
                 Debug.Log("Recieved versionCheck OK\n" + versionCheck.ToString());
             }
 
             //check for login data
-            XElement loginData = GetChildElement(body, "LoginData");
+            XElement loginData = body.GetChildElement("LoginData");
             if (loginData != null)
             {
                 //read server data
-                string gameServerIp = GetChildElement(loginData, "GameServerIp").Value;
-                int gameServerPort = int.Parse(GetChildElement(loginData, "GameServerPort").Value);
-                string token = GetChildElement(loginData, "Token").Value;
+                string gameServerIp = body.GetChildElement("GameServerIp").Value;
+                int gameServerPort = int.Parse(body.GetChildElement("GameServerPort").Value);
+                string token = body.GetChildElement("Token").Value;
 
                 Debug.Log("Got token: " + token);
 
@@ -184,25 +196,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         {
             Debug.Log("Accounts server connection closed:\n" + closecode, this);
             mySocket = null;
-        }
-
-        /// <summary>
-        /// Finds element nested in XML XElement by local name
-        /// </summary>
-        /// <param name="body">XElement which to look</param>
-        /// <param name="elementLocalName">Target name</param>
-        /// <returns>Found xelement. Null if none</returns>
-        private static XElement GetChildElement(XElement body, string elementLocalName)
-        {
-            foreach (var element in body.Elements())
-            {
-                if (element.Name.LocalName == elementLocalName)
-                {
-                    return element;
-                }
-            }
-
-            return null;
         }
     }
 }

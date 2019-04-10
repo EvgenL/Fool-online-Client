@@ -7,7 +7,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.AccountsServer.Packets
     /// <summary>
     /// Static calss for sending packets to server
     /// </summary>
-    static class SendAccountData
+    static class AccountPackets
     {
         /// <summary>
         /// Try register by email

@@ -1,7 +1,7 @@
 ﻿
-//DEFINES
-#define TEST_MODE_LOCALHOST // if defined, will connect to localhost
 
+using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
 using Fool_online.Plugins;
@@ -15,11 +15,8 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer
     /// </summary>
     static class AccountsTransport
     {
-        private static string LoginServerIp = "51.75.236.170";
-        private static int LoginServerPort = 5054;
-
-        public static bool IsConnectingToAccountsServer = false;
         public static bool IsConnected = false;
+        public static bool IsConnecting = false;
 
         /// <summary>
         /// My client socket for sending data to server
@@ -27,43 +24,99 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer
         private static WebSocket mySocket;
 
         /// <summary>
-        /// Data to send
+        /// Messages buffered while waiting for connection
         /// </summary>
-        private static XElement bufferedBody;
-        
+        private static Queue<XElement> _bufferedMessages = new Queue<XElement>();
+
+        /// <summary>
+        /// ip.
+        /// Set by SetIpEndpoint method
+        /// </summary>
+        private static string _accountsServerIp;
+
+        /// <summary>
+        /// port.
+        /// Set by SetIpEndpoint method
+        /// </summary>
+        private static int _accountsServerPort;
+
+        /// <summary>
+        /// Flag if SetIpEndpoint method was ever called
+        /// </summary>
+        private static bool _endPointSet = false;
+
+        /// <summary>
+        /// Sets ip and port of account server
+        /// Should be called once before sending any data
+        /// </summary>
+        public static void SetIpEndpoint(string ip, int port)
+        {
+            _endPointSet = true;
+
+            _accountsServerIp = ip;
+            _accountsServerPort = port;
+        }
+
 
         /// <summary>
         /// Connects to server then dends XML data
         /// </summary>
         public static void Send(XElement body)
         {
-#if TEST_MODE_LOCALHOST
-            string LoginServerIp = "127.0.0.1";
-#else
-            string LoginServerIp = LoginServerIp;
-#endif
+            if (!_endPointSet)
+            {
+                throw new Exception(
+                    "Ip and port wasn't set. Call AccountsTransport.SetIpEndpoint method before sending any data.");
+            }
+
             //Create and set up a new socket
-            mySocket = WebSocketFactory.CreateInstance("ws://" + LoginServerIp + ":" + LoginServerPort);
+            mySocket = WebSocketFactory.CreateInstance("ws://" + _accountsServerIp + ":" + _accountsServerPort);
 
-            //Init callbacks
-            mySocket.OnOpen += SendBufferedBody;
-            mySocket.OnMessage += OnMessage;
-            mySocket.OnError += OnError;
-            mySocket.OnClose += OnClose;
-            bufferedBody = body;
+            // buffer message
+            _bufferedMessages.Enqueue(body);
 
-            //Connect
-            mySocket.Connect();
+            // not connected (first message)
+            if (!IsConnected && !IsConnecting)
+            {
+                //Connect(); <- method was removed to make clear meaning of a 'SendBuferedMessages' method and 'IsConnecting' bool
+
+                IsConnecting = true;
+
+                //Init callbacks
+                mySocket.OnOpen += SendBuferedMessages;
+                mySocket.OnMessage += OnMessage;
+                mySocket.OnError += OnError;
+                mySocket.OnClose += OnClose;
+
+                //Connect
+                mySocket.Connect();
+            }
+            else // if already connected
+            {
+                SendBuferedMessages();
+            }
+
         }
 
         /// <summary>
-        /// Triggered on open to send request immdiatelly
+        /// Triggered on open.
+        /// Immidiatelly sends messages
         /// </summary>
-        private static void SendBufferedBody()
+        private static void SendBuferedMessages()
         {
-            byte[] data = Encoding.Unicode.GetBytes(bufferedBody.ToString());
+            IsConnected = true;
+            IsConnecting = false;
 
-            mySocket.Send(data);
+            // send all the messages
+            while (_bufferedMessages.Count > 0)
+            {
+                // get string
+                string messageString = _bufferedMessages.Dequeue().ToString();
+                // get bytes
+                byte[] dataBytes = Encoding.Unicode.GetBytes(messageString);
+                // send
+                mySocket.Send(dataBytes);
+            }
         }
 
 
@@ -125,6 +178,7 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer
         {
             Debug.Log("Accounts server connection closed:\n" + closecode);
             mySocket = null;
+            IsConnected = false;
         }
 
     }

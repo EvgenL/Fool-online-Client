@@ -46,12 +46,15 @@ namespace Fool_online.Scripts.Manager
         [SerializeField] private string _sceneGameplay = "Gameplay";
         [Header("Scene name for logging in")]
         [SerializeField] private string _sceneLogin = "Login register";
+        [Header("Open SceneOnDisconnected on awake")]
+        [SerializeField] private bool _awakeOpenOnDisconnected;
 
         private void Start()
         {
-            if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(_sceneOnDisconnected))
+            if (_awakeOpenOnDisconnected &&
+                SceneManager.GetActiveScene() != SceneManager.GetSceneByName(_sceneLogin))
             {
-                SceneManager.LoadScene(_sceneOnDisconnected);
+                SceneManager.LoadScene(_sceneLogin);
             }
         }
 

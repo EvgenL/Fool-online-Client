@@ -46,7 +46,7 @@ public class EmailLoginContainer : MonoBehaviour
         if (!errorFlag)
         {
             string sha1password = AccountsUtil.GetSha1(password);
-            SendAccountData.SendEmailLogin(email, sha1password);
+            AccountPackets.SendEmailLogin(email, sha1password);
         }
     }
 }
