@@ -73,49 +73,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
 
 
-        /*
-        /// <summary>
-        /// Login without registration if allowed
-        /// </summary>
-        /// <param name="nickname">Desired nickname</param>
-        public void AnonymousLogin(string nickname)
-        {
-            string ip = LoginServerIp;
-
-            if (_testModeLocalhost)
-            {
-                ip = "127.0.0.1";
-            }
-
-            print("Anonymous Login. Server: " + ip);
-
-            ConnectAndAnonymousLogin(ip, LoginServerPort, nickname);
-        }
-
-        /// <summary>
-        /// Sends to server data for anonymous login
-        /// </summary>
-        private void ConnectAndAnonymousLogin(string serverIp, int serverPort, string nickname)
-        {
-            //Create request body
-            XElement body = new XElement(
-                new XElement("Request",
-                    //add version
-                    new XElement("VersionCheck", Application.version
-                    ),
-                    //add login data
-                    new XElement("Connection",
-                        new XElement("LoginMethod", "Anonymous"),
-                        new XElement("Nickname", nickname)
-                    )
-                )
-            );
-
-            ConnectAndSend(serverIp, serverPort, body);
-        }
-        */
-
-        /// <summary>
+                /// <summary>
         /// Connects to server then dends XML data
         /// </summary>
         private void ConnectAndSend(string serverIp, int serverPort, XElement body)
@@ -142,6 +100,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             byte[] data = Encoding.Unicode.GetBytes(bufferedBody.ToString());
 
             mySocket.Send(data);
+            
         }
 
         private void OnMessage(byte[] data)

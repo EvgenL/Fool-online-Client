@@ -110,6 +110,7 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer
             // send all the messages
             while (_bufferedMessages.Count > 0)
             {
+                Debug.Log("Sending message " + _bufferedMessages.Peek().ToString());
                 // get string
                 string messageString = _bufferedMessages.Dequeue().ToString();
                 // get bytes
@@ -125,6 +126,7 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer
             //parse response data
             string bodyString = Encoding.Unicode.GetString(data);
             XElement body = XElement.Parse(bodyString);
+            Debug.Log("Got message " + body);
 
             // get result
             XElement result = body.GetChildElement("Result");
