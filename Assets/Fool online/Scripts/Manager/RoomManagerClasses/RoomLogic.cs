@@ -290,7 +290,7 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
                     CoverThisCardWith(closestCardOnTable, heldCard);
                 }
             }
-            else if (CanAddThisCard(heldCard)) //if i am attacking and can add this card
+            else if (IcanAddCards && CanAddThisCard(heldCard)) //if i am attacking and can add this card
             {
                 MeAddCardToTable(heldCard);
             }

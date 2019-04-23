@@ -633,11 +633,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: MessageManagerCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 8864804261898264731, guid: cd937a8c331cbf64699f38f748ab3e54,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8864804261898264735, guid: cd937a8c331cbf64699f38f748ab3e54,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -742,6 +737,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8864804261679384692, guid: cd937a8c331cbf64699f38f748ab3e54,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8864804261679384695, guid: cd937a8c331cbf64699f38f748ab3e54,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.04638672
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cd937a8c331cbf64699f38f748ab3e54, type: 3}
@@ -2660,10 +2665,10 @@ RectTransform:
   m_Father: {fileID: 1502672076}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 24.5, y: 0}
-  m_SizeDelta: {x: -398.30005, y: -283.7}
+  m_AnchorMin: {x: 0, y: 0.22674996}
+  m_AnchorMax: {x: 1, y: 0.900625}
+  m_AnchoredPosition: {x: -0.000017166, y: -6.5999756}
+  m_SizeDelta: {x: 0.79999, y: 47.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1869916382
 GameObject:
@@ -3571,7 +3576,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 7cccdcfdcd0534b41ab8a11f82cd8b9d, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3622,10 +3627,10 @@ RectTransform:
   m_Father: {fileID: 139553822142002594}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.17501, y: -29.4}
-  m_SizeDelta: {x: 326.1, y: 74.2}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: -104.16998, y: 64.999985}
+  m_SizeDelta: {x: 326.1, y: 86.32}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &139553823130876575
 MonoBehaviour:

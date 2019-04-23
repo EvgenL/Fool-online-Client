@@ -102,7 +102,7 @@ namespace Fool_online.Scripts.Manager
             // get card value from the held card
             int heldCardValue = heldCard.GetCardValue();
             // find at least one card on table with same value
-            if (!GetAllCardsOnTable().Any(card => card.GetCardValue() == heldCardValue))
+            if (!GetAllCardsOnTable().Any(card => card.Value == heldCardValue)) //bug: can add carn not on your turn
             {
                 // say 'Cant add this card to table'
                 MessageManager.Instance.ShowFullScreenText("Эту карту нельзя подкинуть");

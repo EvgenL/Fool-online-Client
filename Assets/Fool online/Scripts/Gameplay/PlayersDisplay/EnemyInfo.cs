@@ -81,6 +81,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
             var cardGo = Instantiate(CardBackPrefab, HandContainer);
             var cardRootScript = cardGo.GetComponent<CardRoot>();
             cardRootScript.InitGraphics("BACK");
+            cardRootScript.InteractionDisable();
             AddCardToHand(cardRootScript);
             cardsN++;
             return cardRootScript;
@@ -89,8 +90,8 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         private void AddCardToHand(CardRoot cardRootScript)
         {
             CardsInHand.Add(cardRootScript);
-            //enable interaction
-            cardRootScript.InteractionEnable();
+            //disable interaction
+            cardRootScript.InteractionDisable();
             cardsN++;
         }
 

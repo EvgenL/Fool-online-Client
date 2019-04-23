@@ -18,9 +18,8 @@ namespace Fool_online.Scripts.Manager
         public static MessageManager Instance;
 
 
-        [Header("References to text")]
-        [SerializeField] private TextMeshProUGUI _textMeshText;
-        [SerializeField] private GameObject _textContainer;
+        [Header("Reference to text object")]
+        [SerializeField] private Text _text;
 
 
         [Header("Center of the screen where status icons will be spawned")]
@@ -54,15 +53,15 @@ namespace Fool_online.Scripts.Manager
         public void ShowFullScreenText(string message)
         {
             Debug.Log(message + ". \n" + StackTraceUtility.ExtractStackTrace());
-            _textMeshText.text = message;
-            _textContainer.SetActive(true);
+            _text.text = message;
+            _text.gameObject.SetActive(true);
             CancelInvoke(nameof(Hide));
             Invoke(nameof(Hide), 3f);
         }
 
         private void Hide()
         {
-            _textContainer.SetActive(false);
+            _text.gameObject.SetActive(false);
         }
 
 

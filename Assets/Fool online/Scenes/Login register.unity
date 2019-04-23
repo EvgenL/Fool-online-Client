@@ -8227,7 +8227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _accountsServerIp: 51.77.235.237
   _accountsServerPort: 5054
-  _testModeLocalhost: 0
+  _testModeLocalhost: 1
 --- !u!4 &1748260733
 Transform:
   m_ObjectHideFlags: 0

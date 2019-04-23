@@ -103,10 +103,15 @@ namespace Fool_online.Scripts.Manager
 
         public override void OnDisconnectedFromGameServer(string reason = null)
         {
+            // TODO: Split to two different methods:
+            // 1) On reconnect recursion started
+            // 2) On force disconnected (OnKicked)
+            /*
             if (SceneManager.GetActiveScene() != SceneManager.GetSceneByName(_sceneOnDisconnected))
             {
                 SceneManager.LoadScene(_sceneOnDisconnected);
             }
+            */
         }
 
         public override void OnSendError()

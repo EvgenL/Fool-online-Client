@@ -7,16 +7,14 @@ namespace Fool_online.Scripts.UiScripts.LoginRegister
     /// <summary>
     /// Class that opens scene NextScene on succesful connect to game server
     /// </summary>
-    public class OnAuthorizedLoadScene : MonoBehaviourFoolObserver
+    public class OnAuthorizedOk_LoadScene : MonoBehaviourFoolObserver
     {
         public string NextScene = "";
 
-        public override void OnAuthorizedOk(long cid)
+        public override void OnAuthorizedOk(long connectionId)
         {
             Debug.Log("Loading next scene");
             SceneManager.LoadScene(NextScene);
-            this.enabled = false;
         }
-
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Assets.Fool_online.Scripts.FoolNetworkScripts;
+using Assets.Fool_online.Scripts.FoolNetworkScripts.GameServer;
 using Fool_online.Plugins;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using UnityEngine;
@@ -11,8 +13,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts
     /// </summary>
     public class FoolWebClient : FoolObservable
     {
-        //public static string ClientVersion = "1.2"; //todo implement version check
-
         private static FoolWebClient _instance;
 
         public static FoolWebClient Instance
@@ -27,56 +27,44 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
         }
 
-        private string LastIp;
-        private int LastPort;
+        private static string LastIp;
+        private static int LastPort;
 
-        private string myToken;
+        private static string myToken;
 
-        public bool IsConnected = false;
-        public bool IsConnectingToGameServer = false;
+        public static bool IsConnected = false;
+        public static bool IsConnectingToGameServer = false;
 
         /// <summary>
         /// Sometimes we recieve more than 1 message per frame. We buffer all the recieved messages
         /// and process them later on in Update()
         /// </summary>
-        private readonly Queue<byte[]> bufferedRecievedMessages = new Queue<byte[]>();
+        private static readonly Queue<byte[]> bufferedRecievedMessages = new Queue<byte[]>();
 
 
-        private WebSocket mySocket;
+        private static WebSocket mySocket;
 
-
-        public void Start(string ip, int port, string authToken)
+        /// <summary>
+        /// Initialize conenction between game server and client
+        /// </summary>
+        public static void ConnectToGameServer(string ip, int port, string authToken)
         {
+            if (IsConnectingToGameServer)
+            {
+                Debug.LogWarning("Trying to connect while already connecting. Aborting.");
+                return;
+            }
+
             //Observable
             OnTryingConnectToGameServer();
-
-            myToken = authToken;
-
+            
             //Create a connection
-            ConnectToGameServer(ip, port);
-        }
-
-        /// <summary>
-        /// This shuold be called on unity update callback used to handle data only from main thread
-        /// </summary>
-        public void Update()
-        {
-
-            while (bufferedRecievedMessages.Count > 0)
-            {
-                ClientHandlePackets.HandleData(bufferedRecievedMessages.Dequeue());
-            }
-        }
-
-        /// <summary>
-        /// Connects this player to game server
-        /// </summary>
-        public void ConnectToGameServer(string serverIp, int serverPort)
-        {
             IsConnectingToGameServer = true;
 
-            LastIp = serverIp;
-            LastPort = serverPort;
+            // buffer connection data
+            LastIp = ip;
+            LastPort = port;
+            myToken = authToken;
 
             //if player socket exist
             if (mySocket != null)
@@ -84,16 +72,17 @@ namespace Fool_online.Scripts.FoolNetworkScripts
                 //don't do anything if it's already connecter
                 if (IsConnected)
                 {
-                    throw new Exception("Error: Trying to connect while already connecting.");
+                    throw new Exception("Error: Trying to connect while already connected.");
                 }
 
+                throw new Exception("Socket exists but not connected. This should not happen");
                 //Else if it wasn't connected then destroy connection
                 Disconnect();
                 return;
             }
 
             //Create and set up a new socket
-            mySocket = WebSocketFactory.CreateInstance("ws://" + serverIp + ":" + serverPort);
+            mySocket = WebSocketFactory.CreateInstance("ws://" + ip + ":" + port);
 
             //Init callbacks
             mySocket.OnOpen += OnOpen;
@@ -101,12 +90,36 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             mySocket.OnError += OnError;
             mySocket.OnClose += OnClose;
 
+            // connect
             mySocket.Connect();
         }
 
-        private void OnOpen()
+        /// <summary>
+        /// Connect using last succesfull ip end point
+        /// </summary>
+        public static void ReconnectToGameServer()
         {
-            OnConnectedToGameServer();
+            ConnectToGameServer(LastIp, LastPort, myToken);
+        }
+
+        /// <summary>
+        /// This shuold be called on unity update callback used to handle data only from main thread
+        /// </summary>
+        public void Update()
+        {
+            while (bufferedRecievedMessages.Count > 0)
+            {
+                ClientHandlePackets.HandleData(bufferedRecievedMessages.Dequeue());
+            }
+        }
+        
+        private static void OnOpen()
+        {
+            // Notify ConnectionWatchdog that connection is ok
+            ConnectionWatchdog.OnOpen();
+
+            // observable
+            FoolObservable.OnConnectedToGameServer();
 
             IsConnectingToGameServer = false;
             IsConnected = true;
@@ -115,21 +128,23 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             ClientSendPackets.Send_Authorize(myToken);
         }
 
-        private void OnMessage(byte[] data)
+        private static void OnMessage(byte[] data)
         {
             //Buffer this message 
             bufferedRecievedMessages.Enqueue(data);
         }
 
-        private void OnError(string errormsg)
+        private static void OnError(string errormsg)
         {
-            //throw new Exception(errormsg);
+            Debug.LogWarning("OnError: " + errormsg);
         }
 
-        private void OnClose(WebSocketCloseCode closecode)
+        private static void OnClose(WebSocketCloseCode closecode)
         {
             Disconnect(closecode.ToString());
 
+            // Notify ConnectionWatchdog that connection was lost
+            ConnectionWatchdog.OnClose(closecode);
         }
 
         /// <summary>
@@ -138,31 +153,43 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <param name="data">data to write to server</param>
         public static void WriteToServer(byte[] data)
         {
-            if (Instance.mySocket != null)
+            if (IsConnected && mySocket != null)
             {
-                Instance.mySocket.Send(data);
+                mySocket.Send(data);
             }
             else
             {
-                throw new Exception("Error: Trying send data to server but not connected");
+                // observable
+                FoolObservable.OnSendError();
+                UnityEngine.Debug.LogWarning("Can't send data to server: Not connected.");
+
+                FoolNetwork.Reconnect();
             }
         }
 
-        public void Disconnect(string disconnectReason = null)
+        public static void Disconnect(string disconnectReason = null)
         {
             Debug.Log("Disconnected. " + disconnectReason);
             if (mySocket != null)
             {
+                // close socket if was open
+                // (true if Disconnect() called by user's will)
+                // (false if connection was suddenly lost)
+                if (mySocket.GetState() == WebSocketState.Open)
+                {
+                    mySocket.Close(WebSocketCloseCode.Normal);
+                }
+
                 mySocket = null;
                 IsConnected = false;
                 IsConnectingToGameServer = false;
 
                 //Observable
-                OnDisconnectedFromGameServer(disconnectReason);
+                FoolObservable.OnDisconnectedFromGameServer(disconnectReason); //вызывает исключение
             }
         }
 
-        public string GetConnectedEndPoint()
+        public static string GetConnectedEndPoint()
         {
             if (!IsConnected)
             {

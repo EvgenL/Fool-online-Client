@@ -71,8 +71,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
 
         public static void OnAuthorizedOk(long connectionId)
         {
-            FoolNetwork.LocalPlayer.Authorized = true;
-
             foreach (var obs in _observers)
             {
                 obs.OnAuthorizedOk(connectionId);
@@ -104,6 +102,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         {
             //Set player status to inRoom
             FoolNetwork.DisconnectReasonText = reason;
+
 
             foreach (var obs in _observers)
             {

@@ -181,6 +181,8 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer
             Debug.Log("Accounts server connection closed:\n" + closecode);
             mySocket = null;
             IsConnected = false;
+            IsConnecting = false;
+            _bufferedMessages.Clear();
         }
 
     }

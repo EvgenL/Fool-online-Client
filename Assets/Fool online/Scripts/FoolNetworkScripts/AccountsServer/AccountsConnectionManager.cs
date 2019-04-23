@@ -16,6 +16,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
     /// <summary>
     /// Connects to accounts server.
     /// Checks version and initializes AccountsTransport
+    /// TODO mostly not used for now. Functions handled by AccountsTransport class
     /// </summary>
     public class AccountsConnectionManager : MonoBehaviour
     {
@@ -71,7 +72,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             //StartCoroutine(//todo CheckVersion(LoginServerIp, LoginServerPort));
         }
 
-
+        /*
 
                 /// <summary>
         /// Connects to server then dends XML data
@@ -156,5 +157,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             Debug.Log("Accounts server connection closed:\n" + closecode, this);
             mySocket = null;
         }
+        
+             */
     }
 }

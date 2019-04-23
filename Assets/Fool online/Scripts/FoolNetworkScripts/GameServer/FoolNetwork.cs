@@ -1,4 +1,5 @@
 ﻿using Fool_online.Scripts.Manager;
+using UnityEngine;
 
 namespace Fool_online.Scripts.FoolNetworkScripts
 {
@@ -31,7 +32,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <summary>
         /// Gets info of server to which we did connected
         /// </summary>
-        public static string ServerInfo => FoolWebClient.Instance.GetConnectedEndPoint(); 
+        public static string ServerInfo => FoolWebClient.GetConnectedEndPoint(); 
 
         public enum ConnectionState
         {
@@ -41,7 +42,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             //TODO states
             //SearchingForRoom,
             //JoiningRoom,
-            //ConnectedInRoom
+            //InRoom
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
                     return ConnectionState.Connected;
                 }
 
-                if (client != null && client.IsConnectingToGameServer)
+                if (client != null && FoolWebClient.IsConnectingToGameServer)
                 {
                     return ConnectionState.ConnectingGameServer;
                 }
@@ -66,15 +67,19 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             }
         }
 
+        /// <summary>
+        /// Should be tied to unity's update function and called every frame
+        /// Used to synchronise with uinity main thread
+        /// </summary>
         public static void Update()
         {
-            if (client != null && client.IsConnected)
+            if (client != null && FoolWebClient.IsConnected)
             {
                 client.Update();
             }
         }
 
-        public static bool IsConnected => (client != null && FoolWebClient.Instance.IsConnected);
+        public static bool IsConnected => (client != null && FoolWebClient.IsConnected);
 
         private static FoolWebClient client;
 
@@ -83,8 +88,24 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// </summary>
         public static void ConnectToGameServer(string ip, int port, string authToken)
         {
-            FoolWebClient.Instance.Start(ip, port, authToken);
+            FoolWebClient.ConnectToGameServer(ip, port, authToken);
             client = FoolWebClient.Instance;
+        }
+
+        /// <summary>
+        /// Tries to reconnect if connection was lost
+        /// </summary>
+        public static void Reconnect()
+        {
+            Debug.Log("Trying to reconnect...");
+
+            if (FoolWebClient.IsConnected)
+            {
+                Debug.Log("Already connected!");
+                return;
+            }
+
+            FoolWebClient.ReconnectToGameServer();
         }
 
         /// <summary>
@@ -92,7 +113,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// </summary>
         public static void Disconnect(string reason = null)
         {
-            FoolWebClient.Instance.Disconnect(reason);
+            FoolWebClient.Disconnect(reason);
         }
 
         /// <summary>

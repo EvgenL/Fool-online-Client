@@ -38,16 +38,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <param name="data">bytes to send</param>
         private static void SendDataToServer(byte[] data)
         {
-            if (FoolWebClient.Instance == null || !FoolWebClient.Instance.IsConnected)
-            {
-                //FoolObservable.OnDisconnectedFromGameServer("Ошибка при отправке сообщения на сервер.");
-                FoolObservable.OnSendError();
-                UnityEngine.Debug.LogWarning("Can't send data to server: Not connected.");
-            }
-
+            // Add data length at the beginning and send
             ByteBuffer buffer = new ByteBuffer();
             buffer.WriteLong(data.Length);
             buffer.WriteBytes(data);
+
             FoolWebClient.WriteToServer(buffer.ToArray());
         }
 

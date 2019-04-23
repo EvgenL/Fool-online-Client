@@ -229,6 +229,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             //Invoke callback on observers
 
+            FoolNetwork.LocalPlayer.Authorized = true;
             FoolObservable.OnAuthorizedOk(connectionId);
 
         }
