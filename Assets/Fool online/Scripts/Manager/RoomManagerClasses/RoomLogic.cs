@@ -31,7 +31,9 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
         ///////////////////////////////////////////////
         // WEB CALLBACKS
         ///////////////////////////////////////////////
-        
+
+        #region WEB CALLBACKS
+
         /// <summary>
         /// Observer callback
         /// When all cards are beaten and all players are passed except defender
@@ -103,7 +105,8 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
 
             if (cardOnTable == null)
             {
-                Debug.LogWarning("Trying to cover non existing card: " + cardOnTableCode + " by " + cardDroppedCode, this);
+                Debug.LogWarning("Trying to cover non existing card: " + cardOnTableCode + " by " + cardDroppedCode,
+                    this);
                 return;
             }
 
@@ -158,7 +161,7 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
                 WaitForNextTurn();
             }
         }
-        
+
         /// <summary>
         /// Somebody clicked 'ready' button
         /// if all players are ready then wait for game to start
@@ -171,7 +174,8 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
         /// <summary>
         /// Called every next turn
         /// </summary>
-        public override void OnNextTurn(long whoseTurnPlayerId, int slotN, long defendingPlayerId, int defSlotN, int turnN)
+        public override void OnNextTurn(long whoseTurnPlayerId, int slotN, long defendingPlayerId, int defSlotN,
+            int turnN)
         {
             //hide infos
             AnimateHidePassButton();
@@ -242,14 +246,16 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
             EndGame();
         }
 
-
-
+        // WEB CALLBACKS
+        #endregion
 
 
         ///////////////////////////////////////////////
         // OTHER CALLBACKS
         // (mainly called by InputManager)
         ///////////////////////////////////////////////
+
+        #region OTHER CALLBACKS
 
         /// <summary>
         /// Called by InputManager when i click 'ready'
@@ -294,6 +300,7 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
             {
                 MeAddCardToTable(heldCard);
             }
+
             // else if i am not attacking nor defenfing and cant add cards
             // then wait till attacker passes priority
         }
@@ -362,6 +369,10 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
             }
         }
 
+        // OTHER CALLBACKS
+        #endregion
+
+        // OBSERVER CALLBACKS
         #endregion
 
 
