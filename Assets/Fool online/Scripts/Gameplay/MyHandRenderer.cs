@@ -10,6 +10,15 @@ namespace Fool_online.Scripts.InRoom
     {
         [SerializeField] private GameObject _cardPrefab;
         [SerializeField] private Transform _talonTransform;
+        [SerializeField] private bool _debugDontClearHandOnAwake;
+
+        private void Awake()
+        {
+            if (!_debugDontClearHandOnAwake)
+            {
+                ClearHand();
+            }
+        }
 
         public List<CardRoot> CardsInHand = new List<CardRoot>();
 

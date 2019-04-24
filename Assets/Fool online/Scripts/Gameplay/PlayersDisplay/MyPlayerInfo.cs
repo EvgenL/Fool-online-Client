@@ -23,8 +23,6 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         {
             //TODO my nickname
             NicknameText.text = FoolNetwork.LocalPlayer.Nickname + " (вы)";
-
-            _myHand.ClearHand();
         }
 
         public void OnEndTurnButtonClick()

@@ -1,4 +1,5 @@
-﻿using DOTween.Modules;
+﻿using DG.Tweening;
+using DOTween.Modules;
 using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,11 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
         [SerializeField] private Color CanBeTargetedCardColor;
         [SerializeField] private Color TargetedCardColor;
 
+        [Header("Animation: hover")]
+        [SerializeField] public float CardMoveUpOnHover = 50f;
+        [SerializeField] private Ease _hoverAnimationEase = Ease.InSine;
+        [SerializeField] private float _animationDuration = 0.25f;
+
 
         public enum CardAnimationState
         {
@@ -34,24 +40,22 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
         private Vector3 targetPos;
         private Quaternion targetRot;
         private Vector3 targetScale;
-        private CardRoot cardRoot;
+        private CardRoot _cardRoot;
 
         public float LerpSpeed = 15f;
         private const float SNAP_DISTANCE = 2f;
         private const float SNAP_ANGLE = 0.5f;
-        public float CardMoveUpOnHover = 50f;
 
         public bool CanBeDragged = true;
         private static bool _mouseBusy = false;
-        private bool _isDragged = false;
+        public bool IsDragged { get; private set; }
         private bool _zoom = false;
         private Image _cardImage;
         private Outline _outline;
-        private static float _animationDuration = 0.25f;
 
         private void Awake()
         {
-            cardRoot = transform.parent.GetComponent<CardRoot>();
+            _cardRoot = transform.parent.GetComponent<CardRoot>();
             _cardImage = GetComponent<Image>();
             _outline = GetComponent<Outline>();
 
@@ -60,54 +64,48 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
             targetScale = transform.localScale;
         }
 
-        public void OnBeginDrag()
+        /// <summary>
+        /// Called from CardHoverInputzone
+        /// </summary>
+        public void BeginDrag()
         {
             if (!_mouseBusy && CanBeDragged)
             {
-                _isDragged = true;
+                IsDragged = true;
                 _mouseBusy = true;
                 AnimationState = CardAnimationState.Dragged;
                 ShowAboveUi();
             }
         }
 
-        public void OnUpdateDrag()
+        /// <summary>
+        /// Called from CardHoverInputzone
+        /// </summary>
+        public void UpdateDrag()
         {
-            InputManager.Instance.DraggedCardUpdate(Input.mousePosition, cardRoot);
+            InputManager.Instance.DraggedCardUpdate(Input.mousePosition, _cardRoot);
         }
 
-        public void OnEndDrag()
+        /// <summary>
+        /// Called from CardHoverInputzone
+        /// </summary>
+        public void EndDrag()
         {
             if (CanBeDragged)
             {
                 _mouseBusy = false;
-                _isDragged = false;
+                IsDragged = false;
                 AnimationState = CardAnimationState.MovingToRoot;
-                UnZoom();
                 ShowInUi();
-                InputManager.Instance.DraggedCardDrop(Input.mousePosition, cardRoot);
+                InputManager.Instance.DraggedCardDrop(Input.mousePosition, _cardRoot);
             }
         }
 
-        public void OnPointerEnter()
-        {
-            Zoom();
-        }
-        public void OnPointerExit()
-        {
-            UnZoom();
-        }
-        public void OnPointerDown()
-        {
-            Zoom();
-        }
-        public void OnPointerUp()
-        {
-            UnZoom();
-        }
 
         private void Update()
         {
+            // If any card got grabbed by mouse then every other card gets un-zoomed
+            // (the _mouseBusy is static)
             if (_mouseBusy)
             {
                 _zoom = false;
@@ -115,9 +113,9 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
 
             if (AnimationState == CardAnimationState.MovingToRoot)
             {
-                targetPos = cardRoot.transform.position;
-                targetRot = cardRoot.transform.rotation;
-                targetScale = cardRoot.transform.localScale;
+                targetPos = _cardRoot.transform.position;
+                targetRot = _cardRoot.transform.rotation;
+                targetScale = _cardRoot.transform.localScale;
                 /*
                 //Lerp LOCAL transform values to root
                 transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, LerpSpeed * Time.deltaTime);
@@ -146,28 +144,13 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
                 targetPos = (Input.mousePosition);
                 targetRot = Quaternion.identity;
                 targetScale = Vector3.one;
-                
+
                 //Lerp WORLD transform values to mouse
-                transform.position = targetPos;
+                //transform.position = targetPos;
+                transform.position = Vector3.Lerp(transform.position, targetPos, LerpSpeed * Time.deltaTime);
                 transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime);
                 transform.localScale = Vector3.Lerp(transform.localScale, targetScale, LerpSpeed * Time.deltaTime);
 
-            }
-            else if (AnimationState == CardAnimationState.Idle)
-            {
-                if (CanBeDragged)
-                {
-                    //Zoom unzoom
-                    if (_zoom)
-                    {
-                        targetPos = transform.parent.position + transform.parent.up * CardMoveUpOnHover;
-                    }
-                    else
-                    {
-                        targetPos = transform.parent.position;
-                    }
-                    transform.position = Vector3.Lerp(transform.position, targetPos, LerpSpeed * Time.deltaTime);
-                }
             }
 
         }
@@ -189,7 +172,8 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
 
         private void ShowInUi()
         {
-            transform.SetParent(cardRoot.transform, true); //Sets parent of this object to Canvas to show above up everything
+            transform.SetParent(_cardRoot.transform, true); //Sets parent of this object to Canvas to show above up everything
+            transform.SetAsFirstSibling();
         }
 
         public void AnimateMoveToRootFrom(Vector3 startPosition)
@@ -210,9 +194,9 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
             transform.localScale = startScale;
 
             //Set target
-            targetPos = cardRoot.transform.position;
-            targetRot = cardRoot.transform.rotation;
-            targetScale = cardRoot.transform.localScale;
+            targetPos = _cardRoot.transform.position;
+            targetRot = _cardRoot.transform.rotation;
+            targetScale = _cardRoot.transform.localScale;
 
             AnimationState = CardAnimationState.MovingToRoot;
         }
@@ -225,23 +209,32 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
             transform.localScale = startScale;
 
             //Set target
-            targetPos = cardRoot.transform.position;
-            targetRot = cardRoot.transform.rotation;
-            targetScale = cardRoot.transform.localScale;
+            targetPos = _cardRoot.transform.position;
+            targetRot = _cardRoot.transform.rotation;
+            targetScale = _cardRoot.transform.localScale;
 
             AnimationState = CardAnimationState.MovingToRoot;
         }
 
-        private void Zoom()
+        public void Zoom()
         {
-            if (!_mouseBusy)
+            if (!_mouseBusy && !_zoom)
+            {
+                Vector3 targetPos = transform.parent.position + transform.parent.up * CardMoveUpOnHover;
+                transform.DOMove(targetPos, _animationDuration).SetEase(_hoverAnimationEase);
+             //   transform.parent.position + transform.parent.up * CardMoveUpOnHover;
                 _zoom = true;
+            }
 
         }
-        private void UnZoom()
+        public void UnZoom()
         {
-            if (!_mouseBusy)
+            if (!_mouseBusy && _zoom)
+            {
+                Vector3 targetPos = transform.parent.position;
+                transform.DOMove(targetPos, _animationDuration).SetEase(_hoverAnimationEase);
                 _zoom = false;
+            }
         }
 
         public void AnimateIdle()
