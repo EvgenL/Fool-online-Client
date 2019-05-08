@@ -23,6 +23,8 @@ public class EmailRegisterContainer : MonoBehaviour
     [SerializeField] private Text ErrorTextEmail;
     [SerializeField] private Text ErrorTextPassword;
 
+    [Header("Login Manager to send login data to server")]
+    [SerializeField] private LoginManager _loginManager;
 
     public void OnSubmit()
     {
@@ -78,8 +80,7 @@ public class EmailRegisterContainer : MonoBehaviour
 
         if (!errorFlag)
         {
-            string sha1password = AccountsUtil.GetSha1(password);
-            AccountPackets.SendEmailRegistration(nickname, email, sha1password);
+            _loginManager.RegisterEmail(nickname,email, password);
         }
     }
 

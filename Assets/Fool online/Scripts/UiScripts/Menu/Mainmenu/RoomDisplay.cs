@@ -26,6 +26,7 @@ namespace Fool_online.Ui.Mainmenu
             _maxPlayers.text = $"{room.ConnectedPlayersN}/{room.MaxPlayers}";
             _deckSize.text = room.DeckSize.ToString();
 
+
             //csv from an array of strings
             string playerNames = room.PlayerNames.Aggregate((a, b) => a + ", " + b);
             _playerNames.text = playerNames;

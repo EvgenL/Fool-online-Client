@@ -1,5 +1,6 @@
 ﻿using Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer;
 using Fool_online.Scripts.FoolNetworkScripts.AccountsServer.Packets;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,14 @@ public class EmailLoginContainer : MonoBehaviour
     [SerializeField] private Text ErrorTextEmail;
     [SerializeField] private Text ErrorTextPassword;
 
+    [Header("Login Manager to send login data to server")]
+    [SerializeField] private LoginManager _loginManager;
+
+    private void Awake()
+    {
+        // Get email if was saved
+        Email.text = PlayerPrefs.GetString("Email", "");
+    }
 
     public void OnSubmit()
     {
@@ -43,10 +52,13 @@ public class EmailLoginContainer : MonoBehaviour
             errorFlag = true;
         }
 
+
+        // if everything went okay
         if (!errorFlag)
         {
-            string sha1password = AccountsUtil.GetSha1(password);
-            AccountPackets.SendEmailLogin(email, sha1password);
+            _loginManager.LoginEmail(Email.text, Password.text);
         }
     }
+
+    
 }

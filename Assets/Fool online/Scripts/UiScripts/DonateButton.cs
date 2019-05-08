@@ -4,15 +4,7 @@ using UnityEngine;
 
 public class DonateButton : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private string _donateUrl = "http://37.112.157.245/payment/?user_id=123&sum=220";
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

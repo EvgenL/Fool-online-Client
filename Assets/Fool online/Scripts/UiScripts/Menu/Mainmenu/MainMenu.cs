@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Fool_online.Ui.Mainmenu
@@ -14,7 +15,9 @@ namespace Fool_online.Ui.Mainmenu
         [SerializeField] private Transform _createRoomContainer;
         [SerializeField] private Transform _openRoomsListContainer;
 
-        
+
+        private static int _lastPage = 0;
+
         private Transform[] _containers;
 
         private void Awake()
@@ -26,17 +29,32 @@ namespace Fool_online.Ui.Mainmenu
             containersList.Add(_openRoomsListContainer);
 
             _containers = containersList.ToArray();
+
+            OpenPage(_lastPage);
+        }
+
+        private void OpenPage(int pageNumber)
+        {
+            OpenPage(_containers[pageNumber]);
         }
 
         private void OpenPage(Transform pageToOpen)
         {
-            foreach (var container in _containers)
+            for (int i = 0; i < _containers.Length; i++)
             {
-               container.gameObject.SetActive(false);
+                if (_containers[i] == pageToOpen)
+                {
+                    _containers[i].gameObject.SetActive(true);
+                    _lastPage = i;
+                }
+                else
+                {
+                    _containers[i].gameObject.SetActive(false);
+                }
             }
-
-            pageToOpen.gameObject.SetActive(true);
         }
+
+    
 
 
         #region Buttons

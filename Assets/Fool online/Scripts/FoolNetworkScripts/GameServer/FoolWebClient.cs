@@ -153,7 +153,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <param name="data">data to write to server</param>
         public static void WriteToServer(byte[] data)
         {
-            if (IsConnected && mySocket != null)
+            if (IsConnected)// && mySocket != null)
             {
                 mySocket.Send(data);
             }
