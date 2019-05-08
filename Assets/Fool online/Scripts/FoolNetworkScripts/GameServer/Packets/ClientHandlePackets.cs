@@ -53,7 +53,10 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             Beaten,
             DefenderPicksCards,
             EndGameFool,
-            PlayerWon
+            PlayerWon,
+
+            // ACCOUNT
+            UpdateMoney
         }
 
 
@@ -109,6 +112,10 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             _packets.Add((long)SevrerPacketId.DefenderPicksCards, Packet_DefenderPicksCards);
             _packets.Add((long)SevrerPacketId.EndGameFool, Packet_EndGameFool); 
             _packets.Add((long)SevrerPacketId.PlayerWon, Packet_PlayerWon);
+
+            _packets.Add((long)SevrerPacketId.UpdateMoney, Packet_UpdateMoney);
+
+            
 
         }
 
@@ -851,6 +858,23 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             //Invoke callback on observers
             FoolObservable.OnPlayerWon(wonPlayerId, reward);
         }
-        
+
+        private static void Packet_UpdateMoney(byte[] data)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+
+            //Skip packetId
+            buffer.ReadLong();
+
+            double money = buffer.ReadDouble();
+            double frozenMoney = buffer.ReadDouble();
+
+            Debug.Log("Packet_UpdateMoney money="+ money + ", frozenMoney="+ frozenMoney);
+
+            //Invoke callback on observers
+            //todo FoolObservable.UpdateMoney(money, frozenMoney);
+        }
+
     }
 }
