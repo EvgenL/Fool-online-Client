@@ -29,6 +29,9 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             DropCardOnTable,
             Pass,
             CoverCardOnTable,
+
+            // ACCOUNT
+            WithdrawFunds,
         }
 
 
@@ -182,6 +185,19 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             buffer.WriteString(cardCodeOnTable);
             //write card dropped
             buffer.WriteString(cardCodeDropped);
+
+            SendDataToServer(buffer.ToArray());
+        }
+
+        public static void Send_WithdrawFunds(float sum)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+
+            //Write packet id
+            buffer.WriteLong((long)ClientPacketId.WithdrawFunds);
+
+            // withdraw sum
+            buffer.WriteFloat(sum);
 
             SendDataToServer(buffer.ToArray());
         }

@@ -2773,7 +2773,6 @@ MonoBehaviour:
   Password: {fileID: 217949471}
   ErrorTextEmail: {fileID: 1702880223}
   ErrorTextPassword: {fileID: 2092802365}
-  _loginManager: {fileID: 0}
 --- !u!114 &410210139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4457,6 +4456,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615431249480648391, guid: f28a4c746387eb447bd6497575a679a8,
+        type: 3}
+      propertyPath: _sceneOnAuthorized
+      value: Payments test
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035052136439303059, guid: f28a4c746387eb447bd6497575a679a8,
+        type: 3}
+      propertyPath: _accountsServerIp
+      value: 127.0.0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6035052136439303059, guid: f28a4c746387eb447bd6497575a679a8,
+        type: 3}
+      propertyPath: _testModeLocalhost
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f28a4c746387eb447bd6497575a679a8, type: 3}
@@ -6402,7 +6416,6 @@ MonoBehaviour:
   ErrorTextNickname: {fileID: 336714634}
   ErrorTextEmail: {fileID: 70460374}
   ErrorTextPassword: {fileID: 1527341398}
-  _loginManager: {fileID: 0}
 --- !u!114 &1205986855
 MonoBehaviour:
   m_ObjectHideFlags: 0
