@@ -17,6 +17,7 @@ public class LoginMenuManager : MonoBehaviour
     [Header("Show page by number on awake. Do nothing if = -1")]
     [SerializeField] private int _showOnAwake = -1;
 
+
     private void Awake()
     {
         _containers = new GameObject[] { ContainerSelectLoginMethod, ContainerAnonLogin, ContainerEmailLogin, ContainerEmailRegister };

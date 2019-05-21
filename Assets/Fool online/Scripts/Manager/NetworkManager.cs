@@ -44,19 +44,6 @@ namespace Fool_online.Scripts.Manager
         [SerializeField] private string _sceneOnDisconnected = "On disconnected";
         [Header("Scene name for game")]
         [SerializeField] private string _sceneGameplay = "Gameplay";
-        [Header("Scene name for logging in")]
-        [SerializeField] private string _sceneLogin = "Login register";
-        [Header("Open SceneOnDisconnected on awake")]
-        [SerializeField] private bool _awakeOpenOnDisconnected;
-
-        private void Start()
-        {
-            if (_awakeOpenOnDisconnected &&
-                SceneManager.GetActiveScene() != SceneManager.GetSceneByName(_sceneLogin))
-            {
-                SceneManager.LoadScene(_sceneLogin);
-            }
-        }
 
         /// <summary>
         /// Connects to server. Called in scene 'Connecting to server.scene'
@@ -91,14 +78,19 @@ namespace Fool_online.Scripts.Manager
             {
                 FoolNetwork.LeaveRoom();
             }
-            FoolNetwork.Disconnect();
+            FoolNetwork.Disconnect("On Application Quit");
         }
 
         #region Observer callbacks
 
         public override void OnAuthorizedOk(long connectionId)
         {
-            SceneManager.LoadScene(_sceneOnAuthorized);
+            // open scene if not opened
+            if (SceneManager.GetActiveScene().name != _sceneOnAuthorized)
+            {
+                Debug.Log("Loading onAuthScene");
+                SceneManager.LoadScene(_sceneOnAuthorized);
+            }
         }
 
         public override void OnDisconnectedFromGameServer(string reason = null)

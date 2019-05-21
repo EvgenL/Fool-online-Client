@@ -20,7 +20,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             RefreshRoomList,
             JoinRoom,
             JoinRandom,
-            GiveUp,
+            GiveUp, // todo not used
             LeaveRoom,
             GetReady,
             GetNotReady,
@@ -122,15 +122,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         }
 
         /// <summary>
-        /// I want to give up a game
-        /// </summary>
-        public static void Send_GiveUp()
-        {
-            SendOnlyPacketId(ClientPacketId.GiveUp);
-        }
-
-        /// <summary>
-        /// I want to give up a game
+        /// I want to leave or give up a game
         /// </summary>
         public static void Send_LeaveRoom()
         {

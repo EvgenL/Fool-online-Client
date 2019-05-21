@@ -68,13 +68,11 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts.GameServer
         /// </summary>
         private static void Reconnect()
         {
-
             Debug.Log($"Trying to reconnect. Tries left: {_reconnectTriesLeft}/{RECONNECT_TRIES}");
 
             _reconnectTriesLeft--;
 
             FoolWebClient.ReconnectToGameServer();
-
         }
     }
 }

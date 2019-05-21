@@ -14,8 +14,6 @@ public class EmailLoginContainer : MonoBehaviour
     [SerializeField] private Text ErrorTextEmail;
     [SerializeField] private Text ErrorTextPassword;
 
-    [Header("Login Manager to send login data to server")]
-    [SerializeField] private LoginManager _loginManager;
 
     private void Awake()
     {
@@ -32,7 +30,6 @@ public class EmailLoginContainer : MonoBehaviour
         // read form
         string email = Email.text;
         string password = Password.text;
-
 
         bool errorFlag = false;
 
@@ -56,8 +53,8 @@ public class EmailLoginContainer : MonoBehaviour
         // if everything went okay
         if (!errorFlag)
         {
-            _loginManager.LoginEmail(Email.text, Password.text);
-        }
+            LoginManager.Instance.LoginEmail(Email.text, Password.text);
+        } 
     }
 
     

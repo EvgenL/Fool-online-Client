@@ -131,24 +131,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         }
 
         /// <summary>
-        /// Give up a game.
+        /// Give up or leave
         /// </summary>
-        public static void GiveUp()
-        {
-            ClientSendPackets.Send_GiveUp();
-            LocalPlayer.IsInRoom = false;
-        }
-
         public static void LeaveRoom()
         {
-            if (StaticRoomData.IsPlaying)
-            {
-                ClientSendPackets.Send_GiveUp();
-            }
-            else
-            {
-                ClientSendPackets.Send_LeaveRoom();
-            }
+            ClientSendPackets.Send_LeaveRoom();
             LocalPlayer.IsInRoom = false;
         }
 

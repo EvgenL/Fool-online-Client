@@ -10,13 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 8615431249480648390}
   - component: {fileID: 8615431249480648391}
+  - component: {fileID: 6035052136439303059}
   m_Layer: 0
   m_Name: NetworkConnectionManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &8615431249480648390
 Transform:
   m_ObjectHideFlags: 0
@@ -47,4 +48,21 @@ MonoBehaviour:
   _sceneOnAuthorized: Main menu
   _sceneOnDisconnected: On disconnected
   _sceneGameplay: Gameplay
+--- !u!114 &6035052136439303059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8615431249480648385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f98658091c4b2843827fc83b3f38feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RememberMe: 0
+  _accountsServerIp: 51.77.235.237
+  _accountsServerPort: 5054
+  _testModeLocalhost: 0
+  _loginIfRememberMe: 1
   _sceneLogin: Login register

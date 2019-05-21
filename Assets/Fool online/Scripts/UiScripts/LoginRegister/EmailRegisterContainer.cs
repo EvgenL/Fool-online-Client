@@ -22,10 +22,7 @@ public class EmailRegisterContainer : MonoBehaviour
     [SerializeField] private Text ErrorTextNickname;
     [SerializeField] private Text ErrorTextEmail;
     [SerializeField] private Text ErrorTextPassword;
-
-    [Header("Login Manager to send login data to server")]
-    [SerializeField] private LoginManager _loginManager;
-
+    
     public void OnSubmit()
     {
         // disable error messages if was
@@ -80,7 +77,7 @@ public class EmailRegisterContainer : MonoBehaviour
 
         if (!errorFlag)
         {
-            _loginManager.RegisterEmail(nickname,email, password);
+            LoginManager.Instance.RegisterEmail(nickname,email, password);
         }
     }
 
