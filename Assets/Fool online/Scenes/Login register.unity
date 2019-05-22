@@ -4397,11 +4397,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkConnectionManager
       objectReference: {fileID: 0}
-    - target: {fileID: 8615431249480648385, guid: f28a4c746387eb447bd6497575a679a8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8615431249480648390, guid: f28a4c746387eb447bd6497575a679a8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4456,21 +4451,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8615431249480648391, guid: f28a4c746387eb447bd6497575a679a8,
-        type: 3}
-      propertyPath: _sceneOnAuthorized
-      value: Payments test
-      objectReference: {fileID: 0}
-    - target: {fileID: 6035052136439303059, guid: f28a4c746387eb447bd6497575a679a8,
-        type: 3}
-      propertyPath: _accountsServerIp
-      value: 51.77.235.237
-      objectReference: {fileID: 0}
-    - target: {fileID: 6035052136439303059, guid: f28a4c746387eb447bd6497575a679a8,
-        type: 3}
-      propertyPath: _testModeLocalhost
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f28a4c746387eb447bd6497575a679a8, type: 3}

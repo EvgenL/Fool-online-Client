@@ -32,13 +32,13 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer
         /// ip.
         /// Set by SetIpEndpoint method
         /// </summary>
-        public static string AccountsServerIp;
+        private static string _accountsServerIp;
 
         /// <summary>
         /// port.
         /// Set by SetIpEndpoint method
         /// </summary>
-        public static int AccountsServerPort;
+        private static int _accountsServerPort;
 
         /// <summary>
         /// Flag if SetIpEndpoint method was ever called
@@ -53,8 +53,8 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer
         {
             _endPointSet = true;
 
-            AccountsServerIp = ip;
-            AccountsServerPort = port;
+            _accountsServerIp = ip;
+            _accountsServerPort = port;
         }
 
 
@@ -70,7 +70,7 @@ namespace Assets.Fool_online.Scripts.FoolNetworkScripts.AccountsServer
             }
 
             //Create and set up a new socket
-            mySocket = WebSocketFactory.CreateInstance("ws://" + AccountsServerIp + ":" + AccountsServerPort);
+            mySocket = WebSocketFactory.CreateInstance("ws://" + _accountsServerIp + ":" + _accountsServerPort);
 
             // buffer message
             _bufferedMessages.Enqueue(body);

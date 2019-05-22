@@ -63,7 +63,8 @@ public class LoginManager : MonoBehaviourFoolObserver
         //StartCoroutine(//todo CheckVersion(LoginServerIp, LoginServerPort));
 
         // login if remember me
-        if (_loginIfRememberMe && PlayerPrefs.GetString("RememberMe") == "true")
+        RememberMe = PlayerPrefs.GetString("RememberMe") == "true";
+        if (_loginIfRememberMe && RememberMe)
         {
             print("Remember me is set. Logging in with last saved player data.");
 

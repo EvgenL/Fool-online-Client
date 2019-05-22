@@ -198,6 +198,16 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             return LastIp + ":" + LastPort;
         }
-    
+
+        public static string GetIp()
+        {
+            if (!IsConnected)
+            {
+                return "NOT CONNECTED";
+            }
+
+            return LastIp;
+        }
+
     }
 }

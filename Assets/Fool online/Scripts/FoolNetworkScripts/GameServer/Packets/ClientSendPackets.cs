@@ -189,7 +189,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             SendDataToServer(buffer.ToArray());
         }
 
-        public static void Send_WithdrawFunds(float sum)
+        public static void Send_WithdrawFunds(float sum, string requisites)
         {
             ByteBuffer buffer = new ByteBuffer();
 
@@ -198,6 +198,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             // withdraw sum
             buffer.WriteFloat(sum);
+            buffer.WriteString(requisites);
 
             SendDataToServer(buffer.ToArray());
         }

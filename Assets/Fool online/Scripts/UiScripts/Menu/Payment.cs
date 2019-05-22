@@ -6,17 +6,23 @@ using Fool_online.Scripts.FoolNetworkScripts;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Payment : MonoBehaviour {
-    public InputField InputSum, OutputSum;
+public class Payment : MonoBehaviour
+{
+
+    public int PayServerPort = 5056;
+
+    public InputField InputSum, OutputSum, Requisites;
 
     public void Input() {
         string sum     = InputSum.text;
-        string request = $"http://{AccountsTransport.AccountsServerIp}/payment/?user_id={FoolNetwork.LocalPlayer.UserId}&sum={sum}";
+        string request = $"http://{FoolWebClient.GetIp()}:{PayServerPort}/payment/?user_id={FoolNetwork.LocalPlayer.UserId}&sum={sum}";
         Application.OpenURL(request);
     }
 
-    public void Output() {
-        float sum = (float) Convert.ToDouble(OutputSum.text);
-        ClientSendPackets.Send_WithdrawFunds(sum);
+    public void Output()
+    {
+        float sum = (float)Convert.ToDouble(OutputSum.text);
+        string requsites = Requisites.text;
+        ClientSendPackets.Send_WithdrawFunds(sum, requsites);
     }
 }
