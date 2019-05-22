@@ -5,10 +5,16 @@ using UnityEngine.UI;
 
 public class RememberMeToggle : MonoBehaviour
 {
-    public Toggle Toggle;
+    private Toggle _toggle;
 
-    private void Awake()
+    private void Start()
     {
-        Toggle.isOn = PlayerPrefs.GetString("RememberMe") == "true";
+        _toggle = GetComponent<Toggle>();
+        _toggle.isOn = PlayerPrefs.GetString("RememberMe") == "true";
+    }
+
+    public void OnValueChanged(bool value)
+    {
+        LoginManager.Instance.RememberMe = value;
     }
 }

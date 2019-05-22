@@ -4465,7 +4465,7 @@ PrefabInstance:
     - target: {fileID: 6035052136439303059, guid: f28a4c746387eb447bd6497575a679a8,
         type: 3}
       propertyPath: _accountsServerIp
-      value: 127.0.0.1
+      value: 51.77.235.237
       objectReference: {fileID: 0}
     - target: {fileID: 6035052136439303059, guid: f28a4c746387eb447bd6497575a679a8,
         type: 3}
@@ -9365,11 +9365,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 6143366504110370016, guid: ce3b166089958074faada6f154497869,
-        type: 3}
-      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce3b166089958074faada6f154497869, type: 3}
 --- !u!224 &2039539955 stripped
@@ -10917,11 +10912,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6143366504110370016, guid: ce3b166089958074faada6f154497869,
-        type: 3}
-      propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ce3b166089958074faada6f154497869, type: 3}
