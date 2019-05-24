@@ -35,12 +35,13 @@ public class FileSelector : MonoBehaviour
     {
 
 #if UNITY_EDITOR
-        OpenFileEditor();
+        // todo for modile select from gallery
+        OpenFile_UnityEditor();
 #endif
     }
 
 #if UNITY_EDITOR
-    private void OpenFileEditor()
+    private void OpenFile_UnityEditor()
     {
         Texture2D texture = new Texture2D(0, 0);
         string path = EditorUtility.OpenFilePanel("Open file", "", "");
@@ -101,6 +102,7 @@ public class FileSelector : MonoBehaviour
 
     public void OnSendClick()
     {
-        ClientSendPackets.Send_UpdateAvatar(_selectedSpriteBytes);
+        ClientSendPackets.Send_UploadAvatar(_selectedSpriteBytes);
+
     }
 }

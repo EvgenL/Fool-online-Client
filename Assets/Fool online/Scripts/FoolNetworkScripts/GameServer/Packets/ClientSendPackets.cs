@@ -32,7 +32,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             // ACCOUNT
             WithdrawFunds,
-            UpdateAvatar
+            UloadAvatar
         }
 
 
@@ -204,14 +204,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             SendDataToServer(buffer.ToArray());
         }
 
-        public static void Send_UpdateAvatar(byte[] imageBytes)
+        public static void Send_UploadAvatar(byte[] imageBytes)
         {
             ByteBuffer buffer = new ByteBuffer();
 
             //Write packet id
-            buffer.WriteLong((long)ClientPacketId.UpdateAvatar);
+            buffer.WriteLong((long)ClientPacketId.UloadAvatar);
 
-            // withdraw sum
+            // avatar binary data
             buffer.WriteBytes(imageBytes);
 
             SendDataToServer(buffer.ToArray());

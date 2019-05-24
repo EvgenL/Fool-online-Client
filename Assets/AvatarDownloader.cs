@@ -1,33 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AvatarDownloader : MonoBehaviour
+public class AvatarDownloader : MonoBehaviourFoolObserver
 {
-    [Header("Download picture and put in this UI image")]
+    public long AvaratHolderConnectionId;
+    public bool UseMyconnectionId = false;
+
+    [Header("Download avatar and put in this UI image")]
     [SerializeField] private Image _targetImage;
 
-    [SerializeField] private bool _downloalOnAwake = false;
-    [SerializeField] private string _awakeUrl;
 
-    void Awake()
+    public override void OnUpdateUserAvatar(long avatarHolder, string avatarPath)
     {
-        if (_downloalOnAwake)
+
+        if (avatarHolder == AvaratHolderConnectionId
+            || UseMyconnectionId && avatarHolder == FoolNetwork.LocalPlayer.ConnectionId)
         {
-            DownloadPic(_awakeUrl);
-        }   
-    }
-
-
-    public void DownloadPic(string url)
-    {
-        StartCoroutine(DownloadCoroutine(url));
+            StartCoroutine(DownloadCoroutine(avatarPath));
+        }
     }
 
 
     private IEnumerator DownloadCoroutine(string url)
     {
+       
+
         Texture2D texture = new Texture2D(1, 1);
         WWW www = new WWW(url);
         yield return www;

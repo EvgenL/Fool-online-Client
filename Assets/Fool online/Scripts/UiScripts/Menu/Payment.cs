@@ -8,8 +8,7 @@ using UnityEngine.UI;
 
 public class Payment : MonoBehaviour
 {
-
-    public int PayServerPort = 5056;
+    public const int PayServerPort = 5056; // todo recieve from server
 
     public InputField InputSum, OutputSum, Requisites;
 

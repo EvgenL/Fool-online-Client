@@ -488,6 +488,15 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
             }
         }
 
+        public static void UpdateUserAvatar(long avatarHolder, string avatarPath)
+        {
+            foreach (var obs in _observers)
+            {
+                obs.OnUpdateUserAvatar(avatarHolder, avatarPath);
+            }
+        }
+        
+
         #endregion
     }
 }

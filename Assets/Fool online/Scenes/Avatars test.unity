@@ -264,6 +264,7 @@ GameObject:
   - component: {fileID: 163647581}
   - component: {fileID: 163647580}
   - component: {fileID: 163647579}
+  - component: {fileID: 163647582}
   m_Layer: 5
   m_Name: Avatar
   m_TagString: Untagged
@@ -297,14 +298,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163647577}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e57e625cc5927e24ab97a177f585d3f7, type: 3}
+  m_Script: {fileID: 11500000, guid: 215849bfd02c0db41b01b52b1585b0f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AvaratHolderConnectionId: 0
+  UseMyconnectionId: 1
   _targetImage: {fileID: 163647580}
-  _downloalOnAwake: 1
-  _awakeUrl: https://sun2.43222.userapi.com/c635101/v635101853/4611b/cHL9uE5U4T4.jpg
 --- !u!114 &163647580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,6 +343,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163647577}
   m_CullTransparentMesh: 0
+--- !u!114 &163647582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163647577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e57e625cc5927e24ab97a177f585d3f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetImage: {fileID: 163647580}
+  _downloalOnAwake: 1
+  _awakeUrl: 127.0.0.1:80/avatars/33711845.png
 --- !u!1 &224864391
 GameObject:
   m_ObjectHideFlags: 0

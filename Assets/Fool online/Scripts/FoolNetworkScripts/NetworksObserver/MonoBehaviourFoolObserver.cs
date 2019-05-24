@@ -265,6 +265,14 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         {
         }
 
+        /// <summary>
+        /// Recieved When some user's avatar was updated.
+        /// long avatarHolder is connectionId of user who has this avatar
+        /// </summary>
+        public virtual void OnUpdateUserAvatar(long avatarHolder, string avatarPath)
+        {
+        }
         
+
     }
 }

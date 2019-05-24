@@ -57,7 +57,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             PlayerWon,
 
             // ACCOUNT
-            UpdateMoney
+            UpdateMoney,
+            UpdateUserAvatar
         }
 
 
@@ -115,8 +116,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             _packets.Add((long)SevrerPacketId.PlayerWon, Packet_PlayerWon);
 
             _packets.Add((long)SevrerPacketId.UpdateMoney, Packet_UpdateMoney);
-
+            _packets.Add((long)SevrerPacketId.UpdateUserAvatar, Packet_UpdateUserAvatar);
             
+
+
+
 
         }
 
@@ -876,6 +880,26 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             //Invoke callback on observers
             //todo FoolObservable.UpdateMoney(money, frozenMoney);
         }
+
+        private static void Packet_UpdateUserAvatar(byte[] data)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+
+            //Skip packetId
+            buffer.ReadLong();
+
+            // read holder's id
+            long avatarHolder = buffer.ReadLong();
+
+            // read uri of the avatar
+            string avatarPath = buffer.ReadString();
+
+            //Invoke callback on observers
+            FoolObservable.UpdateUserAvatar(avatarHolder, avatarPath);
+        }
+
+        
 
     }
 }
