@@ -455,7 +455,7 @@ MonoBehaviour:
   PayServerPort: 5056
   InputSum: {fileID: 657360752}
   OutputSum: {fileID: 847513987}
-  Requisites: {fileID: 0}
+  Requisites: {fileID: 1494683587}
 --- !u!4 &584745143
 Transform:
   m_ObjectHideFlags: 0
@@ -1140,7 +1140,7 @@ GameObject:
   - component: {fileID: 1494683588}
   - component: {fileID: 1494683587}
   m_Layer: 5
-  m_Name: OutInputField (1)
+  m_Name: RequisitesInputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

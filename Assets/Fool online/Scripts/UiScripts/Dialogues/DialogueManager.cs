@@ -29,12 +29,16 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Dialogue box objects")]
     [SerializeField] private DialogueYesNo _dialogueYesNo;
+    [SerializeField] private DialogueOk _dialogueOk;
 
     [Header("Backgtound")]
     [SerializeField] private Image _background;
 
-    private IDialogue _currentDialogue;
+    private MonoBehavoirDialogue _currentDialogue;
 
+    /// <summary>
+    /// Show YesNo with yes and no callbacks
+    /// </summary>
     public void ShowYesNo(string bodyText, string yesText, string noText, Action<object> onYes, object onYesParameter, Action onNo = null)
     {
         _dialogueYesNo.ShowYesNo(bodyText, yesText, noText, onYes, onYesParameter, onNo);
@@ -43,6 +47,9 @@ public class DialogueManager : MonoBehaviour
         ShowBackground();
     }
 
+    /// <summary>
+    /// Show YesNo with yes callback
+    /// </summary>
     public void ShowYesNo(string bodyText, string yesText, string noText, Action onYes)
     {
         _dialogueYesNo.ShowYesNo(bodyText, yesText, noText, delegate (object o) { onYes?.Invoke(); }, null, null);
@@ -51,6 +58,9 @@ public class DialogueManager : MonoBehaviour
         ShowBackground();
     }
 
+    /// <summary>
+    /// Show YesNo with yes callback and with parameter for yes callback
+    /// </summary>
     public void ShowYesNo(string bodyText, string yesText, string noText, Action<object> onYes, object onYesParameter)
     {
         _dialogueYesNo.ShowYesNo(bodyText, yesText, noText, onYes, onYesParameter, null);
@@ -58,6 +68,19 @@ public class DialogueManager : MonoBehaviour
 
         ShowBackground();
     }
+
+
+    /// <summary>
+    /// Show Ok with no callbacks
+    /// </summary>
+    public void ShowOk(string bodyText)
+    {
+        _dialogueOk.ShowOk(bodyText);
+        _currentDialogue = _dialogueOk;
+
+        ShowBackground();
+    }
+
 
     private void ShowBackground()
     {

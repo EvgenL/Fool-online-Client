@@ -32,6 +32,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             // ACCOUNT
             WithdrawFunds,
+            UpdateAvatar
         }
 
 
@@ -202,5 +203,19 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             SendDataToServer(buffer.ToArray());
         }
+
+        public static void Send_UpdateAvatar(byte[] imageBytes)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+
+            //Write packet id
+            buffer.WriteLong((long)ClientPacketId.UpdateAvatar);
+
+            // withdraw sum
+            buffer.WriteBytes(imageBytes);
+
+            SendDataToServer(buffer.ToArray());
+        }
+        
     }
 }
