@@ -1,20 +1,15 @@
 ﻿using System.Collections.Generic;
+using Fool_online.Scripts.FoolNetworkScripts;
 using UnityEngine;
 
 namespace Fool_online.Scripts.InRoom
 {
-    public class PlayerInRoom
+    public class PlayerInRoom : FoolPlayer
     {
         public PlayerInRoom(long connectionId)
         {
             this.ConnectionId = connectionId;
         }
-
-        public long ConnectionId;
-
-        public string Nickname;
-
-        public int cn;
 
         public int CardsNumber;
 

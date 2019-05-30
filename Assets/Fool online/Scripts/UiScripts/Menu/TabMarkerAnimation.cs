@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using DOTween.Modules;
 using UnityEngine;
@@ -14,26 +15,36 @@ public class TabMarkerAnimation : MonoBehaviour
     [SerializeField] private float _animationLength = 0.3f;
     [SerializeField] private Ease _animationEase = Ease.OutCubic;
 
-    public RectTransform currentSelected;
-    
+    public RectTransform[] _containers;
+
     private RectTransform currntHighlighted;
 
     private float _constWidthAdd;
     private float _constHeight;
     private float _constYpos;
 
+    private static int _lastSelected = 0;
+    private RectTransform _lastSelectedRect;
+
     private void Start()
     {
-        SetFirstTarget(currentSelected);
+        if (_lastSelected < 0) _lastSelected = 0;
+
+        SetFirstTarget(_containers[_lastSelected]);
     }
-    
+
+    public void Select(int pageNumber)
+    {
+        Select(_containers[pageNumber]);
+    }
+
     public void SetFirstTarget(RectTransform target)
     {
-        currentSelected = target;
+        _lastSelectedRect = target;
 
         var rectTransform = transform as RectTransform;
 
-        _constWidthAdd = rectTransform.sizeDelta.x - currentSelected.sizeDelta.x;
+        _constWidthAdd = rectTransform.sizeDelta.x - _lastSelectedRect.sizeDelta.x;
         _constHeight = rectTransform.sizeDelta.y;
         _constYpos = rectTransform.position.y;
         _constWidthAdd = rectTransform.sizeDelta.x - target.sizeDelta.x;
@@ -53,12 +64,14 @@ public class TabMarkerAnimation : MonoBehaviour
 
     public void Select(RectTransform target)
     {
-        currentSelected = target;
+        _lastSelected = _containers.ToList().FindIndex(c => c == target);
+
+        _lastSelectedRect = target;
 
         var rectTransform = transform as RectTransform;
 
         // do move
-        Vector2 targetPos = currentSelected.position;
+        Vector2 targetPos = _lastSelectedRect.position;
         targetPos.y = rectTransform.position.y;
 
         // init animation
@@ -67,7 +80,7 @@ public class TabMarkerAnimation : MonoBehaviour
         // do scale
         Vector2 newSizeDelta;
 
-        newSizeDelta.x = currentSelected.sizeDelta.x + _constWidthAdd;
+        newSizeDelta.x = _lastSelectedRect.sizeDelta.x + _constWidthAdd;
         newSizeDelta.y = _constHeight;
 
         // init animation
@@ -82,7 +95,7 @@ public class TabMarkerAnimation : MonoBehaviour
 
         // do move
         // mid point between two vectors = (a + b) / 2f
-        Vector2 midPoint = (currntHighlighted.position + currentSelected.position) / 2f;
+        Vector2 midPoint = (currntHighlighted.position + _lastSelectedRect.position) / 2f;
         midPoint.y = rectTransform.position.y;
 
         // init animation
@@ -95,17 +108,17 @@ public class TabMarkerAnimation : MonoBehaviour
 
         float leftX;
         float rightX;
-        Vector3 localPosSelected = transform.InverseTransformPoint(currentSelected.position);
+        Vector3 localPosSelected = transform.InverseTransformPoint(_lastSelectedRect.position);
         Vector3 localPosHighlighted = transform.InverseTransformPoint(currntHighlighted.position);
 
         if (targetOnRight)
         {
-            leftX = localPosSelected.x + currentSelected.rect.xMin;
+            leftX = localPosSelected.x + _lastSelectedRect.rect.xMin;
             rightX = localPosHighlighted.x + currntHighlighted.rect.xMax;
         }
         else
         {
-            leftX = localPosSelected.x + currentSelected.rect.xMax;
+            leftX = localPosSelected.x + _lastSelectedRect.rect.xMax;
             rightX = localPosHighlighted.x + currntHighlighted.rect.xMin;
         }
 
@@ -135,6 +148,6 @@ public class TabMarkerAnimation : MonoBehaviour
 
     public void StopHighlight()
     {
-        Select(currentSelected);
+        Select(_lastSelectedRect);
     }
 }

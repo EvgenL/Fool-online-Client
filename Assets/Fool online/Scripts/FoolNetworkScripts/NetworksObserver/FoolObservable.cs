@@ -85,16 +85,18 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
             }
         }
 
-        public static void OnUpdateUserData(long connectionId, long userId, string nickname, double money)
+        public static void OnUpdateUserData(long connectionId, long userId, string nickname, double money, string avatarFile)
         {
             FoolNetwork.LocalPlayer.UserId = userId;
             FoolNetwork.LocalPlayer.Nickname = nickname;
-            FoolNetwork.LocalPlayer.Money = money;
+            FoolNetwork.LocalPlayer.Money = money; 
+            FoolNetwork.LocalPlayer.AvatarFile = avatarFile; 
 
+            PlayerPrefs.SetString("LastAvatarFile", avatarFile);
 
             foreach (var obs in _observers)
             {
-                obs.OnUpdateUserData(connectionId, userId, nickname, money);
+                obs.OnUpdateUserData(connectionId, userId, nickname, money, avatarFile);
             }
         }
 
@@ -162,35 +164,11 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
             }
         }
 
-        public static void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN, string joinedPlayerNickname)
+        public static void OnOtherPlayerJoinedRoom(PlayerInRoom joinedPlayer)
         {
-            StaticRoomData.ConnectedPlayersCount++;
-
-            // if this slot was occupied once then replace slot values
-            if (StaticRoomData.OccupiedSlots.TryGetValue(slotN, out long n))
-            {
-                StaticRoomData.OccupiedSlots[slotN] = joinedPlayerId;
-                StaticRoomData.PlayerIds.Remove(n);
-                StaticRoomData.PlayerIds.Add(joinedPlayerId);
-            }
-            else // else create new slot values
-            {
-                StaticRoomData.OccupiedSlots.Add(slotN, joinedPlayerId);
-                StaticRoomData.PlayerIds.Add(joinedPlayerId);
-            }
-
-            PlayerInRoom newPlayer = new PlayerInRoom(joinedPlayerId);
-            newPlayer.SlotN = slotN;
-            newPlayer.Nickname = joinedPlayerNickname;
-            StaticRoomData.Players[slotN] = newPlayer;
-
-
-            //Observable - room data changed
-            OnRoomDataUpdated();
-
             foreach (var obs in _observers)
             {
-                obs.OnOtherPlayerJoinedRoom(joinedPlayerId, slotN, joinedPlayerNickname);
+                obs.OnOtherPlayerJoinedRoom(joinedPlayer);
             }
         }
 

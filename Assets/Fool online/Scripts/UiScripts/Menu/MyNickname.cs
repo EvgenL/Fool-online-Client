@@ -17,7 +17,7 @@ namespace Fool_online.Scripts.UiScripts.Menu
             text.text = FoolNetwork.LocalPlayer.Nickname;
         }
 
-        public override void OnUpdateUserData(long connectionId, long userId, string nickname, double money)
+        public override void OnUpdateUserData(long connectionId, long userId, string nickname, double money, string avatarFile)
         {
             // if that data is about me
             if (connectionId == FoolNetwork.LocalPlayer.ConnectionId)

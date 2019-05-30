@@ -83,3 +83,11 @@ Update Mode: updateDependencies
 The following packages were updated:
   com.unity.test-framework from version 1.0.12 to 1.0.13
   com.unity.timeline from version 1.0.0 to 1.1.0
+
+=== Tue May 28 12:46:59 2019
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were added:
+  com.unity.ugui@1.0.0

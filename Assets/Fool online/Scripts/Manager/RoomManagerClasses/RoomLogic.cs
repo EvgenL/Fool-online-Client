@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Fool_online.Scripts.FoolNetworkScripts;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
+using Fool_online.Scripts.InRoom;
 using Fool_online.Scripts.InRoom.CardsScripts;
 using Fool_online.Scripts.Manager;
 using UnityEngine;
@@ -58,7 +59,7 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
         /// <summary>
         /// Callback on somebody enters room
         /// </summary>
-        public override void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN, string joinedPlayerNickname)
+        public override void OnOtherPlayerJoinedRoom(PlayerInRoom joinedPlayer)
         {
             PlayerNumberChanged();
         }
@@ -262,7 +263,7 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
         /// </summary>
         public override void OnMeGotReady(bool value)
         {
-            MyPlayer.IsReady = value;
+            StaticRoomData.MyPlayer.IsReady = value;
 
             if (value)
             {

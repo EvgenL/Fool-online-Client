@@ -277,9 +277,20 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             string Nickname = buffer.ReadStringUnicode();
 
             double money = buffer.ReadDouble();
+            
+            // if avatar string is empty then skip. Otherwise read
+            string avatarPath = "";
+            if (buffer.Length() > 0)
+            {
+                int strLen = buffer.ReadInteger(false);
+                if (strLen > 0)
+                {
+                    avatarPath = buffer.ReadString();
+                }
+            }
 
             //Invoke callback on observers
-            FoolObservable.OnUpdateUserData(connectionId, UserId, Nickname, money);
+            FoolObservable.OnUpdateUserData(connectionId, UserId, Nickname, money, avatarPath);
         }
         
 
@@ -381,24 +392,29 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             //Read packet id
             long packetId = buffer.ReadLong();
 
+            //Read maxPlayers
+            int maxPlayers = buffer.ReadInteger();
+            //Init player array
+            StaticRoomData.Players = new PlayerInRoom[maxPlayers];
+            StaticRoomData.MaxPlayers = maxPlayers;
+
+            //Init slots dict
+            Dictionary<int, long> slots = new Dictionary<int, long>();
+
             //Read players count
             int playersCount = buffer.ReadInteger();
 
-            //Init player array
-            List<long> playerIdsInRoom = new List<long>();
-            List<string> playerNicknames = new List<string>();
-            //Init chair dict
-            Dictionary<int, long> slots = new Dictionary<int, long>();
-
-            //Read players
+            // Read players
             for (int i = 0; i < playersCount; i++)
             {
                 //Read player id
                 long playerId = buffer.ReadLong();
-                playerIdsInRoom.Add(playerId);
+                PlayerInRoom player = new PlayerInRoom(playerId);
+
                 //Read slots number
                 int slotN = buffer.ReadInteger();
-                slots.Add(slotN, playerIdsInRoom[i]);
+                player.SlotN = slotN;
+                slots.Add(slotN, playerId);
                 
                 //if that part of data is about out player then set InRoomSlotNumber to read value
                 if (playerId == FoolNetwork.LocalPlayer.ConnectionId)
@@ -407,33 +423,19 @@ namespace Fool_online.Scripts.FoolNetworkScripts
                 }
 
                 //read player nickname
-                playerNicknames.Add(buffer.ReadStringUnicode());
-            }
+                player.Nickname = buffer.ReadStringUnicode();
 
-            //Read maxPlayers
-            int maxPlayers = buffer.ReadInteger();
+                //read player avatar url
+                player.AvatarFile = buffer.ReadString();
+
+                StaticRoomData.Players[i] = player;
+            }
 
             StaticRoomData.ConnectedPlayersCount = playersCount;
-            StaticRoomData.PlayerIds = playerIdsInRoom;
             StaticRoomData.OccupiedSlots = slots;
-            StaticRoomData.MaxPlayers = maxPlayers;
-
-            StaticRoomData.Players = new PlayerInRoom[maxPlayers];
-
-            for (int i = 0; i < maxPlayers; i++)
-            {
-                if (slots.ContainsKey(i))
-                {
-                    PlayerInRoom pl = new PlayerInRoom(slots[i]);
-                    pl.SlotN = i;
-                    pl.Nickname = playerNicknames[i];
-                    StaticRoomData.Players[i] = pl;
-                }
-            }
 
             //Invoke callback on observers
             FoolObservable.OnRoomDataUpdated();
-
         }
 
 
@@ -449,16 +451,38 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             buffer.ReadLong();
 
             //Read id of newly joined player
-            long joinedPlayerId = buffer.ReadLong();
+            long joinedId = buffer.ReadLong();
+            PlayerInRoom joinedPlayer = new PlayerInRoom(joinedId);
 
             //Read slotN of newly joined player
-            int slotN = buffer.ReadInteger();
+            joinedPlayer.SlotN = buffer.ReadInteger();
 
             //read name
-            string nickname = buffer.ReadStringUnicode();
+            joinedPlayer.Nickname = buffer.ReadStringUnicode();
+
+            //read avatar
+            joinedPlayer.AvatarFile = buffer.ReadString();
+
+
+            StaticRoomData.ConnectedPlayersCount++;
+
+            // add to room
+            if (StaticRoomData.OccupiedSlots.TryGetValue(joinedPlayer.SlotN, out long n))
+            {
+                StaticRoomData.OccupiedSlots[joinedPlayer.SlotN] = joinedId;
+            }
+            else // else create new slot values
+            {
+                StaticRoomData.OccupiedSlots.Add(joinedPlayer.SlotN, joinedId);
+            }
+
+            StaticRoomData.Players[joinedPlayer.SlotN] = joinedPlayer;
+
+            //Observable - room data changed
+            FoolObservable.OnRoomDataUpdated();
 
             //Invoke callback on observers
-            FoolObservable.OnOtherPlayerJoinedRoom(joinedPlayerId, slotN, nickname);
+            FoolObservable.OnOtherPlayerJoinedRoom(joinedPlayer);
         }
 
         /// <summary>
@@ -894,6 +918,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             // read uri of the avatar
             string avatarPath = buffer.ReadString();
+
+            FoolNetwork.LocalPlayer.AvatarFile = avatarPath;
 
             //Invoke callback on observers
             FoolObservable.UpdateUserAvatar(avatarHolder, avatarPath);

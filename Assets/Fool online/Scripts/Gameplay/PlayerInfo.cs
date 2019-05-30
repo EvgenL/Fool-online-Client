@@ -26,7 +26,7 @@ namespace Fool_online.Scripts.InRoom
         private PlayerStatusIcon CurrentStatusIcon;
 
         [SerializeField] protected Text NicknameText;
-        [SerializeField] protected Image Userpic;
+        [SerializeField] protected AvatarDownloader Avatar;
         [SerializeField] protected Transform HandContainer;
         [SerializeField] protected Transform MoneyIconContainer;
 
@@ -140,11 +140,20 @@ namespace Fool_online.Scripts.InRoom
         public virtual void DrawPlayerslot(PlayerInRoom playerInRoom)
         {
             NicknameText.text = playerInRoom.Nickname;
+
+            Avatar.AvatarHolderConnectionId = playerInRoom.ConnectionId;
+
+            // force callback for avatar update
+            if (!string.IsNullOrEmpty(playerInRoom.AvatarFile))
+            {
+                Avatar.OnUpdateUserAvatar(playerInRoom.ConnectionId, playerInRoom.AvatarFile);
+            }
         }
 
         public virtual void DrawEmptySlot()
         {
             NicknameText.text = "Ожидание противника";
+            Avatar.ResetImage();
 
             HideTextCloud();
             AnimateHideCurrentStatusIcon();

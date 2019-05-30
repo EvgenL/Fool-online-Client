@@ -99,6 +99,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// </summary>
         public static void ReconnectToGameServer()
         {
+            // todo lastIp is equals to = "" here and port is 0
             ConnectToGameServer(LastIp, LastPort, myToken);
         }
 

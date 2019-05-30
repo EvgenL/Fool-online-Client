@@ -139,8 +139,12 @@ namespace Fool_online.Ui.Mainmenu
             CheckDeckSizeToPlayers();
         }
 
+        private bool checking = false;
         private void CheckDeckSizeToPlayers()
         {
+            if (checking) return;
+            checking = true;
+
             //Can't use dect size of 24 for 4 players because that creates hight disadvantage for player defending first
             if (_currMaxPlayers > 4)
             {
@@ -149,8 +153,8 @@ namespace Fool_online.Ui.Mainmenu
                     _buttonDeckSize36.isOn = true;
                 }
 
-                _buttonDeckSize24.isOn = false;
                 _buttonDeckSize24.interactable = false;
+                _buttonDeckSize24.isOn = false;
             }
             else
             {
@@ -165,8 +169,8 @@ namespace Fool_online.Ui.Mainmenu
                     _buttonDeckSize52.isOn = true;
                 }
 
-                _buttonDeckSize36.isOn = false;
                 _buttonDeckSize36.interactable = false;
+                _buttonDeckSize36.isOn = false;
             }
             else
             {
@@ -181,13 +185,15 @@ namespace Fool_online.Ui.Mainmenu
                     _maxPlayers5.isOn = true;
                 }
 
-                _maxPlayers6.isOn = false;
                 _maxPlayers6.interactable = false;
+                _maxPlayers6.isOn = false;
             }
             else
             {
                 _maxPlayers6.interactable = true;
             }
+
+            checking = false;
         }
 
         public void OnSubmit()

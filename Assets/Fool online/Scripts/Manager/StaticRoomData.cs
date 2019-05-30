@@ -20,8 +20,6 @@ namespace Fool_online.Scripts.Manager
 
         public static int MaxPlayers;
 
-        public static List<long> PlayerIds;
-
         public static PlayerInRoom[] Players;
 
         public static Dictionary<int, long> OccupiedSlots;

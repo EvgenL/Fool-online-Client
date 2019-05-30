@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Fool_online.Scripts.InRoom;
 using Fool_online.Scripts.InRoom.CardsScripts;
 using Fool_online.Ui.Mainmenu;
 using UnityEngine;
@@ -54,7 +55,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         {
         }
 
-        public virtual void OnUpdateUserData(long connectionId, long userId, string nickname, double money)
+        public virtual void OnUpdateUserData(long connectionId, long userId, string nickname, double money, string avatarFile)
         {
         }
 
@@ -110,7 +111,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         /// <summary>
         /// Called on somebody expect you joins room. Also OnRoomData called.
         /// </summary>
-        public virtual void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN, string joinedPlayerNickname)
+        public virtual void OnOtherPlayerJoinedRoom(PlayerInRoom joinedPlayer)
         {
         }
 

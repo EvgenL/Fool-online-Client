@@ -140,7 +140,7 @@ namespace Fool_online.Scripts.Manager
             ClientSendPackets.Send_DropCardOnTable(heldCard.CardCode);
 
             // if my hand is empty then count as pass
-            if (MyPlayer.CardsNumber == 0 && MeLeadAttack)
+            if (StaticRoomData.MyPlayer.CardsNumber == 0 && MeLeadAttack)
             {
                 AttackerPassedPriority = true;
             }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Fool_online.Scripts.FoolNetworkScripts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,8 +31,9 @@ public class DialogueManager : MonoBehaviour
     [Header("Dialogue box objects")]
     [SerializeField] private DialogueYesNo _dialogueYesNo;
     [SerializeField] private DialogueOk _dialogueOk;
+    [SerializeField] private DialogueProfile _dialogueProfile;
 
-    [Header("Backgtound")]
+    [Header("Background")]
     [SerializeField] private Image _background;
 
     private MonoBehavoirDialogue _currentDialogue;
@@ -81,6 +83,23 @@ public class DialogueManager : MonoBehaviour
         ShowBackground();
     }
 
+
+    public void ShowProffile(FoolPlayer player)
+    {
+        ShowBackground();
+
+        _dialogueProfile.Show(player);
+        _currentDialogue = _dialogueProfile;
+
+    }
+
+    public void ShowMyProffile()
+    {
+        ShowBackground();
+
+        _dialogueProfile.ShowMy();
+        _currentDialogue = _dialogueProfile;
+    }
 
     private void ShowBackground()
     {

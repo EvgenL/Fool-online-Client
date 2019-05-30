@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
+using Fool_online.Scripts.InRoom;
 using Fool_online.Scripts.Manager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ namespace Fool_online.Scripts.UiScripts.Gameplay
 
         #region Observer callbacks
 
-        public override void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN, string joinedPlayerNickname)
+        public override void OnOtherPlayerJoinedRoom(PlayerInRoom joinedPlayer)
         {
             CheckIfAllPlayersJoined();
         }

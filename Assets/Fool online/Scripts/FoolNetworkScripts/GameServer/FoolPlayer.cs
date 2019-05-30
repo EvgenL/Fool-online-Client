@@ -45,5 +45,13 @@
         /// Amount of currency
         /// </summary>
         public double Money;
+
+
+        /// <summary>
+        /// Avatar file path
+        /// </summary>
+        public string AvatarFile;
+
+        
     }
 }

@@ -157,9 +157,9 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         /// <summary>
         /// Observer method: On Other Player Joined Room
         /// </summary>
-        public override void OnOtherPlayerJoinedRoom(long joinedPlayerId, int slotN, string joinedPlayerNickname)
+        public override void OnOtherPlayerJoinedRoom(PlayerInRoom joinedPlayer)
         {
-            SetSlotAsOccupied(slotN);
+            SetSlotAsOccupied(joinedPlayer.SlotN);
         }
 
         /// <summary>

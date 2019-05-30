@@ -19,7 +19,9 @@ public class FileSelector : MonoBehaviour
     [SerializeField] private Text _filenameText;
     [SerializeField] private Image _fileImage;
 
+
     [SerializeField] private Button _sendButton;
+    [SerializeField] private bool _sendAuto;
 
     private Sprite _defaultSprite;
     private byte[] _selectedSpriteBytes;
@@ -27,7 +29,10 @@ public class FileSelector : MonoBehaviour
 
     private void Awake()
     {
-        _sendButton.interactable = false;
+        if (_sendButton != null)
+        {
+            _sendButton.interactable = false;
+        }
         _defaultSprite = _fileImage.sprite;
     }
 
@@ -73,7 +78,8 @@ public class FileSelector : MonoBehaviour
         isFileSelected = true;
         _selectedSpriteBytes = fileContent;
 
-        _sendButton.interactable = true;
+        if (_sendButton != null)
+            _sendButton.interactable = true;
 
         if (_filenameText != null)
         {
@@ -87,6 +93,11 @@ public class FileSelector : MonoBehaviour
                 new Vector2(0.5f, 0.5f));
 
             _fileImage.sprite = sprite;
+        }
+
+        if (_sendAuto)
+        {
+            OnSendClick();
         }
     }
 #endif

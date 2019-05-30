@@ -21,9 +21,6 @@ namespace Assets.Fool_online.Scripts.Manager
         public RoomStateFields()
         {
             if (!FoolNetwork.IsConnected) return;
-
-            Players = StaticRoomData.Players;
-            MyPlayer = StaticRoomData.MyPlayer;
         }
 
         #region Constants and enums
@@ -77,11 +74,6 @@ namespace Assets.Fool_online.Scripts.Manager
         public PlayerInRoom Attacker;
 
         /// <summary>
-        /// Reference to my player object
-        /// </summary>
-        public PlayerInRoom MyPlayer;
-
-        /// <summary>
         /// Set to true when all players are connected
         /// </summary>
         public bool RoomIsFull; //todo
@@ -120,12 +112,12 @@ namespace Assets.Fool_online.Scripts.Manager
         /// <summary>
         /// If you are leader of an attack
         /// </summary>
-        protected bool MeLeadAttack => Attacker == MyPlayer;
+        protected bool MeLeadAttack => Attacker == StaticRoomData.MyPlayer;
 
         /// <summary>
         /// If you are defending from attack leader and players who can also add cards
         /// </summary>
-        protected bool MeDefending => Defender == MyPlayer;
+        protected bool MeDefending => Defender == StaticRoomData.MyPlayer;
 
         /// <summary>
         /// If you are not leader of an attack but can add cards
