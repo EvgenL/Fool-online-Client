@@ -3,10 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fool_online.Scripts.FoolNetworkScripts;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogueManager : MonoBehaviour
+public class DialogueManager : MonoBehaviourFoolObserver
 {
     #region Singleton
 
@@ -123,5 +124,10 @@ public class DialogueManager : MonoBehaviour
     {
         _currentDialogue.Hide();
         HideBackground();
+    }
+
+    public override void OnMessage(string message)
+    {
+        ShowOk(message);
     }
 }

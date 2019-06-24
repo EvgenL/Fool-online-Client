@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class FooterBarButton : MonoBehaviour
 {
+
     [Header("Link to animated footer marker")]
     [SerializeField] private TabMarkerAnimation _marker;
 
@@ -14,6 +15,8 @@ public class FooterBarButton : MonoBehaviour
     private Image _image;
     private Text _text;
     private TouchscreenButton _touchscreenButton;
+
+    public RectTransform ButtonBounds => _touchscreenButton.transform as RectTransform;
 
     private void Awake()
     {
@@ -43,17 +46,27 @@ public class FooterBarButton : MonoBehaviour
 
     public void PointerDown()
     {
-         _marker.Highlight(_touchscreenButton.transform as RectTransform);
+         _marker.Highlight(this);
     }
 
     public void PointerUp()
     {
-         _marker.Select(_touchscreenButton.transform as RectTransform);
+         _marker.Select(this);
     }
 
     public void Deselect()
     {
         _marker.StopHighlight();
+    }
+
+    public void ShowBackSprite()
+    {
+        _image.sprite = _backButtonSpriteFile;
+    }
+
+    public void ShowNormalSprite()
+    {
+        _image.sprite = _defaultSprite;
     }
 
     #endregion

@@ -17,7 +17,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Fool online/Scenes/Payments test.unity
     guid: af5ce8519abee3d45baee4aa295dddc3
-  - enabled: 0
-    path: Assets/Fool online/Scenes/Avatars test.unity
-    guid: c9ab71a4c5985e24aa7b8809c139f02d
   m_configObjects: {}

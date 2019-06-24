@@ -15,10 +15,13 @@ namespace Assets.Fool_online.Scripts.Chacher
     {
         private const int SecondsToExpire = 300;
 
+
+        // todo delete unused
+
         public static void DownloadOrChache(string url, Action<Sprite> onDownloaded)
         {
             string filePath = Application.persistentDataPath;
-            filePath += "/" + url.GetHashCode();
+            filePath += "cache/" + url.GetHashCode();
 
             bool existsInChache = System.IO.File.Exists(filePath);
 

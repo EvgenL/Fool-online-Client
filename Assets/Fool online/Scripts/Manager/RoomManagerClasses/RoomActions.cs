@@ -105,7 +105,7 @@ namespace Fool_online.Scripts.Manager
             if (!GetAllCardsOnTable().Any(card => card.Value == heldCardValue)) //bug: can add carn not on your turn
             {
                 // say 'Cant add this card to table'
-                MessageManager.Instance.ShowFullScreenText("Эту карту нельзя подкинуть");
+                GameplayMessageManager.Instance.ShowFullScreenText("Эту карту нельзя подкинуть");
                 return false;
             }
 
@@ -115,7 +115,7 @@ namespace Fool_online.Scripts.Manager
             if (TableIsFull || !DefenderHasCardsToDefend)
             {
                 // say 'Too much cards on table'
-                MessageManager.Instance.ShowFullScreenText("Перебор");
+                GameplayMessageManager.Instance.ShowFullScreenText("Перебор");
                 return false;
             }
 
@@ -157,7 +157,7 @@ namespace Fool_online.Scripts.Manager
             if (TableIsEmpty || AllCardsCovered)
             {
                 // say 'you are defending'
-                MessageManager.Instance.ShowFullScreenText("На вас ходят");
+                GameplayMessageManager.Instance.ShowFullScreenText("На вас ходят");
                 return false;
             }
 
@@ -165,7 +165,7 @@ namespace Fool_online.Scripts.Manager
             if (DefenderPassedPriority)
             {
                 // say 'you passed'
-                MessageManager.Instance.ShowFullScreenText("Вы решили брать");
+                GameplayMessageManager.Instance.ShowFullScreenText("Вы решили брать");
                 return false;
             }
 
@@ -184,7 +184,7 @@ namespace Fool_online.Scripts.Manager
             // else 
             {
                 // say 'you can not defend with this card'
-                MessageManager.Instance.ShowFullScreenText("Вы не можете побиться этой картой");
+                GameplayMessageManager.Instance.ShowFullScreenText("Вы не можете побиться этой картой");
                 return false;
             }
 

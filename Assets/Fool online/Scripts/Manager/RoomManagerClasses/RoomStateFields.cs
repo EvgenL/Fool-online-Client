@@ -61,7 +61,7 @@ namespace Assets.Fool_online.Scripts.Manager
         /// <summary>
         /// Connected players
         /// </summary>
-        public PlayerInRoom[] Players;
+        public PlayerInRoom[]  Players => StaticRoomData.Players;
 
         /// <summary>
         /// Player who defends this turn

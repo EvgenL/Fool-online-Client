@@ -13,7 +13,7 @@ public class CardHoverInputzone : MonoBehaviour,
 
     private Vector2 baseSizeDelta;
 
-    private void Awake()
+    private void Start()
     {
         // remember base size
         baseSizeDelta = (_interactibleCard.transform as RectTransform).sizeDelta;
@@ -29,11 +29,11 @@ public class CardHoverInputzone : MonoBehaviour,
             || _interactibleCard.IsDragged) return;
 
         var sizedelta = baseSizeDelta;
-        sizedelta.y += _interactibleCard.CardMoveUpOnHover;
+        sizedelta.y += InteractibleCard.CardMoveUpOnHover; //_interactibleCard.CardMoveUpOnHover;
 
         var rectTransform = transform as RectTransform;
         rectTransform.sizeDelta = sizedelta;
-        rectTransform.position += Vector3.up * _interactibleCard.CardMoveUpOnHover / 2f;
+        rectTransform.position += Vector3.up * InteractibleCard.CardMoveUpOnHover / 2f; //_interactibleCard.CardMoveUpOnHover / 2f;
 
         _interactibleCard.Zoom();
     }

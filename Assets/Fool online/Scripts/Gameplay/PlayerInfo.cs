@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
 using DOTween.Modules;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using Fool_online.Scripts.InRoom.CardsScripts;
 using Fool_online.Scripts.Manager;
 using UnityEngine;
@@ -33,6 +34,7 @@ namespace Fool_online.Scripts.InRoom
         [SerializeField] private GameObject TextCloud;
         [SerializeField] private Text TextCloudText;
 
+        public long connectionId;
 
         protected int cardsN;
 
@@ -69,15 +71,21 @@ namespace Fool_online.Scripts.InRoom
             if (icon == PlayerStatusIcon.Money)
             {
                 //init icon animation
-                MessageManager.Instance.AnimatePlayerStatusIcon(MoneyIconContainer, icon);
+                return; //GameplayMessageManager.Instance.AnimatePlayerStatusIcon(MoneyIconContainer, icon);
             }
             else
             {
                 //init icon animation
-                MessageManager.Instance.AnimatePlayerStatusIcon(TurnStatusIconContainer, icon);
+                GameplayMessageManager.Instance.AnimatePlayerStatusIcon(TurnStatusIconContainer, icon);
             }
 
             CurrentStatusIcon = icon;
+        }
+
+        public void AnimateMoneyReward(double amount)
+        {
+            AnimateHideCurrentStatusIcon();
+            GameplayMessageManager.Instance.AnimateMoney(MoneyIconContainer, amount);
         }
         /// <summary>
         /// Spawns player status icon like attack, defend, won, fool, etc
@@ -88,7 +96,7 @@ namespace Fool_online.Scripts.InRoom
             AnimateHideCurrentStatusIcon();
 
             //init icon animation
-            var iconTransform = MessageManager.Instance.SpawnIconAtScreenCentre(icon);
+            var iconTransform = GameplayMessageManager.Instance.SpawnIconAtScreenCentre(icon);
             iconTransform.SetParent(TurnStatusIconContainer, false);
 
             var iconDisplay = iconTransform.GetComponent<Image>();
@@ -126,6 +134,8 @@ namespace Fool_online.Scripts.InRoom
                 var text = currntIcon.GetComponentInChildren<Text>();
                 text.DOFade(0, 0.5f);
             }
+
+            Util.DestroyAllChildren(MoneyIconContainer);
         }
 
         /// <summary>
@@ -139,6 +149,7 @@ namespace Fool_online.Scripts.InRoom
 
         public virtual void DrawPlayerslot(PlayerInRoom playerInRoom)
         {
+            connectionId = playerInRoom.ConnectionId;
             NicknameText.text = playerInRoom.Nickname;
 
             Avatar.AvatarHolderConnectionId = playerInRoom.ConnectionId;
@@ -148,6 +159,9 @@ namespace Fool_online.Scripts.InRoom
             {
                 Avatar.OnUpdateUserAvatar(playerInRoom.ConnectionId, playerInRoom.AvatarFile);
             }
+
+            HideMoneyIcon();
+            HideTextCloud();
         }
 
         public virtual void DrawEmptySlot()
@@ -156,6 +170,7 @@ namespace Fool_online.Scripts.InRoom
             Avatar.ResetImage();
 
             HideTextCloud();
+            HideMoneyIcon();
             AnimateHideCurrentStatusIcon();
             SetReadyCheckmark(false);
         }

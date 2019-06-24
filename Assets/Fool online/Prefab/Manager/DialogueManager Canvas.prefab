@@ -30,7 +30,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1930883188}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -155,6 +155,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &204032333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -506,6 +507,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &1894349302
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,6 +585,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &1894349304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658,7 +661,7 @@ MonoBehaviour:
   _filenameText: {fileID: 0}
   _fileImage: {fileID: 3465185763810856365}
   _sendButton: {fileID: 0}
-  _sendAuto: 0
+  _sendAuto: 1
 --- !u!1 &1930883187
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,15 +693,15 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1834151974}
+  - {fileID: 6182458695544877993}
   - {fileID: 22018307}
-  - {fileID: 3465185764710500974}
   - {fileID: 1478195844}
   m_Father: {fileID: 5415999279734853063}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.000015259}
   m_SizeDelta: {x: 869, y: 808.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1930883191
@@ -738,6 +741,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &1930883189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -983,6 +987,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &3743979887532656747
 GameObject:
   m_ObjectHideFlags: 0
@@ -1061,6 +1066,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &5471596097239985279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1150,6 +1156,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &5415999279194080922
 GameObject:
   m_ObjectHideFlags: 0
@@ -1388,6 +1395,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &5415999279242362456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1679,6 +1687,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &5415999280019396044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1862,6 +1871,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &6593241020938169478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1994,6 +2004,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &5415999280452727938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2126,6 +2137,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &7158622489893771136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2233,7 +2245,7 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
---- !u!1001 &1629677748
+--- !u!1001 &7339268131092140403
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -2283,7 +2295,7 @@ PrefabInstance:
     - target: {fileID: 3465185763118654170, guid: cc31fc2ebd1e2184db92e1aa5bfc7c33,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3465185763118654170, guid: cc31fc2ebd1e2184db92e1aa5bfc7c33,
         type: 3}
@@ -2308,17 +2320,17 @@ PrefabInstance:
     - target: {fileID: 3465185763118654170, guid: cc31fc2ebd1e2184db92e1aa5bfc7c33,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 26
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 3465185763118654170, guid: cc31fc2ebd1e2184db92e1aa5bfc7c33,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 376.6
+      value: 272.4
       objectReference: {fileID: 0}
     - target: {fileID: 3465185763118654170, guid: cc31fc2ebd1e2184db92e1aa5bfc7c33,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 376.6
+      value: 272.4
       objectReference: {fileID: 0}
     - target: {fileID: 3465185763118654170, guid: cc31fc2ebd1e2184db92e1aa5bfc7c33,
         type: 3}
@@ -2352,11 +2364,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc31fc2ebd1e2184db92e1aa5bfc7c33, type: 3}
---- !u!114 &3465185763810856365 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3465185763288491289, guid: cc31fc2ebd1e2184db92e1aa5bfc7c33,
+--- !u!224 &6182458695544877993 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3465185763118654170, guid: cc31fc2ebd1e2184db92e1aa5bfc7c33,
     type: 3}
-  m_PrefabInstance: {fileID: 1629677748}
+  m_PrefabInstance: {fileID: 7339268131092140403}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3465185763810856365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -2364,9 +2382,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &3465185764710500974 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3465185763118654170, guid: cc31fc2ebd1e2184db92e1aa5bfc7c33,
-    type: 3}
-  m_PrefabInstance: {fileID: 1629677748}
-  m_PrefabAsset: {fileID: 0}
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, Unity.ugui,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1

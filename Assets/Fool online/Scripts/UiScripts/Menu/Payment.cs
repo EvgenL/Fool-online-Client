@@ -10,18 +10,14 @@ public class Payment : MonoBehaviour
 {
     public const int PayServerPort = 5056; // todo recieve from server
 
-    public InputField InputSum, OutputSum, Requisites;
-
-    public void Input() {
-        string sum     = InputSum.text;
-        string request = $"http://{FoolWebClient.GetIp()}:{PayServerPort}/payment/?user_id={FoolNetwork.LocalPlayer.UserId}&sum={sum}";
-        Application.OpenURL(request);
+    public void WithdtawMoney(float sum, string requsites)
+    {
+        ClientSendPackets.Send_WithdrawFunds(sum, requsites);
     }
 
-    public void Output()
+    public void AddMoney(float sum)
     {
-        float sum = (float)Convert.ToDouble(OutputSum.text);
-        string requsites = Requisites.text;
-        ClientSendPackets.Send_WithdrawFunds(sum, requsites);
+        string request = $"http://{FoolWebClient.GetIp()}:{PayServerPort}/payment/?user_id={FoolNetwork.LocalPlayer.UserId}&sum={sum}";
+        Application.OpenURL(request);
     }
 }

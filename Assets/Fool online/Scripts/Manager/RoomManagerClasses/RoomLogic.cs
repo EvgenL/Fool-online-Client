@@ -200,7 +200,7 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
         /// </summary>
         public override void OnDropCardOnTableErrorCantDropThisCard(string cardCode)
         {
-            MessageManager.Instance.ShowFullScreenText("Нельзя подкинуть эту карту");
+            GameplayMessageManager.Instance.ShowFullScreenText("Нельзя подкинуть эту карту");
             //TODO go back (cardCode)
         }
 
@@ -210,7 +210,7 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
         /// </summary>
         public override void OnDropCardOnTableErrorNotYourTurn(string cardCode)
         {
-            MessageManager.Instance.ShowFullScreenText("Не ваш ход");
+            GameplayMessageManager.Instance.ShowFullScreenText("Не ваш ход");
             //TODO go back (cardCode)
         }
 
@@ -220,7 +220,7 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
         /// </summary>
         public override void OnDropCardOnTableErrorTableIsFull(string cardCode)
         {
-            MessageManager.Instance.ShowFullScreenText("Перебор");
+            GameplayMessageManager.Instance.ShowFullScreenText("Перебор");
             //TODO go back (cardCode)
         }
 
@@ -230,7 +230,7 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
         public override void OnEndGameFool(long foolPlayerId)
         {
             string foolNickname = GetPlayerNickname(foolPlayerId);
-            MessageManager.Instance.ShowFullScreenText(foolNickname + " - дурак");
+            GameplayMessageManager.Instance.ShowFullScreenText(foolNickname + " - дурак");
 
 
             EndGame();
@@ -242,7 +242,7 @@ namespace Assets.Fool_online.Scripts.Manager.RoomManagerClasses
         public override void OnEndGameGiveUp(long foolConnectionId, Dictionary<long, double> rewards)
         {
             string foolNickname = GetPlayerNickname(foolConnectionId);
-            MessageManager.Instance.ShowFullScreenText(foolNickname + " сдался.");
+            GameplayMessageManager.Instance.ShowFullScreenText(foolNickname + " сдался.");
 
             EndGame();
         }

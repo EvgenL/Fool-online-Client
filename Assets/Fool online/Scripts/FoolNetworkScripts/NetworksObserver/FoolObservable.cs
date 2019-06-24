@@ -326,20 +326,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         {
             StaticRoomData.IsPlaying = false;
 
-
-            /*foreach (var player in StaticRoomData.Players)
-            {
-                if (player != null && player.Left)
-                {
-
-                    StaticRoomData.ConnectedPlayersCount--;
-                    StaticRoomData.OccupiedSlots.Remove(player.SlotN);
-                    StaticRoomData.PlayerIds.Remove(player.ConnectionId);
-
-                    StaticRoomData.Players[player.SlotN] = null;
-                }
-            }*/
-
             foreach (var obs in _observers)
             {
                 obs.OnEndGame(foolConnectionId, rewards);
@@ -449,6 +435,23 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
                 obs.OnPlayerWon(wonPlayerId, winnerReward);
             }
         }
+
+        public static void OnToast(string message)
+        {
+            foreach (var obs in _observers)
+            {
+                obs.OnToast(message);
+            }
+        }
+
+        public static void OnMessage(string message)
+        {
+            foreach (var obs in _observers)
+            {
+                obs.OnMessage(message);
+            }
+        }
+        
 
         public static void OnRoomList(RoomInstance[] rooms)
         {

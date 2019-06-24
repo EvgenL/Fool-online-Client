@@ -13,6 +13,7 @@ namespace Fool_online.Ui.Mainmenu
         [SerializeField] private Text _playerNames;
         [SerializeField] private Text _maxPlayers;
         [SerializeField] private Text _deckSize;
+        [SerializeField] private Text _bet;
 
         private RoomInstance _currentRoom;
 
@@ -25,7 +26,7 @@ namespace Fool_online.Ui.Mainmenu
 
             _maxPlayers.text = $"{room.ConnectedPlayersN}/{room.MaxPlayers}";
             _deckSize.text = room.DeckSize.ToString();
-
+            // todo _bet.text = BetConverter
 
             //csv from an array of strings
             string playerNames = room.PlayerNames.Aggregate((a, b) => a + ", " + b);

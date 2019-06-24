@@ -91,3 +91,13 @@ Update Mode: updateDependencies
 
 The following packages were added:
   com.unity.ugui@1.0.0
+
+=== Mon Jun  3 10:11:13 2019
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were added:
+  com.unity.multiplayer-hlapi@1.0.2
+The following packages were updated:
+  com.unity.textmeshpro from version 2.0.0 to 2.0.1

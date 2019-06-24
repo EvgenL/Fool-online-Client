@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
 using DOTween.Modules;
+using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using Fool_online.Scripts.InRoom;
 using TMPro;
 using UnityEngine;
@@ -12,10 +13,10 @@ namespace Fool_online.Scripts.Manager
     /// Shows text message in game
     /// Shows player status icon animations (who if fool and who won on this turn for example)
     /// </summary>
-    public class MessageManager : MonoBehaviour
+    public class GameplayMessageManager : MonoBehaviourFoolObserver
     {
 
-        public static MessageManager Instance;
+        public static GameplayMessageManager Instance;
 
 
         [Header("Reference to text object")]
@@ -52,7 +53,7 @@ namespace Fool_online.Scripts.Manager
         /// </summary>
         public void ShowFullScreenText(string message)
         {
-            Debug.Log(message + ". \n" + StackTraceUtility.ExtractStackTrace());
+            Debug.Log(message + ". \n");// + StackTraceUtility.ExtractStackTrace());
             _text.text = message;
             _text.gameObject.SetActive(true);
             CancelInvoke(nameof(Hide));
@@ -65,11 +66,15 @@ namespace Fool_online.Scripts.Manager
         }
 
 
-        public void PlayerGotReward(Transform playerRewardContainer, double amount)
+        public void AnimateMoney(Transform playerRewardContainer, double amount)
         {
             var moneyTransform = SpawnIconAtScreenCentre(PlayerInfo.PlayerStatusIcon.Money);
 
+            moneyTransform.GetComponentInChildren<Text>().text = amount.ToString("N0");
+
             AnimateMoveIconToTransform(playerRewardContainer, moneyTransform);
+
+            Destroy(moneyTransform.gameObject, 5f);
         }
 
         /// <summary>
@@ -125,7 +130,9 @@ namespace Fool_online.Scripts.Manager
         {
             if (statusIcon == PlayerInfo.PlayerStatusIcon.Money)
             {
-                return Instantiate(_moneyPrefab, _playerStatusIconSpawner).transform;
+                var moneyTr = Instantiate(_moneyPrefab, _playerStatusIconSpawner).transform;
+                moneyTr.position = _playerStatusIconSpawner.position;
+                return moneyTr;
             }
 
             //Spawn icon to centre of the PlayerStatusIconSpawner
@@ -167,7 +174,7 @@ namespace Fool_online.Scripts.Manager
         {
             iconTransform.SetParent(target, true);
 
-            Image iconImage = iconTransform.GetComponent<Image>();
+            Image iconImage = iconTransform.GetComponentInChildren<Image>();
 
             //Set color to transparent (animation start)
             iconImage.color = new Color(1, 1, 1, 0);
@@ -256,5 +263,9 @@ namespace Fool_online.Scripts.Manager
             }
         }
 
+        public override void OnToast(string message)
+        {
+            ShowFullScreenText(message);
+        }
     }
 }

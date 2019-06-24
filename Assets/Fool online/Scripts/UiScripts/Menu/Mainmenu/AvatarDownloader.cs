@@ -19,7 +19,7 @@ public class AvatarDownloader : MonoBehaviourFoolObserver
 
     private Sprite _defaultSprite;
 
-    private void Awake()
+    private void Start()
     {
         _defaultSprite = _targetImage.sprite;
     }
@@ -39,7 +39,7 @@ public class AvatarDownloader : MonoBehaviourFoolObserver
             AvatarHolderConnectionId = FoolNetwork.LocalPlayer.ConnectionId;
 
             // todo not download my avatar but find it on disc
-            WebChacher.DownloadOrChcahe(FoolNetwork.LocalPlayer.AvatarFile, SetAvatar);
+            WebChacher.DownloadOrChache(FoolNetwork.LocalPlayer.AvatarFile, SetAvatar);
         }
     }
 
@@ -49,7 +49,7 @@ public class AvatarDownloader : MonoBehaviourFoolObserver
 
         if (DownloadMyAvatarOnConnect && !string.IsNullOrEmpty(FoolNetwork.LocalPlayer.AvatarFile))
         {
-            WebChacher.DownloadOrChcahe(FoolNetwork.LocalPlayer.AvatarFile, SetAvatar);
+            WebChacher.DownloadOrChache(FoolNetwork.LocalPlayer.AvatarFile, SetAvatar);
             //StartCoroutine(DownloadCoroutine(FoolNetwork.LocalPlayer.AvatarFile));
         }
     }
@@ -59,7 +59,7 @@ public class AvatarDownloader : MonoBehaviourFoolObserver
     {
         if (avatarHolder == AvatarHolderConnectionId)
         {
-            WebChacher.DownloadOrChcahe(avatarPath, SetAvatar);
+            WebChacher.DownloadOrChache(avatarPath, SetAvatar);
             //StartCoroutine(DownloadCoroutine(avatarPath));
         }
     }

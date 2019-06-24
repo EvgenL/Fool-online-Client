@@ -55,9 +55,10 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             DefenderPicksCards,
             EndGameFool,
             PlayerWon,
+            Message,
+            Toast,
 
             // ACCOUNT
-            UpdateMoney,
             UpdateUserAvatar
         }
 
@@ -114,14 +115,10 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             _packets.Add((long)SevrerPacketId.DefenderPicksCards, Packet_DefenderPicksCards);
             _packets.Add((long)SevrerPacketId.EndGameFool, Packet_EndGameFool); 
             _packets.Add((long)SevrerPacketId.PlayerWon, Packet_PlayerWon);
+            _packets.Add((long)SevrerPacketId.Message, Packet_Message);
+            _packets.Add((long)SevrerPacketId.Toast, Packet_Toast);
 
-            _packets.Add((long)SevrerPacketId.UpdateMoney, Packet_UpdateMoney);
             _packets.Add((long)SevrerPacketId.UpdateUserAvatar, Packet_UpdateUserAvatar);
-            
-
-
-
-
         }
 
         /// <summary>
@@ -746,7 +743,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             for (int i = 0; i < rewardsN; i++)
             {
                 long player = buffer.ReadLong();
-                int reward = buffer.ReadInteger();
+                double reward = buffer.ReadDouble();
                 rewards.Add(player, reward);
             }
 
@@ -771,7 +768,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             for (int i = 0; i < rewardsN; i++)
             {
                 long player = buffer.ReadLong();
-                int reward = buffer.ReadInteger();
+                double reward = buffer.ReadDouble();
                 rewards.Add(player, reward);
             }
 
@@ -797,8 +794,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             for (int i = 0; i < rewardsN; i++)
             {
                 long player = buffer.ReadLong();
-                double reward = buffer.ReadInteger();
-                //rewards.Add(player, reward);
+                double reward = buffer.ReadDouble();
+                rewards.Add(player, reward);
             }
 
             //Invoke callback on observers
@@ -870,6 +867,35 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             FoolObservable.OnDefenderPicksCards(playerId, slotN, cardsN);
         }
 
+        private static void Packet_Toast(byte[] data)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+
+            //Skip packetId
+            buffer.ReadLong();
+
+            //Read message
+            string message = buffer.ReadStringUnicode();
+
+            //Invoke callback on observers
+            FoolObservable.OnToast(message);
+        }
+
+        private static void Packet_Message(byte[] data)
+        {
+            ByteBuffer buffer = new ByteBuffer();
+            buffer.WriteBytes(data);
+
+            //Skip packetId
+            buffer.ReadLong();
+
+            //Read message
+            string message = buffer.ReadStringUnicode();
+
+            //Invoke callback on observers
+            FoolObservable.OnMessage(message);
+        }
         private static void Packet_PlayerWon(byte[] data)
         {
             ByteBuffer buffer = new ByteBuffer();
@@ -886,23 +912,6 @@ namespace Fool_online.Scripts.FoolNetworkScripts
 
             //Invoke callback on observers
             FoolObservable.OnPlayerWon(wonPlayerId, reward);
-        }
-
-        private static void Packet_UpdateMoney(byte[] data)
-        {
-            ByteBuffer buffer = new ByteBuffer();
-            buffer.WriteBytes(data);
-
-            //Skip packetId
-            buffer.ReadLong();
-
-            double money = buffer.ReadDouble();
-            double frozenMoney = buffer.ReadDouble();
-
-            Debug.Log("Packet_UpdateMoney money="+ money + ", frozenMoney="+ frozenMoney);
-
-            //Invoke callback on observers
-            //todo FoolObservable.UpdateMoney(money, frozenMoney);
         }
 
         private static void Packet_UpdateUserAvatar(byte[] data)

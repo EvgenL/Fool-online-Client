@@ -78,7 +78,7 @@ namespace Fool_online.Scripts.FoolNetworkScripts
         /// <summary>
         /// Sent when cover some card on table
         /// </summary>
-        public static void Send_CreateRoom(int maxPlayers, int deckSize)
+        public static void Send_CreateRoom(int maxPlayers, int deckSize, double bet)
         {
             ByteBuffer buffer = new ByteBuffer();
 
@@ -89,6 +89,8 @@ namespace Fool_online.Scripts.FoolNetworkScripts
             buffer.WriteInteger(maxPlayers);
             //write deck size
             buffer.WriteInteger(deckSize);
+            //write bet
+            buffer.WriteDouble(bet);
 
             SendDataToServer(buffer.ToArray());
         }

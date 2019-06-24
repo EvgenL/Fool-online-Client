@@ -15,63 +15,71 @@ public class TabMarkerAnimation : MonoBehaviour
     [SerializeField] private float _animationLength = 0.3f;
     [SerializeField] private Ease _animationEase = Ease.OutCubic;
 
-    public RectTransform[] _containers;
+    public FooterBarButton[] _buttons;
 
-    private RectTransform currntHighlighted;
+    private FooterBarButton currentHighlighted;
 
     private float _constWidthAdd;
     private float _constHeight;
     private float _constYpos;
 
-    private static int _lastSelected = 0;
-    private RectTransform _lastSelectedRect;
+    private static int _lastSelectedNumber = 0;
+    private FooterBarButton _lastSelectedButton; 
+    private RectTransform lastSelectedRect; 
+
+    private FooterBarButton _selectedButton;
 
     private void Start()
     {
-        if (_lastSelected < 0) _lastSelected = 0;
+        if (_lastSelectedNumber < 0) _lastSelectedNumber = 0;
 
-        SetFirstTarget(_containers[_lastSelected]);
+        SelectFirst(_buttons[_lastSelectedNumber]);
     }
 
     public void Select(int pageNumber)
     {
-        Select(_containers[pageNumber]);
+        Select(_buttons[pageNumber]);
     }
 
-    public void SetFirstTarget(RectTransform target)
+    public void SelectFirst(FooterBarButton target)
     {
-        _lastSelectedRect = target;
+        _lastSelectedButton = target;
+        lastSelectedRect = target.ButtonBounds;
 
         var rectTransform = transform as RectTransform;
 
-        _constWidthAdd = rectTransform.sizeDelta.x - _lastSelectedRect.sizeDelta.x;
+        _constWidthAdd = rectTransform.sizeDelta.x - lastSelectedRect.sizeDelta.x;
         _constHeight = rectTransform.sizeDelta.y;
         _constYpos = rectTransform.position.y;
-        _constWidthAdd = rectTransform.sizeDelta.x - target.sizeDelta.x;
+        _constWidthAdd = rectTransform.sizeDelta.x - lastSelectedRect.sizeDelta.x;
 
         // set pos
         rectTransform.position 
-            = new Vector3(target.position.x, // x
+            = new Vector3(lastSelectedRect.position.x, // x
             _constYpos);  // y
 
         // set scale
         rectTransform.sizeDelta 
-            = new Vector3(target.sizeDelta.x + _constWidthAdd, // x
+            = new Vector3(lastSelectedRect.sizeDelta.x + _constWidthAdd, // x
             _constHeight);  // y
 
-        return;
     }
 
-    public void Select(RectTransform target)
+    public void Select(FooterBarButton target)
     {
-        _lastSelected = _containers.ToList().FindIndex(c => c == target);
+        if (_lastSelectedButton != null) _lastSelectedButton.ShowNormalSprite();
 
-        _lastSelectedRect = target;
+        _lastSelectedNumber = _buttons.ToList().FindIndex(c => c == target);
 
+        _lastSelectedButton = target;
+
+        lastSelectedRect = target.ButtonBounds;
+        // var lastSelectedRect = target.transform as RectTransform;
+        
         var rectTransform = transform as RectTransform;
 
         // do move
-        Vector2 targetPos = _lastSelectedRect.position;
+        Vector2 targetPos = lastSelectedRect.position;
         targetPos.y = rectTransform.position.y;
 
         // init animation
@@ -80,54 +88,68 @@ public class TabMarkerAnimation : MonoBehaviour
         // do scale
         Vector2 newSizeDelta;
 
-        newSizeDelta.x = _lastSelectedRect.sizeDelta.x + _constWidthAdd;
+        newSizeDelta.x = lastSelectedRect.sizeDelta.x + _constWidthAdd;
         newSizeDelta.y = _constHeight;
 
         // init animation
         rectTransform.DOSizeDelta(newSizeDelta, _animationLength).SetEase(_animationEase);
     }
 
-    public void Highlight(RectTransform target)
+    public void Highlight(FooterBarButton target)
     {
-        currntHighlighted = target;
+        currentHighlighted = target;
+        var currentHighlightedRect = target.ButtonBounds;
 
         var rectTransform = transform as RectTransform;
+        // var lastSelectedRect = target.transform as RectTransform;
 
         // do move
         // mid point between two vectors = (a + b) / 2f
-        Vector2 midPoint = (currntHighlighted.position + _lastSelectedRect.position) / 2f;
+        Vector2 midPoint = (currentHighlightedRect.position + lastSelectedRect.position) / 2f;
         midPoint.y = rectTransform.position.y;
 
         // init animation
         rectTransform.DOMove(midPoint, _animationLength).SetEase(_animationEase);
-
+        
         // do scale
         Vector2 newSizeDelta;
 
-        bool targetOnRight = currntHighlighted.position.x > rectTransform.position.x;
+        bool targetOnRight = currentHighlightedRect.position.x > rectTransform.position.x;
 
         float leftX;
         float rightX;
-        Vector3 localPosSelected = transform.InverseTransformPoint(_lastSelectedRect.position);
-        Vector3 localPosHighlighted = transform.InverseTransformPoint(currntHighlighted.position);
+        Vector3 localPosSelected = transform.InverseTransformPoint(lastSelectedRect.position);
+        Vector3 localPosHighlighted = transform.InverseTransformPoint(currentHighlightedRect.position);
 
         if (targetOnRight)
         {
-            leftX = localPosSelected.x + _lastSelectedRect.rect.xMin;
-            rightX = localPosHighlighted.x + currntHighlighted.rect.xMax;
+            leftX = localPosSelected.x + lastSelectedRect.rect.xMin;
+            rightX = localPosHighlighted.x + currentHighlightedRect.rect.xMax;
         }
         else
         {
-            leftX = localPosSelected.x + _lastSelectedRect.rect.xMax;
-            rightX = localPosHighlighted.x + currntHighlighted.rect.xMin;
+            leftX = localPosSelected.x + lastSelectedRect.rect.xMax;
+            rightX = localPosHighlighted.x + currentHighlightedRect.rect.xMin;
         }
 
         newSizeDelta.x = Mathf.Abs(leftX) + Mathf.Abs(rightX);
-        newSizeDelta.x += _constWidthAdd;
+        //newSizeDelta.x += _constWidthAdd;
         newSizeDelta.y = _constHeight;
 
         // init animation
         rectTransform.DOSizeDelta(newSizeDelta, _animationLength).SetEase(_animationEase);
+
+
+        lastSelectedRect = target.ButtonBounds;
+    }
+
+    public void ShowBackButton()
+    {
+        _lastSelectedButton.ShowBackSprite();
+    }
+    public void HideBackButton()
+    {
+        _lastSelectedButton.ShowNormalSprite();
     }
 
     private void AnimateMoveFromTo(RectTransform from, RectTransform to)
@@ -148,6 +170,6 @@ public class TabMarkerAnimation : MonoBehaviour
 
     public void StopHighlight()
     {
-        Select(_lastSelectedRect);
+        Select(_lastSelectedButton);
     }
 }

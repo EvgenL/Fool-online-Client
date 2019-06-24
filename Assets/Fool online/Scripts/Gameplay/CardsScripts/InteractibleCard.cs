@@ -22,9 +22,9 @@ namespace Fool_online.Scripts.InRoom.CardsScripts
         [SerializeField] private Color TargetedCardColor;
 
         [Header("Animation: hover")]
-        [SerializeField] public float CardMoveUpOnHover = 50f;
+        /*[SerializeField]*/ public const float CardMoveUpOnHover = 70f;
         [SerializeField] private Ease _hoverAnimationEase = Ease.InSine;
-        [SerializeField] private float _animationDuration = 0.25f;
+        [SerializeField] private const float _animationDuration = 0.15f;
 
 
         public enum CardAnimationState

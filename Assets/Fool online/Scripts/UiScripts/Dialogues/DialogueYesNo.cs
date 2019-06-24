@@ -42,6 +42,9 @@ namespace Assets.Fool_online.Scripts.UiScripts.Dialogues
 
             this._bodyText.text = bodyText;
 
+            this._yesText.text = yesText;
+            this._noText.text = noText;
+
             _yesButton.onClick.RemoveAllListeners();
 
             _yesButton.onClick.AddListener(delegate {

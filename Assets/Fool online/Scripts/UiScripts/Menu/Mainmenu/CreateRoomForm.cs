@@ -17,7 +17,7 @@ namespace Fool_online.Ui.Mainmenu
         [SerializeField]  private int _currDeckSize = 36;
 
         [Header("Bet option")]
-        [SerializeField] private Slider _betSlider;
+        [SerializeField] private BetSlider _betSlider;
 
         [Header("Max players option")]
         [SerializeField] private Toggle _maxPlayers2;
@@ -198,7 +198,14 @@ namespace Fool_online.Ui.Mainmenu
 
         public void OnSubmit()
         {
-            ClientSendPackets.Send_CreateRoom(_currMaxPlayers, _currDeckSize); // TODO send bet
+            if (_betSlider.FloorValue > FoolNetwork.LocalPlayer.Money)
+            {
+                DialogueManager.Instance.ShowOk("Вам не хватает денег, чтобы сделать такую ставку.");
+            }
+            else
+            {
+                ClientSendPackets.Send_CreateRoom(_currMaxPlayers, _currDeckSize, _betSlider.FloorValue); // TODO send bet
+            }
         }
 
     }

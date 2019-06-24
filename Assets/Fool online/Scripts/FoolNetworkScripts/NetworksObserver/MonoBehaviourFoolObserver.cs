@@ -253,6 +253,20 @@ namespace Fool_online.Scripts.FoolNetworkScripts.NetworksObserver
         }
 
         /// <summary>
+        /// Show pop up text message on screen
+        /// </summary>
+        public virtual void OnToast(string message)
+        {
+        }
+
+        /// <summary>
+        /// Show OK dialogue on screen
+        /// </summary>
+        public virtual void OnMessage(string message)
+        {
+        }
+
+        /// <summary>
         /// Recieved after UpdateRoomList request
         /// </summary>
         public virtual void OnRoomList(RoomInstance[] rooms)

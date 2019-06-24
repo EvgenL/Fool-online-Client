@@ -13,7 +13,7 @@ namespace Assets.Fool_online.Scripts.Gameplay
     /// </summary>
     public static class BetConverter
     {
-        private static readonly float[] allowedBets = {
+        /*private static readonly float[] allowedBets = {
             100f,
             250f,
             500f,
@@ -30,6 +30,33 @@ namespace Assets.Fool_online.Scripts.Gameplay
             2500000f,
             5000000f,
             10000000f,
+        };*/
+
+        private static readonly float[] allowedBets = {
+            10f,
+            25f,
+            50f,
+            100f,
+            200f,
+            300f,
+            400f,
+            500f,
+            650f,
+            800f,
+            1000f,
+            1500f,
+            2000f,
+            2500f,
+            3000f,
+            3500f,
+            4000f,
+            4500f,
+            5000f,
+            6000f,
+            7000f,
+            8000f,
+            9000f,
+            10000f
         };
 
         public static float MinBet => allowedBets[0];

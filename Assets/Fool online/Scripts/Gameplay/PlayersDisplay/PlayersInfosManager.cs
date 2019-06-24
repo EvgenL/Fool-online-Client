@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using Fool_online.Scripts.FoolNetworkScripts;
 using Fool_online.Scripts.FoolNetworkScripts.NetworksObserver;
 using Fool_online.Scripts.InRoom.CardsScripts;
@@ -21,6 +23,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         /// Array of abstract class PlayerInfo which contains my player info and enemt player info
         /// </summary>
         public PlayerInfo[] SlotsScripts;
+        public Dictionary<long, PlayerInfo> idsSlots = new Dictionary<long, PlayerInfo>();
 
         private const float DelayBeforeNextTurn = 0.5f;
 
@@ -80,7 +83,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
 
                 AddEmptySlot(slotI);
             }
-
+            
             SortSlotDisplays();
 
             //set occupied slots (if we aren't first to enter this room)
@@ -92,7 +95,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
                 //if occupied by some player
                 if (StaticRoomData.Players[slotI] != null)
                 {
-                    SetSlotAsOccupied(slotI);
+                    SetSlotAsOccupied(StaticRoomData.Players[slotI]);
                 }
             }
         }
@@ -132,9 +135,19 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         /// <summary>
         /// Replace slot with prefab of Occupied slot
         /// </summary>
-        private void SetSlotAsOccupied(int slotN)
+        private void SetSlotAsOccupied(PlayerInRoom player)
         {
+            int slotN = player.SlotN;
             SlotsScripts[slotN].DrawPlayerslot(StaticRoomData.Players[slotN]);
+            if (idsSlots.ContainsKey(player.ConnectionId))
+            {
+                idsSlots[player.ConnectionId] = SlotsScripts[slotN];
+            }
+            else
+            {
+                idsSlots.Add(player.ConnectionId, SlotsScripts[slotN]);
+            }
+
         }
 
         #region Observer events
@@ -150,6 +163,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
                 if (i != StaticRoomData.MySlotNumber)
                 {
                     SlotsScripts[i].SetReadyCheckmark(false);
+                    
                 }
             }
         }
@@ -159,7 +173,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
         /// </summary>
         public override void OnOtherPlayerJoinedRoom(PlayerInRoom joinedPlayer)
         {
-            SetSlotAsOccupied(joinedPlayer.SlotN);
+            SetSlotAsOccupied(joinedPlayer);
         }
 
         /// <summary>
@@ -171,6 +185,7 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
             if (StaticRoomData.IsPlaying)
             {
                 SlotsScripts[slotN].DrawLeftSlot();
+
             }
             else // if game is not playing then mark slot as empty
             {
@@ -272,23 +287,45 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
 
             if (turnN == 1)
             {
-                MessageManager.Instance.DelayNextAnimation(DelayBeforeNextTurn * 2);
+                GameplayMessageManager.Instance.DelayNextAnimation(DelayBeforeNextTurn * 2);
             }
             else
             {
-                MessageManager.Instance.DelayNextAnimation(DelayBeforeNextTurn);
+                GameplayMessageManager.Instance.DelayNextAnimation(DelayBeforeNextTurn);
             }
-            attacker.AnimateSpawnStatusIcon(PlayerInfo.PlayerStatusIcon.Attacker);
-            defender.AnimateSpawnStatusIcon(PlayerInfo.PlayerStatusIcon.Defender);
-            
 
-            //MessageManager.Instance.AnimateAttackerAndDefender(attacker, defender);
+            //attacker.AnimateSpawnStatusIcon(PlayerInfo.PlayerStatusIcon.Attacker);
+            //defender.AnimateSpawnStatusIcon(PlayerInfo.PlayerStatusIcon.Defender);
+
+            GameplayMessageManager.Instance.AnimateAttackerAndDefender(attacker.TurnStatusIconContainer, defender.TurnStatusIconContainer);
         }
 
         public override void OnEndGame(long foolConnectionId, Dictionary<long, double> rewards)
         {
-            //todo animate rewards, wait, mark all slots of players who left as empty
+            foreach (var reward in rewards)
+            {
+                if (StaticRoomData.Players.Any(pl => pl.ConnectionId == reward.Key))
+                {
+                    Win(reward.Key, reward.Value);
+                }
+                else
+                {
+                    foreach (var slot in SlotsScripts)
+                    {
+                        if (slot.connectionId == foolConnectionId)
+                        {
+                            slot.AnimateMoneyReward(rewards[slot.connectionId]);
+                            break;
+                        }
+                    }
+                }
+            }
+            // wait, animate rewards, mark all slots of players who left as empty
+            Invoke("DelayEndGameAnim", 2f);
+        }
 
+        private void DelayEndGameAnim()
+        {
             // mark all slots of players who left as empty
             for (int i = 0; i < SlotsScripts.Length; i++)
             {
@@ -374,6 +411,39 @@ namespace Fool_online.Scripts.InRoom.PlayersDisplay
                 }
                 slot.CardsInHand.Clear();
             }
+        }
+
+        public override void OnPlayerWon(long wonPlayerId, double winnerReward)
+        {
+            Win(wonPlayerId, winnerReward);
+        }
+
+        public override void OnEndGameGiveUp(long foolConnectionId, Dictionary<long, double> rewards)
+        {
+            foreach (var reward in rewards)
+            {
+                if (StaticRoomData.Players.Any(pl => pl.ConnectionId == reward.Key))
+                {
+                    Win(reward.Key, reward.Value);
+                }
+                else
+                {
+                    foreach (var slot in SlotsScripts)
+                    {
+                        if (slot.connectionId == foolConnectionId)
+                        {
+                            slot.AnimateMoneyReward(rewards[slot.connectionId]);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        private void Win(long connectionId, double reward)
+        {
+            var client = StaticRoomData.Players.Single(pl => pl.ConnectionId == connectionId);
+            var slot = SlotsScripts[client.SlotN];
+            slot.AnimateMoneyReward(reward);
         }
     }
 }
